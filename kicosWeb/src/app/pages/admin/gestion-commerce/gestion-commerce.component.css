@@ -1,0 +1,100 @@
+.card img {
+    height: 200px;
+}
+
+.icon-edit-delete span a {
+    padding-left: 5px;
+    color: black;
+}
+
+.icon-edit-delete span a:hover {
+    color: rgb(70, 70, 185);
+}
+
+.card-text {
+    font-size: 15px;
+}
+
+::placeholder {
+    font-size: 14px;
+    font-family: 'Times New Roman', Times, serif;
+    color: rgb(155, 155, 155);
+}
+
+.srch input {
+    padding: 5px 10px;
+    border: none;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px,
+        rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+    border-radius: 20px;
+    /* width: 250px; */
+}
+
+
+.btn {
+    border-radius: 20px;
+    border: 1px solid;
+    /* padding: 8px 25px; */
+}
+
+.btnValidate {
+    background-color: var(--bg-primary);
+    color: #fff;
+}
+
+.search-add {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: end;
+}
+
+.pagination{
+    width: 450px;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+::ng-deep .paginationTacheCustom .p-paginator-page,
+::ng-deep .paginationTacheCustom .p-paginator-next,
+::ng-deep .paginationTacheCustom .p-paginator-prev,
+::ng-deep .paginationTacheCustom .p-paginator-first,
+::ng-deep .paginationTacheCustom .p-paginator-last {
+  @apply bg-transparent text-black hover:bg-slate-200 rounded px-3 py-1 mx-1;
+}
+
+::ng-deep .paginationTacheCustom .p-paginator-page.p-highlight {
+  background-color: var(--bg-primary);
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+}
+
+
+::ng-deep .paginationTacheCustom .p-paginator {
+  margin-top: 4%;
+  margin-bottom: 4%;
+  border-bottom: 0;
+  background-color: transparent;
+}
+
+#details {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+    padding-bottom: 20px;
+}
+
+.image {
+    height: 330px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+img {
+    height: 100%;
+}

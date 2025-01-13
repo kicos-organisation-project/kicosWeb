@@ -1,0 +1,52 @@
+<div class="dashboard-container">
+    <!-- Première rangée -->
+    <div class="chart-row">
+      <div class="gauge-card">
+        <h2>Montant Reçu</h2>
+        <div class="gauge-container">
+          <p-chart type="doughnut" 
+                  [data]="gaugeData" 
+                  [options]="gaugeOptions"
+                  [style]="{'width': '100%', 'height': '200px'}">
+          </p-chart>
+          <div class="gauge-value">
+            <span class="money-label">Your Money</span>
+            <span class="money-value">25,430.39F FCA</span>
+          </div>
+        </div>
+      </div>
+  
+      <div class="line-card">
+        <div class="chart-header">
+          <h5>Nombre de livraison effectuer</h5>
+          <div class="period-selector">
+            <button *ngFor="let period of timePeriods" 
+                    [class.active]="period === selectedPeriod"
+                    (click)="selectedPeriod = period">
+              {{period}}
+            </button>
+          </div>
+        </div>
+        <div class="chart-stats">
+          <div class="stat-value">
+            <span class="number">623</span>
+            <span class="label">nombre</span>
+          </div>
+        </div>
+        <p-chart type="line" 
+                [data]="lineData" 
+                [options]="lineOptions"
+                [style]="{'width': '100%', 'height': '300px'}">
+        </p-chart>
+      </div>
+    </div>
+  
+    <!-- Deuxième rangée -->
+    <div class="bar-chart-container">
+      <p-chart type="bar" 
+              [data]="barData" 
+              [options]="barOptions"
+              [style]="{'width': '100%', 'height': '300px'}">
+      </p-chart>
+    </div>
+  </div>

@@ -1,0 +1,89 @@
+<div class="p-0">
+
+    <!-- cartes des statistiques  -->
+    <div class="mx-2">
+        <div class="row g-3"> <!-- g-3 ajoute un espace entre les colonnes -->
+            <div class="col-md-4 col-sm-12">
+                <div class="card rounded shadow p-0">
+                    <div class="mx-3 mt-3">
+                        <div class="d-flex justify-content-between">
+                            <span class="fw-medium">Commerces</span>
+                            <span class="iconRounded B">
+                               <i class="pi pi-shop" style="color: var(--bg-neutral);"></i>
+                            </span>
+                        </div>
+                        <p class="mt-2">320</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="card rounded shadow p-0">
+                    <div class="mx-3 mt-3">
+                        <div class="d-flex justify-content-between">
+                            <span class="fw-medium">Livreurs</span>
+                            <span class="iconRounded A">
+                                <i class="pi pi-user" style="color: var(--bg-neutral);"></i>
+                            </span>
+                        </div>
+                        <p class="mt-2">245</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="card rounded shadow p-0">
+                    <div class="mx-3 mt-3">
+                        <div class="d-flex justify-content-between">
+                            <span class="fw-medium">Utilisateurs</span>
+                            <span class="iconRounded card2">
+                                <i class="pi pi-users" style="color: var(--bg-neutral);"></i>
+                            </span>
+                        </div>
+                        <p class="mt-2">329</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Diagramme Paiement recu par mois -->
+    <div class="my-4 mx-2 py-4 px-2 card shadow p-2">
+        <span class="font-medium text-color">Paiement recu par mois</span>
+        <p-chart type="bar" [data]="dataCategogrie" [options]="optionsCategogrie" />
+    </div>
+
+
+    <div class="row m-0 p-0 g-3 rowCard1">
+        <div class="col-md-6 col-sm-12 content">
+            <div class="card shadow p-2">
+                <span class="font-medium text-color">Zone de livraison</span>
+                <p-chart type="bar" [data]="deliveryZoneData" [options]="deliveryZoneOptions" />
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12 content">
+            <div class="card shadow container">
+                <div class="header">
+                  <h2>Top Scorer</h2>
+                  <select class="month-selector">
+                    <option *ngFor="let month of months" value="{{ month.id }}">{{ month.name }}</option>
+                  </select>
+                </div>
+              
+                <div class="scorer-grid">
+                  <div *ngFor="let scorer of scorer" 
+                       class="scorer-card" 
+                       [ngClass]="scorer.bgColor">
+                    <div class="avatar">
+                      <img [src]="scorer.pp" [alt]="scorer.name">
+                    </div>
+                    <div class="role">{{ scorer.role }}</div>
+                    <div class="name">{{ scorer.name }}</div>
+                    <div class="score">{{ scorer.score }}</div>
+                    <div class="position">{{ scorer.position }}</div>
+                  </div>
+                </div>
+              </div>
+        </div>
+    </div>
+
+
+</div>

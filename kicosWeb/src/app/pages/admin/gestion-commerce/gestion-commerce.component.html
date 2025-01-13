@@ -1,0 +1,267 @@
+<!-- --------les cartes gestion commerce-------- -->
+<div class="container">
+    <!-- recherche et bouton d'ajout -->
+    <div class="search-add">
+        <div class="srch">
+            <input type="text" placeholder="Recherche ...">
+        </div>
+        <div class="add" (click)="showDialogAddCommerce()">
+            <button class="btn btnValidate"> <i class="pi pi-plus me-2"></i> Ajouter</button>
+        </div>
+    </div>
+    <!-- fin -->
+    <br>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col">
+            <div class="card border-0 h-100">
+                <img src="https://img.freepik.com/free-photo/medium-shot-black-woman-running-small-business_23-2150171799.jpg?t=st=1733949765~exp=1733953365~hmac=e039e07cff51d03a4f789b972b88cfa6de5a84d76ba20a693fdf734f477f6683&w=900"
+                    class="card-img-top" alt="..." />
+                <div class="card-body">
+                    <h5 class="card-title"><i>Téranga shoes</i></h5>
+                    <p class="card-text">
+                        Lorem, ipsum dolor sit amet consectetur. Es Quae quam
+                        consequuntur
+                    </p>
+                    <div class="icon-edit-delete">
+                        <span><a href="#"><i class="bi bi-pencil-square"></i></a></span>
+                        <span><a href="#"><i class="bi bi-trash"></i></a></span>
+                        <span (click)="showDialogDetailCommerce()"><a><i class="bi bi-eye"></i></a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border-0 h-100">
+                <img src="https://img.freepik.com/free-photo/female-staff-standing-cheese-counter_107420-63665.jpg?t=st=1733951044~exp=1733954644~hmac=dce833f1ff0ef100a0ef131444c9602a8d6646346392e466831463f5b976721f&w=900"
+                    class="card-img-top" alt="..." />
+                <div class="card-body">
+                    <h5 class="card-title"><i>Dieynaba épicerie</i></h5>
+                    <p class="card-text">
+                        Thi Quos consequuntur cor Iure,Quos
+                        consequuntur corrupti repudiandae?
+                    </p>
+                    <div class="icon-edit-delete">
+                        <span><a href="#"><i class="bi bi-pencil-square"></i></a></span>
+                        <span><a href="#"><i class="bi bi-trash"></i></a></span>
+                        <span><a href="#"><i class="bi bi-eye"></i></a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border-0 h-100">
+                <img src="https://img.freepik.com/premium-photo/hall-shopping-center-shop-digital-equipment-electronics-sale-laptops_497171-106.jpg?w=1060"
+                    class="card-img-top" alt="..." />
+                <div class="card-body">
+                    <h5 class="card-title"><i>Pape électronique</i></h5>
+                    <p class="card-text">
+                        Quos corrupti repudiandae? Iure
+                        consequuntur corrupti repudiandae?
+                    </p>
+                    <div class="icon-edit-delete">
+                        <span><a href="#"><i class="bi bi-pencil-square"></i></a></span>
+                        <span><a href="#"><i class="bi bi-trash"></i></a></span>
+                        <span><a href="#"><i class="bi bi-eye"></i></a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border-0 h-100">
+                <img src="https://img.freepik.com/free-photo/smiley-woman-clothing-store_23-2148312218.jpg?t=st=1733951176~exp=1733954776~hmac=923bf95c4c4dba3afd226b3aca8ad538d42d32056493ccb9eb9ebe2a3c940ff8&w=900"
+                    class="card-img-top" alt="..." />
+                <div class="card-body">
+                    <h5 class="card-title"><i>Germaine clothes</i></h5>
+                    <p class="card-text">
+                        Quos consequuntur corrupti repudiandae? uuntur corrupti repudiandae?
+                    </p>
+                    <div class="icon-edit-delete">
+                        <span><a href="#"><i class="bi bi-pencil-square"></i></a></span>
+                        <span><a href="#"><i class="bi bi-trash"></i></a></span>
+                        <span><a href="#"><i class="bi bi-eye"></i></a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border-0 h-100">
+                <img src="https://img.freepik.com/premium-photo/young-woman-choosing-yoga-mat-sports-store_255755-15597.jpg?w=900"
+                    class="card-img-top" alt="..." />
+                <div class="card-body">
+                    <h5 class="card-title"><i>Seydou fitness</i></h5>
+                    <p class="card-text">
+                        Quos consequuntur corrupti repudiandae? Iure Quos
+                        consequuntur
+                    </p>
+                    <div class="icon-edit-delete">
+                        <span><a href="#"><i class="bi bi-pencil-square"></i></a></span>
+                        <span><a href="#"><i class="bi bi-trash"></i></a></span>
+                        <span><a href="#"><i class="bi bi-eye"></i></a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border-0 h-100">
+                <img src="https://img.freepik.com/premium-photo/cake-refrigerator-coffee-cafe-with-drinking_45463-457.jpg?w=900"
+                    class="card-img-top" alt="..." />
+                <div class="card-body">
+                    <h5 class="card-title"><i>Leye bouffe</i></h5>
+                    <p class="card-text">
+                        Quos consequuntur corrupti
+                        consequuntur corrupti repudiandae?
+                    </p>
+                    <div class="icon-edit-delete">
+                        <span><a href="#"><i class="bi bi-pencil-square"></i></a></span>
+                        <span><a href="#"><i class="bi bi-trash"></i></a></span>
+                        <span><a href="#"><i class="bi bi-eye"></i></a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Pagination -->
+        <div class="pagination mt-5 d-flex justify-content-center">
+            <div>
+                <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="3" [totalRecords]="6"
+                    class="paginator" [styleClass]="'paginationTacheCustom'" [rowsPerPageOptions]="[3, 6, 9]">
+                </p-paginator>
+            </div>
+        </div>
+    </div>
+    <!-- ---------fin des cartes------- -->
+
+
+
+    <!--Modal details commerce -->
+    <p-dialog [modal]="true" [(visible)]="visible"
+        [style]="{ width: '60rem', height:'30rem', backgroundColor: '#F8F9FD'}" header="Détail commerce">
+        <div id="details">
+            <div class="image">
+                <img src="https://img.freepik.com/free-photo/medium-shot-black-woman-running-small-business_23-2150171799.jpg?t=st=1733949765~exp=1733953365~hmac=e039e07cff51d03a4f789b972b88cfa6de5a84d76ba20a693fdf734f477f6683&w=900"
+                    alt="">
+            </div>
+            <div>
+                <h4>Téranga shoes</h4>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ducimus quas dignissimos
+                    consectetur nobis modi tempora eos excepturi, veniam, delectus in commodi voluptatibus animi
+                    blanditiis
+                    quae eligendi fugiat pariatur nam.
+                </p>
+
+                <div class="d-flex">
+                    <h6 class="mb-3">Responsable : </h6>
+                    <span>&nbsp;Oumy Gueye</span>
+                </div>
+                <div class="d-flex">
+                    <h6 class="mb-3">Adresse : </h6>
+                    <span>&nbsp;Sacre coeur 3</span>
+                </div>
+                <div class="d-flex">
+                    <h6 class="mb-3">Horaire: </h6>
+                    <span>&nbsp;9h-18h</span>
+                </div>
+                <div class="d-flex">
+                    <h6 class="mb-3">Téléphone : </h6>
+                    <span>&nbsp;770982312</span>
+                </div>
+                <div class="d-flex">
+                    <h6 class="mb-3">Numéro fixe : </h6>
+                    <span>&nbsp;338402301</span>
+                </div>
+
+            </div>
+        </div>
+
+
+    </p-dialog>
+
+    <!-- Modal ajout commerce -->
+    <p-dialog [modal]="true" [(visible)]="visibleAddCommerce"
+        [style]="{ width: '60rem', height:'50rem', backgroundColor: '#F8F9FD'}" header="Ajout partenaire">
+        <form>
+            <div class="contentInput">
+                <div class="">
+                    <!-- Nom commerce -->
+                    <div class="mb-3">
+                        <label class="mb-1" for="name">Nom </label>
+                        <input id="name" type="text" class="input-field">
+                    </div>
+
+                    <!-- Téléphone -->
+                    <div class="mb-3">
+                        <label for="phone_number" class="mb-1">Téléphone</label>
+                        <input type="tel" class="input-field" id="telephone">
+                    </div>
+
+                    <!-- Adresse  -->
+                    <div class="mb-3">
+                        <label for="adresse" class="mb-1">Adresse</label>
+                        <input type="email" class="input-field" id="adresse">
+                    </div>
+
+                    <!-- Ninea -->
+                    <div class="mb-3">
+                        <label for="address" class="mb-1">Ninea</label>
+                        <input type="text" class="input-field" id="address">
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group mb-3 inputP">
+                        <label for="password" class="textLabel">Mot de passe</label>
+                        <input [type]="showPassword ? 'text' : 'password'" class="input-field" id="password">
+                        <button type="button" (click)="togglePassword()" class="iconEye">
+                            <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+
+
+                <div class="">
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label for="email" class="mb-1">Email</label>
+                        <input type="text" class="input-field" id="email">
+                    </div>
+
+                    <!-- Téléphone fixe -->
+                    <div class="mb-3">
+                        <label for="phone_number" class="mb-1">Numéro fixe</label>
+                        <input type="tel" class="input-field" id="telephone">
+                    </div>
+
+                    <!-- Localisation -->
+                    <div class="mb-3">
+                        <label class="mb-1" for="name">Localisation </label>
+                        <input id="name" type="text" class="input-field">
+                    </div>
+                    
+                    <!-- Horaire -->
+                    <div class="mb-3">
+                        <label for="horaire" class="mb-1">Horaire</label>
+                        <input type="text" class="input-field" id="horaire">
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group mb-3 inputP">
+                        <label for="password" class="textLabel">Confirmer mot de passe</label>
+                        <input [type]="showPassword ? 'text' : 'password'" class="input-field" id="password">
+                        <button type="button" (click)="togglePassword()" class="iconEye">
+                            <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- description -->
+            <div class="mb-3">
+                <label for="description" class="mb-1">Description</label>
+                <input id="description" type="text" class="input-field">
+            </div>
+            <div class="d-flex justify-content-center">
+                <button type="button" class="btn btnAnnuler me-2" (click)="closeModal()">Annuler</button>
+                <button type="submit" class="btn btnSave">Enregistrer</button>
+            </div>
+        </form>
+    </p-dialog>

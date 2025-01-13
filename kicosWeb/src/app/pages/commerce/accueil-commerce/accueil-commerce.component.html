@@ -1,0 +1,60 @@
+<!-- dashboard.component.html -->
+<div class="dashboard">
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-header">
+                <h3>Revenu Commande</h3>
+                <span class="icon"><i class="pi pi-shopping-cart"></i></span>
+            </div>
+            <div class="stat-value">9240500 F FCA</div>
+            <div class="stat-change positive">↑ 5.39% period of change</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <h3>Profit</h3>
+                <span class="icon"><i class="pi pi-dollar"></i></span>
+            </div>
+            <div class="stat-value">3221800 F FCA</div>
+            <div class="stat-change positive">↑ 5.39% period of change</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <h3>New customer</h3>
+                <span class="icon"><i class="pi pi-users"></i></span>
+            </div>
+            <div class="stat-value">298</div>
+            <div class="stat-change positive">↑ 6.84% period of change</div>
+        </div>
+    </div>
+
+    <div class="secondContainer">
+        <div class="chart-container">
+            <h2>Evolution des ventes</h2>
+            <p-chart type="bar" [data]="chartData" [options]="chartOptions"
+                [style]="{ 'width': '100%', 'height': '100%' }">
+            </p-chart>
+        </div>
+
+        <div class="best-sellers">
+            <h2>les plus vendues</h2>
+            <p class="subtitle">best sellers</p>
+
+            <div class="product-list">
+                <div class="product-card" *ngFor="let i of [1,2,3]">
+                    <div class="product-image"></div>
+                    <div class="product-info">
+                        <h3>Berry Blast Smoothie</h3>
+                        <div class="rating">
+                            <span class="stars">⭐</span>
+                            <span class="score">4.8/5</span>
+                            <span class="reviews">(1k+ reviews)</span>
+                        </div>
+                        <div class="price">$320</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

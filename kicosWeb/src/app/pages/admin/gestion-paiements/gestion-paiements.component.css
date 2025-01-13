@@ -1,0 +1,57 @@
+::ng-deep .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+    color: var(--bg-blue2); 
+    border-color: var(--bg-blue2);
+    text-decoration: none;
+  }
+  
+  ::ng-deep .p-tabview .p-tabview-nav .p-tabview-nav-link {
+    color: var(--text-dark); 
+    text-decoration: none;
+  }
+
+.btn{
+  border-radius: 20px;
+  border: 1px solid;
+  /* padding: 8px 25px; */
+}
+.inputSearch{
+  border-radius: 20px;
+  border-left: none;
+}
+
+.btnValidate{
+  background-color: var(--bg-primary);
+  color: #fff;
+}
+
+.tdimg img{
+  width: 100%;
+  height: 10vh;
+  border-radius: 100%;
+}
+
+input:focus {
+  box-shadow: none;
+}
+
+form input {
+  border: none;
+  border-bottom: 1px solid;
+  border-radius: 0;
+  /* padding: 8px 0; */
+  margin-bottom: 16px;
+}
+
+::ng-deep .paginationTacheCustom .p-paginator-page.p-highlight {
+  background-color: var(--bg-primary);
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+::ng-deep .p-tabview .p-tabview-panels {
+  background: transparent!important;
+  /* ou la couleur de votre choix */
+  border: none;
+  /* si vous voulez aussi enlever la bordure */
+}

@@ -1,0 +1,231 @@
+::ng-deep .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  color: var(--bg-blue2);
+  border-color: var(--bg-blue2);
+  text-decoration: none;
+}
+
+::ng-deep .p-tabview .p-tabview-nav .p-tabview-nav-link {
+  color: var(--text-dark);
+  text-decoration: none;
+}
+
+.cardItem {
+  padding: 12px;
+  background-color: rgb(252, 252, 252);
+  box-shadow: rgba(0, 0, 0, 0.05) 1px 1px 1px 1px;
+  transition: opacity 0.3s ease;
+  opacity: 1;
+  border-radius: 8px;
+}
+
+.inputSearch{
+  border-radius: 20px;
+  border-left: none;
+  }
+
+.profil a img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+}
+
+.order-profil {
+  display: flex;
+  justify-content: space-between;
+}
+
+.order p {
+  font-size: 14px;
+  margin-top: -7px !important;
+  font-weight: 600;
+  color: rgb(167, 167, 167);
+}
+
+.plat img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+}
+
+.description-plat,
+.price-qty,
+.invalid-enable {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Nbr-items p {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgb(170, 170, 170);
+}
+
+.invalid-enable-btn span a .bi-x-lg {
+  font-size: 21px;
+  padding: 7px 10px;
+  border-radius: 5px;
+  color: red;
+  border: thin solid red;
+  font-weight: 700;
+}
+
+
+.invalid-enable-btn span a .bi-check2 {
+  font-size: 21px;
+  padding: 7px 10px;
+  border-radius: 5px;
+  color: greenyellow;
+  border: thin solid greenyellow;
+  font-weight: 700;
+}
+
+.btnSave span {
+  font-size: 21px;
+  padding: 7px 10px;
+  border-radius: 5px;
+  color: greenyellow;
+  border: thin solid greenyellow;
+  font-weight: 700;
+}
+
+
+.invalid-enable span {
+  padding-left: 10px;
+}
+
+.invalid-enable {
+  padding: 10px;
+}
+
+
+
+.num-command {
+  padding: 10px;
+  border-bottom: 1px solid #d8d8d8;
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-left,
+.card-right {
+  width: 360px;
+  height: auto;
+  font-family: 'Times New Roman', Times, serif;
+  padding: 10px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  border-radius: 10px;
+  border: none !important;
+}
+
+
+
+.depart {
+  display: flex;
+  justify-content: center;
+}
+
+.depart ul .ligneDepart {
+  color: #00cddb;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+ul li {
+  list-style: none;
+  padding-top: 5px;
+}
+
+hr {
+  color: #adadad;
+}
+
+
+.profil span img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+}
+
+.profil span {
+  color: gray;
+  font-size: 15px;
+}
+
+.order-profil {
+  display: flex;
+  justify-content: space-between;
+}
+
+.order p {
+  font-size: 14px;
+  margin-top: -7px !important;
+  font-weight: 600;
+  color: rgb(167, 167, 167);
+}
+
+.plat img {
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+}
+
+.description-plat,
+.price-qty,
+.invalid-enable {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Nbr-items p {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgb(170, 170, 170);
+}
+
+.Detailcontainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.invalid-enable-btn span a {
+  font-size: 18px;
+  text-decoration: none;
+  padding: 7px 10px;
+  border-radius: 5px;
+  font-weight: 700;
+}
+
+::ng-deep .p-tabview .p-tabview-panels {
+  background: transparent;
+  /* ou la couleur de votre choix */
+  border: none;
+  /* si vous voulez aussi enlever la bordure */
+}
+
+::ng-deep .paginationTacheCustom .p-paginator-page,
+::ng-deep .paginationTacheCustom .p-paginator-next,
+::ng-deep .paginationTacheCustom .p-paginator-prev,
+::ng-deep .paginationTacheCustom .p-paginator-first,
+::ng-deep .paginationTacheCustom .p-paginator-last {
+  @apply bg-transparent text-black hover:bg-slate-200 rounded px-3 py-1 mx-1;
+}
+
+::ng-deep .paginationTacheCustom .p-paginator-page.p-highlight {
+  background-color: var(--bg-primary);
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+}
+
+::ng-deep .paginationTacheCustom .p-paginator {
+  margin-top: 4%;
+  margin-bottom: 4%;
+  border-bottom: 0;
+  background-color: transparent;
+}

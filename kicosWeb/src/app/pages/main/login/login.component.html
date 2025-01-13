@@ -1,0 +1,23 @@
+<div class="login d-flex justify-content-center align-items-center">
+    <div class="loginCard ">
+        <p class="text-center text-white textLogin">Connectez-vous</p>
+        <form action="" class="mt-4 mx-3" [formGroup]="loginForm" (ngSubmit)="onSubmitLoginForm()">
+            <div class="form-group mt-5 mb-3">
+                <label class="text-white textLabel" for="pseudo">Votre pseudo</label>
+                <input id="pseudo" type="text" class="input-field" formControlName="login">
+            </div>
+            <div class="form-group mb-3 inputP mb-5">
+                <label for="password" class="text-white textLabel">Mot de passe</label>
+                <input [type]="showPassword ? 'text' : 'password'" class="input-field" id="password" formControlName="password">
+                <button type="button" (click)="togglePassword()" class="iconEye">
+                    <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                </button>
+            </div>
+
+            <div class="d-flex justify-content-center align-items-center my-4">
+                <button type="submit" class="btn mx-auto btnLogin text-white">Se connecter</button>
+            </div>
+            <p routerLink="/forgot-password" class="forgotPassword text-center text-white cursor-pointer">Mot de passe oublié ?</p>
+        </form>
+    </div>
+</div>

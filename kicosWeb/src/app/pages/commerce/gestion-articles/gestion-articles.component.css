@@ -1,0 +1,171 @@
+.new {
+    position: absolute;
+    left: 0;
+    font-size: 15px;
+    padding: 5px 10px 5px 10px;
+    font-weight: 600;
+    color: rgb(255, 255, 255);
+    background-color: rgb(39, 192, 25);
+    border-radius: 8px 0px 8px 0px;
+    width: auto;
+    height: auto;
+    font-style: italic;
+}
+
+.Promo {
+    position: absolute;
+    left: 0;
+    font-size: 15px;
+    padding: 5px 10px 5px 10px;
+    font-weight: 600;
+    color: rgb(255, 255, 255);
+    border-radius: 8px 0px 8px 0px;
+    width: auto;
+    height: auto;
+    font-style: italic;
+    background-color: rgb(248, 190, 30);
+}
+
+.card {
+    border-radius: 8px;
+    border: none;
+}
+
+.card .img img {
+    width: 100%;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.description {
+    padding: 5px 10px;
+}
+
+.categorie {
+    color: gray;
+    font-size: 14px;
+    font-family: italic;
+    font-weight: 600;
+    padding-top: 5px;
+}
+
+.card {
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+    transition: opacity 0.3s ease;
+    opacity: 1;
+}
+
+/* .row-cols-1:hover .card:not(:hover) {
+    opacity: 0.5;
+  } */
+
+.nom {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.price p {
+    color: rgb(14, 226, 7);
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.price-detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+}
+
+.detail button {
+    padding: 5px 17px;
+    border: none;
+    background-color: var(--bg-blue2);
+    color: #fff;
+    border-radius: 5px;
+}
+
+::placeholder {
+    font-size: 14px;
+    font-family: 'Times New Roman', Times, serif;
+    color: rgb(155, 155, 155);
+}
+
+.srch input {
+    padding: 5px 10px;
+    border: none;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px,
+        rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+    border-radius: 20px;
+    /* width: 250px; */
+}
+
+.btn {
+    border-radius: 20px;
+    border: 1px solid;
+    /* padding: 8px 25px; */
+}
+
+.btnValidate {
+    background-color: var(--bg-primary);
+    color: #fff;
+}
+
+.search-add {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: end;
+}
+
+.first {
+    color: var(--bg-blue2) !important;
+    text-decoration: underline;
+}
+
+span a {
+    text-decoration: none;
+    color: black;
+    font-size: 15px;
+    font-weight: 600;
+    padding-left: 15px;
+}
+
+.filtre-produit {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.pagination {
+    width: 450px;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+::ng-deep .paginationTacheCustom .p-paginator-page,
+::ng-deep .paginationTacheCustom .p-paginator-next,
+::ng-deep .paginationTacheCustom .p-paginator-prev,
+::ng-deep .paginationTacheCustom .p-paginator-first,
+::ng-deep .paginationTacheCustom .p-paginator-last {
+    @apply bg-transparent text-black hover:bg-slate-200 rounded px-3 py-1 mx-1;
+}
+
+::ng-deep .paginationTacheCustom .p-paginator-page.p-highlight {
+    background-color: var(--bg-primary);
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+}
+
+
+::ng-deep .paginationTacheCustom .p-paginator {
+    margin-top: 4%;
+    margin-bottom: 4%;
+    border-bottom: 0;
+    background-color: transparent;
+}
+

@@ -1,0 +1,200 @@
+/* @import "bootstrap/dist/css/bootstrap.min.css"; */
+@import "bootstrap-icons/font/bootstrap-icons.css";
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
+
+:root {
+    --bg-neutral: #F8F9FA;
+    --bg-primary: #F18401;
+    --text-primary: #fff;
+    --text-dark: #343a40;
+    --border-primary: #007bff;
+    --border-light: #ced4da;
+    --border-dark: #343a40;
+    --bg-white: #fff;
+    --bg-blue1: #009FE9;
+    --bg-blue2: #37BDD5;
+    --bg-blue3: #F8F9FD;
+    --bg-blue4: #BFDBFE;
+}
+
+* {
+    /* padding: 0; */
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--bg-neutral) !important;
+
+    .wrapper {
+        height: 100%;
+
+        main {
+            height: 100%;
+            display: grid;
+            grid-template-rows: 8% 92%;
+            padding: 0;
+
+            header {
+                background-color: var(--bg-white);
+                padding: 10px 30px;
+                height: 100%;
+                /* box-shadow: 0px 10px 23px 8px rgba(0,0,0,0.09);
+        -webkit-box-shadow: 0px 10px 23px 8px rgba(0,0,0,0.09);
+        -moz-box-shadow: 0px 10px 23px 8px rgba(0,0,0,0.09); */
+
+                .haederItem {
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    list-style: none;
+
+                    li i {
+                        font-size: 18px;
+                        margin-right: 15px;
+                        cursor: pointer;
+                        transition: color ease-in 0.3s;
+
+                        &:hover {
+                            color: var(--bg-blue2);
+                        }
+                    }
+
+                    li .imageWrapper {
+                        width: 35px;
+                        height: 35px;
+                        border-radius: 100%;
+                        background-color: var(--main-color);
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            .mainContainer {
+                /* border: 1px solid ; */
+                padding: 20px 25px;
+                height: 100%;
+                overflow-y: scroll;
+            }
+
+            /* Styles pour les navigateurs basés sur WebKit (Chrome, Safari) */
+            /* Personnalisation de la largeur de la barre de défilement */
+            .mainContainer::-webkit-scrollbar {
+                width: 12px;
+            }
+
+            /* Personnalisation de la piste de la barre de défilement */
+            .mainContainer::-webkit-scrollbar-track {
+                /* Couleur de fond de la piste */
+                background: #f1f1f1;
+                /* Arrondir les coins de la piste */
+                border-radius: 10px;
+            }
+
+            /* Personnalisation de la poignée de la barre de défilement */
+            .mainContainer::-webkit-scrollbar-thumb {
+                /* Couleur de fond de la poignée */
+                background: #0a1929;
+                /* Arrondir les coins de la poignée */
+                border-radius: 10px;
+            }
+
+            /* Changement de couleur de la poignée au survol */
+            .mainContainer::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
+
+            /* Styles pour Firefox */
+            /* Ajuster la largeur de la barre de défilement */
+            .mainContainer {
+                scrollbar-width: thin;
+                /* Couleurs de la poignée et de la piste de la barre de défilement */
+                scrollbar-color: #888 #f1f1f1;
+            }
+
+            footer {
+                /* background-color: var(--bg-white); */
+                padding: 10px 60px;
+                display: flex;
+                justify-content: center;
+                height: 100%;
+            }
+        }
+    }
+}
+
+.contentInput {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+}
+
+
+.input-field {
+    border: none;
+    border-bottom: 1px solid #eee;
+    background: none;
+    color: #222;
+    padding: 0.3rem 0;
+    width: 100%;
+    outline: none;
+}
+
+.inputPhoto {
+    border: none !important;
+    border-bottom: 1px solid #eee !important;
+    background: none;
+    color: #222;
+    padding: 0.6rem 0;
+    width: 100%;
+    outline: none;
+}
+
+.input-field-Date {
+    border: none !important;
+    border-bottom: 1px solid #eee !important;
+    background: none;
+    color: #222;
+    padding: 0.3rem 0;
+    width: 100%;
+    outline: none;
+}
+
+
+.btnAnnuler {
+    background-color: #fff !important;
+    color: var(--bg-primary) !important;
+    border-radius: 20px;
+    border: thin solid var(--bg-primary);
+}
+
+.btnSave {
+    background-color: var(--bg-primary) !important;
+    color: #fff !important;
+    border-radius: 20px;
+}
+
+.inputP {
+    position: relative;
+}
+
+.iconEye {
+    position: absolute;
+    right: 15px !important;
+    background-color: transparent;
+    border: none;
+}
+
+.iconEye i {
+    color: var(--bg-primary);
+    font-size: 20px;
+}
+
+tr{
+    border-bottom: thin solid #eee!important;
+}
