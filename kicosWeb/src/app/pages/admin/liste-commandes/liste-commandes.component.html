@@ -13,10 +13,12 @@
             <!-- Input de recherche  -->
             <div class="me-3">
                 <div class="input-group">
-                    <span class="input-group-text border inputSearch" id="inputGroup-sizing-sm" style="background-color: transparent;">
+                    <span class="input-group-text border inputSearch" id="inputGroup-sizing-sm"
+                        style="background-color: transparent;">
                         <i class="pi pi-search"></i>
                     </span>
-                    <input type="search" class="inputSearch form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Rechercher">
+                    <input type="search" class="inputSearch form-control" aria-label="Sizing example input"
+                        aria-describedby="inputGroup-sizing-sm" placeholder="Rechercher">
                 </div>
             </div>
         </div>
@@ -24,36 +26,107 @@
 
     <!-- Liste des commandes  -->
     @if (tabCommande.length) {
-        <p-table [value]="tabCommande" [paginator]="true" [rows]="5" [tableStyle]="{ 'min-width': '50rem'}"
-            [styleClass]="'paginationTacheCustom'" [rowsPerPageOptions]="[4, 5, 10, 15]">
-            <ng-template pTemplate="header">
-                <tr class="text-center py-2">
-                    <th class="">#</th>
-                    <th class="">client </th>
-                    <th class="">produit </th>
-                    <th class="">quantite</th>
-                    <th class="">etat</th>
-                    <th class="">etablissement</th>
-                    <th class="">Action</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-commande let-index="rowIndex" class="">
-                <tr class="py-4">
-                    <td class="text-center text-xs px-3 tdimg" style="width: 10%;">{{index + 1}}</td>
-                    <td class="text-center text-xs px-3" style="width: 20%;">{{ commande.client}}</td>
-                    <td class="text-center text-xs px-3" style="width: 20%;">{{ commande.produit}}</td>
-                    <td class="text-center text-xs" style="width: 15%;">{{ commande.quantite}}</td>
-                    <td class="text-center text-xs" style="width: 15%;">{{ commande.etat}}</td>
-                    <td class="text-center text-xs" style="width: 20%;">{{ commande.etablissement}}</td>
-                    <td class="text-center text-xs" style="width: 15%;">
-                        <i class="pi pi-eye me-3" style="font-size: 1rem; cursor: pointer;"></i>
-                    </td>
-                </tr>    
-            </ng-template>
-        </p-table>          
+    <p-table [value]="tabCommande" [paginator]="true" [rows]="5" [tableStyle]="{ 'min-width': '50rem'}"
+        [styleClass]="'paginationTacheCustom'" [rowsPerPageOptions]="[4, 5, 10, 15]">
+        <ng-template pTemplate="header">
+            <tr class="text-center py-2">
+                <th class="">#</th>
+                <th class="">client </th>
+                <th class="">Reference </th>
+                <th class="">quantite</th>
+                <th class="">etat</th>
+                <th class="">etablissement</th>
+                <th class="">Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-commande let-index="rowIndex" class="">
+            <tr class="py-4">
+                <td class="text-center text-xs px-3 tdimg" style="width: 10%;">{{index + 1}}</td>
+                <td class="text-center text-xs px-3" style="width: 20%;">{{ commande.client}}</td>
+                <td class="text-center text-xs px-3" style="width: 20%;">{{ commande.reference}}</td>
+                <td class="text-center text-xs" style="width: 15%;">{{ commande.panier.articles.length}}</td>
+                <td class="text-center text-xs" style="width: 15%;">{{ commande.status}}</td>
+                <td class="text-center text-xs" style="width: 20%;">{{ commande.etablissement}}</td>
+                <td class="text-center text-xs" style="width: 15%;" (click)="showDialog();detailCommande(commande.id)">
+                    <i class="pi pi-eye me-3" style="font-size: 1rem; cursor: pointer;"></i>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
     }
     @else {
-        <p class="text-center fs-5 fw-bold">Aucun commande enregistré pour le moment </p>
+    <p class="text-center fs-5 fw-bold">Aucun commande enregistré pour le moment </p>
     }
-
 </div>
+
+<p-dialog header="Détail Commande" [modal]="true" [(visible)]="visible"
+    [style]="{ width: '60rem', height:'50rem', backgroundColor: '#F8F9FD'}">
+    <div class=" card cardDetail">
+        <h2>Informations commande</h2>
+        <div class="grid">
+            <div class="info-group">
+                <span class="label">Réference</span>
+                <div class="value">{{detailcommande?.reference}}</div>
+            </div>
+            <div class="info-group">
+                <span class="label">Etablissement</span>
+                <div class="value">{{detailcommande?.status}}</div>
+            </div>
+            <div class="info-group">
+                <span class="label">Status</span>
+                <div class="value">{{detailcommande?.status}}</div>
+            </div>
+            <div class="info-group">
+                <span class="label">Montant</span>
+                <div class="value">{{detailcommande?.price}}FCFA</div>
+            </div>
+        </div>
+
+        <div class="info-group">
+            <span class="label">Nombre articles</span>
+            <div class="value">{{detailcommande?.panier.articles.length}}</div>
+        </div>
+        <div class="info-group">
+            <span class="label">Description</span>
+            <ul class="description">
+                <!-- <li *ngFor="let itemArticle of detailcommande?.panier.articles ">{{itemArticle[0].name}}</li> -->
+            </ul>
+        </div>
+    </div>
+
+    <div class=" card cardDetail">
+        <h2>Informations Utilisateur</h2>
+        <div class="grid">
+            <div class="info-group">
+                <span class="label">Utilisateur</span>
+                <div class="value">Germaine Daba Diouf</div>
+            </div>
+            <div class="info-group">
+                <span class="label">Contact</span>
+                <div class="value">maildegermaine&#64;gmail.com</div>
+            </div>
+            <div class="info-group">
+                <span class="label">Social</span>
+                <div class="value">Née le 10/11/1988</div>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="info-group">
+                <span class="label">Rôle</span>
+                <div class="value">Vendeur</div>
+            </div>
+            <div class="info-group">
+                <span class="label">Téléphone</span>
+                <div class="value">778890843</div>
+            </div>
+            <div class="info-group">
+                <span class="label">NIN</span>
+                <div class="value">22204400099900</div>
+            </div>
+        </div>
+        <div class="info-group">
+            <span class="label">Localisation</span>
+            <div class="value">Ouakam/Dakar</div>
+        </div>
+    </div>
+</p-dialog>

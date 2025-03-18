@@ -7,7 +7,7 @@
                 <div class="card rounded shadow p-0">
                     <div class="mx-3 mt-3">
                         <div class="d-flex justify-content-between">
-                            <span class="fw-medium">Commerces</span>
+                            <span class="fw-medium">Partenaires</span>
                             <span class="iconRounded B">
                                <i class="pi pi-shop" style="color: var(--bg-neutral);"></i>
                             </span>
@@ -52,38 +52,7 @@
     </div>
 
 
-    <div class="row m-0 p-0 g-3 rowCard1">
-        <div class="col-md-6 col-sm-12 content">
-            <div class="card shadow p-2">
-                <span class="font-medium text-color">Zone de livraison</span>
-                <p-chart type="bar" [data]="deliveryZoneData" [options]="deliveryZoneOptions" />
-            </div>
-        </div>
-        <div class="col-md-6 col-sm-12 content">
-            <div class="card shadow container">
-                <div class="header">
-                  <h2>Top Scorer</h2>
-                  <select class="month-selector">
-                    <option *ngFor="let month of months" value="{{ month.id }}">{{ month.name }}</option>
-                  </select>
-                </div>
-              
-                <div class="scorer-grid">
-                  <div *ngFor="let scorer of scorer" 
-                       class="scorer-card" 
-                       [ngClass]="scorer.bgColor">
-                    <div class="avatar">
-                      <img [src]="scorer.pp" [alt]="scorer.name">
-                    </div>
-                    <div class="role">{{ scorer.role }}</div>
-                    <div class="name">{{ scorer.name }}</div>
-                    <div class="score">{{ scorer.score }}</div>
-                    <div class="position">{{ scorer.position }}</div>
-                  </div>
-                </div>
-              </div>
-        </div>
-    </div>
+ 
 
 
 </div>

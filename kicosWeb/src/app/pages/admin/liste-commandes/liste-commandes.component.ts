@@ -1,72 +1,76 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TableModule } from 'primeng/table';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { ApiService } from '../../../core/services/api.service';
+import { MessageService } from '../../../core/services/message.service';
+import { environment } from '../../../../environments/environment';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-liste-commandes',
   standalone: true,
-  imports: [TableModule],
+  imports: [TableModule, DialogModule],
   templateUrl: './liste-commandes.component.html',
   styleUrl: './liste-commandes.component.css'
 })
 export class ListeCommandesComponent {
-  tabcommande: any[] = [];
 
-  tabCommande = [
-    {
-      id: 1,
-      client: 'Dupont SA',
-      produit: 'Ordinateur portable',
-      quantite: 5,
-      etat: 'En cours',
-      etablissement: 'Paris',
-      action: 'Modifier'
-    },
-    {
-      id: 2,
-      client: 'Martin SARL',
-      produit: 'Écran 24"',
-      quantite: 10,
-      etat: 'Livré',
-      etablissement: 'Lyon',
-      action: 'Supprimer'
-    },
-    {
-      id: 3,
-      client: 'Tech Solutions',
-      produit: 'Clavier sans fil',
-      quantite: 15,
-      etat: 'En attente',
-      etablissement: 'Marseille',
-      action: 'Valider'
-    },
-    {
-      id: 4,
-      client: 'InfoSys Plus',
-      produit: 'Souris gaming',
-      quantite: 20,
-      etat: 'En préparation',
-      etablissement: 'Bordeaux',
-      action: 'Modifier'
-    },
-    {
-      id: 5,
-      client: 'Bureau Pro',
-      produit: 'Station d\'accueil',
-      quantite: 8,
-      etat: 'Expédié',
-      etablissement: 'Toulouse',
-      action: 'Supprimer'
-    },
-    {
-      id: 6,
-      client: 'Digital Services',
-      produit: 'Casque bluetooth',
-      quantite: 12,
-      etat: 'En cours',
-      etablissement: 'Nantes',
-      action: 'Valider'
-    }
-  ];
+  // Injection de dépendances
+  router = inject(Router);
+  http = inject(HttpClient);
+  apiService = inject(ApiService);
+  messageService = inject(MessageService);
+
+
+  // Declaration des variables 
+  baseUrl = environment.base_url;
+  first: number = 0;
+  rows: number = 6;
+  tabCommande: any[] = [];
+
+  ngOnInit() {
+    this.commandeList();
+  }
+
+  // lister les partenaire
+  commandeList() {
+    // On fait appel a l'api pour lister les commandes
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/commandes`).subscribe(
+      (response: any) => {
+        console.log("liste des commandes", response);
+        this.tabCommande = response.data;
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+
+      }
+    )
+  }
+
+  visible: boolean = false;
+
+  showDialog() {
+    this.visible = true;
+  }
+
+  detailcommande:any;
+  // détail partenaire
+  detailCommande(idCommande: string) {
+    // On fait appel a l'api pour afficher les détails d'un partenaire
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/commandes/${idCommande}`).subscribe(
+      (response: any) => {
+        this.detailcommande = response.data;
+        console.log("Detail du commande", this.detailcommande);
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+
+      }
+    )
+  }
 
 
 }

@@ -56,14 +56,14 @@ export class DashboardComponent {
 
   ngOnInit(): void {
     // Récupère les menus accessibles à l'utilisateur connecté
-    const storedUserInfo = localStorage.getItem('userConnected');
+    const storedUserInfo = localStorage.getItem('userInfo');
     if (storedUserInfo) {
       this.userInfo = JSON.parse(storedUserInfo);
       this.userRole = this.userInfo.role;
       console.log('role userInfo: ' + this.userRole);
       if (this.userRole === 'admin') {
         this.menus = this.menuService.menus.admin;
-      }else if (this.userRole === 'commerce') {
+      }else if (this.userRole === 'partenaire') {
         this.menus = this.menuService.menus.commerce;
       }else{
         this.menus = this.menuService.menus.livreur;
@@ -95,7 +95,8 @@ export class DashboardComponent {
 
   // Méthode pour la déconnexion
   logout() {
-    localStorage.removeItem('userConnected');
+    localStorage.removeItem('userInfo');
+    localStorage.removeItem('session_id');
     this.router.navigate(['/login']);
     this.menus = [];
     this.userInfo = null;

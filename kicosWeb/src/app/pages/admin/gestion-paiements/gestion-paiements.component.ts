@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
 import { TabViewModule } from 'primeng/tabview';
 import { TableModule } from 'primeng/table';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { ApiService } from '../../../core/services/api.service';
+import { environment } from '../../../../environments/environment';
+import { MessageService } from '../../../core/services/message.service';
 
 @Component({
   selector: 'app-gestion-paiements',
@@ -11,56 +17,50 @@ import { TableModule } from 'primeng/table';
 })
 export class GestionPaiementsComponent {
 
-  demandeCommerce = [
-    {
-      id: 1,
-      photo: "https://img.freepik.com/photos-gratuite/restaurant-italien-moderne_23-2148956171.jpg",
-      responsable: "Michel Laurent",
-      dateDemande: "2024-03-10",
-      demande: "Demande de paiement 2500€ - Restaurant Bella Italia",
-      action: "Valider"
-    },
-    {
-      id: 2,
-      photo: "https://img.freepik.com/photos-gratuite/magasin-vetements_1150-8324.jpg",
-      responsable: "Sarah Dubois",
-      dateDemande: "2024-03-11",
-      demande: "Demande de paiement 1850€ - Boutique Mode&Style",
-      action: "En attente"
-    },
-    {
-      id: 3,
-      photo: "https://img.freepik.com/photos-gratuite/cafe-moderne-exterieur_23-2148956170.jpg",
-      responsable: "Antoine Moreau",
-      dateDemande: "2024-03-12",
-      demande: "Demande de paiement 3200€ - Café des Arts",
-      action: "Refuser"
-    },
-    {
-      id: 4,
-      photo: "https://img.freepik.com/photos-gratuite/boulangerie-moderne_23-2148956172.jpg",
-      responsable: "Marie Petit",
-      dateDemande: "2024-03-13",
-      demande: "Demande de paiement 1200€ - Boulangerie du Coin",
-      action: "Valider"
-    },
-    {
-      id: 5,
-      photo: "https://img.freepik.com/photos-gratuite/supermarche-moderne_1150-8325.jpg",
-      responsable: "Thomas Bernard",
-      dateDemande: "2024-03-14",
-      demande: "Demande de paiement 4500€ - Épicerie Bio",
-      action: "En attente"
-    },
-    {
-      id: 6,
-      photo: "https://img.freepik.com/photos-gratuite/pharmacie-moderne_23-2148956173.jpg",
-      responsable: "Claire Martin",
-      dateDemande: "2024-03-15",
-      demande: "Demande de paiement 2800€ - Pharmacie Centrale",
-      action: "En cours"
-    }
-  ];
+  // Injection de dépendances
+  router = inject(Router);
+  http = inject(HttpClient);
+  apiService = inject(ApiService);
+  messageService = inject(MessageService);
+  baseUrl = environment.base_url;
+  demandeCommerce: any []=[];
+
+  ngOnInit() {
+    this.listDemandePartenaire();
+  }
+
+  // lister les demandes de paiement des partenaires
+  listDemandePartenaire() {
+    // On fait appel a l'api pour lister les demande de paiement des  partenaires
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/admin/demandes`).subscribe(
+      (response: any) => {
+        console.log("liste des partenaires", response);
+        this.demandeCommerce = response.demandes;
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+
+      }
+    )
+  }
+
+ 
+  // traiter demande paiements
+  traiterDemandePaiement(idDemande:any) {
+      // On fait appel a l'api pour traiter les demande de paiement des  partenaires
+      this.apiService.postWithSessionId(`${this.baseUrl}/admin/demandes/${idDemande}`, { status: "Traité" }).subscribe(
+        (response: any) => {
+          console.log("Demande traitée", response);
+          this.listDemandePartenaire();
+        },
+        (error: any) => {
+          console.log("Partie erreur");
+          console.log(error);
+        }
+      )
+  }
+
 
   demandeLivreur = [
     {
@@ -106,4 +106,6 @@ export class GestionPaiementsComponent {
       action: 'Supprimer'
     }
   ];
+
+
 }

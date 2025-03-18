@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-accueil-livreur',
   standalone: true,
-  imports: [CommonModule,ChartModule],
+  imports: [CommonModule,ChartModule,CardModule],
   templateUrl: './accueil-livreur.component.html',
   styleUrl: './accueil-livreur.component.css'
 })
@@ -22,7 +23,6 @@ export class AccueilLivreurComponent  implements OnInit{
   ngOnInit() {
     this.initGaugeChart();
     this.initLineChart();
-    this.initBarChart();
   }
 
   private initGaugeChart() {
@@ -83,43 +83,9 @@ export class AccueilLivreurComponent  implements OnInit{
     };
   }
 
-  private initBarChart() {
-    this.barData = {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-      datasets: [
-        {
-          label: 'Série 1',
-          data: [65, 45, 80, 45, 70, 45, 65, 45],
-          backgroundColor: '#FF9800'
-        },
-        {
-          label: 'Série 2',
-          data: [40, 60, 35, 65, 35, 65, 45, 55],
-          backgroundColor: '#00BCD4'
-        }
-      ]
-    };
-
-    this.barOptions = {
-      plugins: {
-        legend: { display: false }
-      },
-      scales: {
-        y: {
-          display: false,
-          grid: {
-            display: false
-          }
-        },
-        x: {
-          grid: {
-            display: false
-          }
-        }
-      },
-      responsive: true,
-      maintainAspectRatio: false,
-      barPercentage: 0.4
-    };
-  }
+  // Statistiques
+  totalEarningsToday: number = 42.50;
+  totalEarningsWeek: number = 286.75;
+  completedDeliveries: number = 8;
+  totalDistance: number = 64;
 }

@@ -15,247 +15,174 @@
         <div class="title">
             <h3>Liste des produits</h3>
         </div>
-        <div class="filtre">
+        <!-- <div class="filtre">
             <span><a href="#" class="first">Tous</a></span>
             <span><a href="#">Produits laitiers</a></span>
             <span><a href="#">Fruits & Légumes</a></span>
             <span><a href="#">Café & Thé</a></span>
             <span><a href="#">Viandes</a></span>
-        </div>
+        </div> -->
     </div>
     <!-- fin -->
     <!-- les cartes -->
     <div class="row row-cols-1 row-cols-md-4 g-4">
-        <div class="col">
+        <div class="col" *ngFor="let article of  getPaginatedPartners()">
             <div class="card h-100">
-                <div class="new">New</div>
+                <!-- <div class="new">New</div> -->
                 <div class="img">
-                    <img src="https://img.freepik.com/photos-gratuite/legumes_1398-810.jpg?ga=GA1.1.112979598.1725359040&semt=ais_hybrid"
-                        alt="" />
+                    <img src="https://kiccos.terangacode.com/{{article.articleImage}}" class="card-img-top" alt="..." />
                 </div>
                 <div class="description">
-                    <p class="categorie">Végétal</p>
-                    <p class="nom">Panier légume</p>
+                    <p class="categorie">{{article.articleName}}</p>
+                    <p class="nom">{{article.articleName}}</p>
                 </div>
                 <div class="price-detail">
                     <div class="price">
-                        <p>10.900 fcfa</p>
-                    </div>
-                    <div class="detail" routerLink="/kicos/commerce/detailArticle">
-                        <button>Détail</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- ---------- -->
-        <div class="col">
-            <div class="card h-100">
-                <div class="Promo">-10%</div>
-                <div class="img">
-                    <img src="https://img.freepik.com/photos-gratuite/legumes_1398-810.jpg?ga=GA1.1.112979598.1725359040&semt=ais_hybrid"
-                        alt="" />
-                </div>
-                <div class="description">
-                    <p class="categorie">Végétal</p>
-                    <p class="nom">Panier légume</p>
-                </div>
-                <div class="price-detail">
-                    <div class="price">
-                        <p>10.900 fcfa</p>
+                        <p>{{article.articlePrice}}</p>
                     </div>
                     <div class="detail">
-                        <button>Détail</button>
+                        <span (click)="showDialogUpdateArticle(article)"><a><i
+                                    class="bi bi-pencil-square"></i></a></span>
+                        <span (click)="suprimerArticle(article.id)"><a><i class="bi bi-trash"></i></a></span>
+                        <span [routerLink]="['/kicos/commerce/detailArticle', article.id]"><a><i
+                                    class="bi bi-eye"></i></a></span>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- ---------- -->
-        <div class="col">
-            <div class="card h-100">
-                <div class="new">New</div>
-                <div class="img">
-                    <img src="https://img.freepik.com/photos-premium/divers-legumes-dans-panier-osier-isoler-blanc-aliments-frais_194646-2141.jpg?w=826"
-                        alt="" />
-                </div>
-                <div class="description">
-                    <p class="categorie">Végétal</p>
-                    <p class="nom">Panier légume</p>
-                </div>
-                <div class="price-detail">
-                    <div class="price">
-                        <p>10.900 fcfa</p>
-                    </div>
-                    <div class="detail">
-                        <button>Détail</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- ---------- -->
-        <div class="col">
-            <div class="card h-100">
-                <div class="Promo">-20%</div>
-                <div class="img">
-                    <img src="https://img.freepik.com/photos-gratuite/legumes_1398-810.jpg?ga=GA1.1.112979598.1725359040&semt=ais_hybrid"
-                        alt="" />
-                </div>
-                <div class="description">
-                    <p class="categorie">Végétal</p>
-                    <p class="nom">Panier légume</p>
-                </div>
-                <div class="price-detail">
-                    <div class="price">
-                        <p>10.900 fcfa</p>
-                    </div>
-                    <div class="detail">
-                        <button>Détail</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- ---------- -->
-        <div class="col">
-            <div class="card h-100">
-                <div class="new">New</div>
-                <div class="img">
-                    <img src="https://img.freepik.com/photos-premium/divers-legumes-dans-panier-osier-isoler-blanc-aliments-frais_194646-2141.jpg?w=826"
-                        alt="" />
-                </div>
-                <div class="description">
-                    <p class="categorie">Végétal</p>
-                    <p class="nom">Panier légume</p>
-                </div>
-                <div class="price-detail">
-                    <div class="price">
-                        <p>10.900 fcfa</p>
-                    </div>
-                    <div class="detail">
-                        <button>Détail</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- ---------- -->
-        <div class="col">
-            <div class="card h-100">
-                <div class="Promo">-10%</div>
-                <div class="img">
-                    <img src="https://img.freepik.com/photos-gratuite/legumes_1398-810.jpg?ga=GA1.1.112979598.1725359040&semt=ais_hybrid"
-                        alt="" />
-                </div>
-                <div class="description">
-                    <p class="categorie">Végétal</p>
-                    <p class="nom">Panier légume</p>
-                </div>
-                <div class="price-detail">
-                    <div class="price">
-                        <p>10.900 fcfa</p>
-                    </div>
-                    <div class="detail">
-                        <button>Détail</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- ---------- -->
-        <div class="col">
-            <div class="card h-100">
-                <div class="new">New</div>
-                <div class="img">
-                    <img src="https://img.freepik.com/photos-premium/divers-legumes-dans-panier-osier-isoler-blanc-aliments-frais_194646-2141.jpg?w=826"
-                        alt="" />
-                </div>
-                <div class="description">
-                    <p class="categorie">Végétal</p>
-                    <p class="nom">Panier légume</p>
-                </div>
-                <div class="price-detail">
-                    <div class="price">
-                        <p>10.900 fcfa</p>
-                    </div>
-                    <div class="detail">
-                        <button>Détail</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- ---------- -->
-        <div class="col">
-            <div class="card h-100">
-                <div class="Promo">-25%</div>
-                <div class="img">
-                    <img src="https://img.freepik.com/photos-gratuite/legumes_1398-810.jpg?ga=GA1.1.112979598.1725359040&semt=ais_hybrid"
-                        alt="" />
-                </div>
-                <div class="description">
-                    <p class="categorie">Végétal</p>
-                    <p class="nom">Panier légume</p>
-                </div>
-                <div class="price-detail">
-                    <div class="price">
-                        <p>10.900 fcfa</p>
-                    </div>
-                    <div class="detail">
-                        <button>Détail</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- ---------- -->
     </div>
     <!-- Pagination -->
     <div class="pagination mt-5 d-flex justify-content-center">
         <div>
-            <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="3" [totalRecords]="6"
-                class="paginator" [styleClass]="'paginationTacheCustom'" [rowsPerPageOptions]="[3, 6, 9]">
+            <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows"
+                [totalRecords]="listeArticles.length" class="paginator" [styleClass]="'paginationTacheCustom'"
+                [rowsPerPageOptions]="[8, 12, 16]">
             </p-paginator>
         </div>
     </div>
 </div>
 
 
-
 <!-- Modal ajout article -->
 <p-dialog [modal]="true" [(visible)]="visibleAddArticle"
     [style]="{ width: '60rem', height:'50rem', backgroundColor: '#F8F9FD'}" header="Ajout Article">
-    <form>
+    <form novalidate [formGroup]="articleForm" #ngForm="ngForm" (ngSubmit)="ajouterArticle()">
         <div class="">
             <div class="">
                 <!-- Nom  -->
                 <div class="mb-3">
                     <label class="mb-1" for="name">Nom </label>
-                    <input id="name" type="text" class="input-field">
+                    <input id="name" type="text" class="input-field" formControlName="articleName">
+                    <p *ngIf="error" class="text-danger">{{error.articleName}}</p>
+                    <div *ngIf="articleForm.get('articleName')?.invalid && articleForm.get('articleName')?.touched"
+                        class="text-danger">
+                        {{ articleForm.get('articleName')?.errors?.['invalid'] ? 'Le nom de l\'article est invalide.' :
+                        'Le nom de l\'article est obligatoire.' }}
+                    </div>
+                </div>
+
+                <!-- Prix d'achat -->
+                <div class="mb-3">
+                    <label for="prix_achat" class="mb-1">Prix d'achat</label>
+                    <input type="tel" class="input-field" id="prix_achat" formControlName="articlePrice">
+                    <p *ngIf="error" class="text-danger">{{error.articlePrice}}</p>
+                    <div *ngIf="articleForm.get('articlePrice')?.invalid && articleForm.get('articlePrice')?.touched"
+                        class="text-danger">
+                        {{ articleForm.get('articlePrice')?.errors?.['invalid'] ? 'Le prix est invalide.' : 'Le prix est \n
+                        obligatoire.' }}
+                    </div>
+                </div>
+
+                <!-- Photo article-->
+                <div class="mb-3 ">
+                    <label for="photoArticle" class="mb-1">Photo</label>
+                    <input accept="image/*" name="photo_Article" class="form-control w-full py-1 inputPhoto"
+                        id="photoArticle" type="file" (change)="addPhotoArticle($event)">
+                    <p *ngIf="error" class="text-danger">{{error.articleImage}}</p>
+                    <div *ngIf="articleForm.get('articleImage')?.invalid && articleForm.get('articleImage')?.touched"
+                        class="text-danger">
+                        {{ articleForm.get('articleImage')?.errors?.['invalid'] ? 'Le format de l\'image est invalide.'
+                        : 'L\'image est obligatoire.' }}
+                    </div>
+                </div>
+
+                <!-- Categorie -->
+                <div class="mb-3">
+                    <label for="address" class="mb-1">Catégorie</label>
+                    <select name="" id="" class="form-control w-full py-1 inputPhoto" formControlName="categorie_id">
+                        <option>Sélectionnez un catégorie</option>
+                        <option *ngFor="let categorie of categorieTab" [value]="categorie.id">{{categorie.titre}}
+                        </option>
+                    </select>
+                    <p *ngIf="error" class="text-danger">{{error.categorie_id}}</p>
+                    <div *ngIf="articleForm.get('categorie_id')?.invalid && articleForm.get('categorie_id')?.touched"
+                        class="text-danger">
+                        {{ articleForm.get('categorie_id')?.errors?.['invalid'] ? 'La catégorie sélectionnée est\n
+                        invalide.' : 'La catégorie est obligatoire.' }}
+                    </div>
+                </div>
+
+                <!-- description -->
+                <div class="mb-3">
+                    <label for="description" class="mb-1">Description</label>
+                    <input id="description" type="text" class="input-field" formControlName="articleDescription">
+                    <p *ngIf="error" class="text-danger">{{error.articleDescription}}</p>
+                    <div *ngIf="articleForm.get('articleDescription')?.invalid && articleForm.get('articleDescription')?.touched"
+                        class="text-danger">
+                        {{ articleForm.get('articleDescription')?.errors?.['invalid'] ? 'La description est invalide.' :
+                        'La description est obligatoire.' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <button type="button" class="btn btnAnnuler me-2" (click)="closeModal()">Annuler</button>
+            <button type="submit" class="btn btnSave" [disabled]="articleForm.invalid">Enregistrer</button>
+        </div>
+    </form>
+</p-dialog>
+
+<!-- Modal modifier article -->
+<p-dialog [modal]="true" [(visible)]="visibleUpdateArticle"
+    [style]="{ width: '60rem', height:'50rem', backgroundColor: '#F8F9FD'}" header="Ajout Article">
+    <form novalidate [formGroup]="articleForm" #ngForm="ngForm" (ngSubmit)="modifierArticle()">
+        <div class="">
+            <div class="">
+                <!-- Nom  -->
+                <div class="mb-3">
+                    <label class="mb-1" for="name">Nom </label>
+                    <input id="name" type="text" class="input-field" formControlName="articleName">
                 </div>
 
                 <!-- Prix d’achat -->
                 <div class="mb-3">
                     <label for="prix_achat" class="mb-1">Prix d’achat</label>
-                    <input type="tel" class="input-field" id="prix_achat">
+                    <input type="tel" class="input-field" id="prix_achat" formControlName="articlePrice">
                 </div>
 
                 <!-- Photo article-->
                 <div class="mb-3 ">
                     <label for="photoArticle" class="mb-1">Photo</label>
                     <input accept="image/*" name="photo_Article" class=" form-control w-full py-1 inputPhoto"
-                        id="photoArticle" type="file">
+                        id="photoArticle" type="file" (change)="addPhotoArticle($event)">
                 </div>
 
                 <!-- Categorie -->
                 <div class="mb-3">
                     <label for="address" class="mb-1">Catégorie</label>
-                    <select name="" id=""  class=" form-control w-full py-1 inputPhoto">
-                    <!-- Liste déroulante avec les catégories -->
-                     <option>Sélectionnez un catégorie</option>
-                     <option value="">Fruit et legumes</option>
-                     <option value="">Produit alimentaire</option>
-                     <option value="">Produit de beurre</option>
+                    <select name="" id="" class=" form-control w-full py-1 inputPhoto" formControlName="categorie_id">
+                        <!-- Liste déroulante avec les catégories -->
+                        <option>Sélectionnez un catégorie</option>
+                        <option *ngFor="let categorie of categorieTab" [value]="categorie.id">{{categorie.titre}}
+                        </option>
                     </select>
                 </div>
 
                 <!-- description -->
                 <div class="mb-3">
                     <label for="description" class="mb-1">Description</label>
-                    <input id="description" type="text" class="input-field">
+                    <input id="description" type="text" class="input-field" formControlName="articleDescription">
                 </div>
             </div>
         </div>

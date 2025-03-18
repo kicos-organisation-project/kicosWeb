@@ -20,16 +20,21 @@ export class ApiService {
 
   // Faire une requete de type put
   put(endpoint: string, data: object | FormData | any) {
-    return this.http.put(endpoint, data);
+    return this.http.post(endpoint, data);
   }
+ // Faire une requete de type put
+ putRequest(endpoint: string, data: object | FormData | any) {
+  return this.http.put(endpoint, data);
+}
+
   // Faire une requete de type put
   CustomPut(endpoint: string, data: object | FormData | any, id: number) {
     return this.http.put(`${environment.base_url}/${endpoint}/${id}`,data);
   }
 
   // getElementById or liste elements
-  get(id: any = null, endpoint: string) {
-    return this.http.get(`${endpoint}${id ? '/' + id : ''}`);
+  get( endpoint: string) {
+    return this.http.get(`${endpoint}`);
   }
 
   // ajout simple
@@ -39,12 +44,12 @@ export class ApiService {
 
   // Recupere une liste de données en lui passant l'entité
   getRequest(endpoint: string) {
-    return this.http.get(`${environment.base_url}/${endpoint}`,);
+    return this.http.get(`${endpoint}`,);
   }
 
   // Supprime un élément spécifique.
-  delete(id: string | number, endpoint: string) {
-    return this.http.delete(`${endpoint}/${id}`);
+  delete(endpoint: string) {
+    return this.http.delete(`${endpoint}`);
   }
 
   // ------------------------ Avec session_id ---------------------------------
@@ -80,9 +85,32 @@ export class ApiService {
   }
 
   // Supprime un élément spécifique.
-  deleteWithSessionId(id: string | number, endpoint: string | any) {
+  deleteWithSessionId(endpoint: string | any) {
     let headers = new HttpHeaders();
     headers = headers.set('session_id','' + localStorage.getItem('session_id'));
-    return this.http.delete(`${endpoint}/${id}`, { headers: headers });
+    return this.http.delete(`${endpoint}`, { headers: headers });
   }
+  
+  // ------------------------ Autres ---------------------------------
+  //  filtre general 
+filterByTerm(list: any[], filterTerm: string, keys: string[]): any[] {
+  if (!list || !filterTerm || !keys || keys.length === 0) return list;
+
+  const filteredList = list.filter(item => {
+    return keys.some(key => {
+      if (item[key] && typeof item[key] === 'string') {
+        return item[key].toLowerCase().includes(filterTerm.toLowerCase());
+      }
+      return false;
+    });
+  });
+
+  // If no matches are found, show an alert and return the original list
+  if (filteredList.length === 0) {
+    alert('Aucune correspondance trouvée');
+  }
+
+  return filteredList;
+}
+
 }

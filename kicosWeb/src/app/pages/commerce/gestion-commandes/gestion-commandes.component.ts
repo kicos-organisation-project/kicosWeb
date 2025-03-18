@@ -1,79 +1,86 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TabViewModule } from 'primeng/tabview';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { PaginatorModule } from 'primeng/paginator';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { ApiService } from '../../../core/services/api.service';
+import { MessageService } from '../../../core/services/message.service';
+import { environment } from '../../../../environments/environment';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-gestion-commandes',
   standalone: true,
-  imports: [TabViewModule, TableModule, DialogModule, PaginatorModule],
+  imports: [TabViewModule, TableModule, DialogModule, PaginatorModule, CommonModule],
   templateUrl: './gestion-commandes.component.html',
   styleUrl: './gestion-commandes.component.css'
 })
 export class GestionCommandesComponent {
-  // contrôler la visibilité du modal details commandes
-  visible: boolean = false;
-  showDialogDetailCommande() {
-    this.visible = true;
-  }
 
-  //fermer modal
-  closeModal() {
-    this.visible = false;
-  }
+  // Injection de dépendances
+  router = inject(Router);
+  http = inject(HttpClient);
+  apiService = inject(ApiService);
+  messageService = inject(MessageService);
 
-  // les varaibles utilisees
+
+  // Declaration des variables 
+  baseUrl = environment.base_url;
   first: number = 0;
   rows: number = 6;
+  listecommandes: any[] = []; 
+
   // les événements de pagination
   onPageChange(event: any) {
     this.first = event.first;
     this.rows = event.rows;
   }
 
-  demandeLivreur = [
-    {
-      id: 1,
-      photo: 'https://img.freepik.com/free-vector/young-afro-man-smiling_24877-81870.jpg?ga=GA1.1.2125268813.1733426263&semt=ais_hybrid',
-      nomComplet: 'Thomas Martin',
-      statut: 'Employés',
-      action: 'Modifier'
-    },
-    {
-      id: 2,
-      photo: 'https://img.freepik.com/free-vector/cute-girl-student-wearing-face-mask-cleansing-hands-with-hand-soap-protection-virus-covid19_40876-3285.jpg?t=st=1733949226~exp=1733952826~hmac=07a6ee7132dad8ec340939a6f9a12bf56d865c3c3a049b7062f9f337449088ca&w=740',
-      nomComplet: 'Sophie Dubois',
-      statut: 'Particuliers',
-      action: 'Supprimer'
-    },
-    {
-      id: 3,
-      photo: 'https://img.freepik.com/free-vector/young-bearded-man_24877-82119.jpg?t=st=1733949040~exp=1733952640~hmac=991bed926bf4da7600ecdd7d64e469f0fd7b55729f2e33e35540e4d705b76da5&w=740',
-      nomComplet: 'Pierre Durand',
-      statut: 'Employés',
-      action: 'Modifier'
-    },
-    {
-      id: 4,
-      photo: 'https://img.freepik.com/free-vector/woman-working-with-laptop-successful-cute-cartoon-character-doodle-style_40876-3220.jpg?t=st=1733949171~exp=1733952771~hmac=26f9d48dec6b4b4481a18705c916ceddda7513ea8686f0ec1c2680ff4b5cfe40&w=740',
-      nomComplet: 'Marie Lambert',
-      statut: 'Particuliers',
-      action: 'Supprimer'
-    },
-    {
-      id: 5,
-      photo: 'https://img.freepik.com/free-vector/purple-man-with-blue-hair_24877-82003.jpg?t=st=1733949092~exp=1733952692~hmac=cad4495a499bec5b0cb70e544eae109ffbd918179491ccdee118475b85ae5008&w=740',
-      nomComplet: 'Lucas Bernard',
-      statut: 'Employés',
-      action: 'Modifier'
-    },
-    {
-      id: 6,
-      photo: 'https://img.freepik.com/free-vector/cute-girl-student-wearing-face-mask-cleansing-hands-with-hand-soap-protection-virus-covid19_40876-3285.jpg?t=st=1733949226~exp=1733952826~hmac=07a6ee7132dad8ec340939a6f9a12bf56d865c3c3a049b7062f9f337449088ca&w=740',
-      nomComplet: 'Emma Petit',
-      statut: 'Particuliers',
-      action: 'Supprimer'
-    }
-  ];
+
+  ngOnInit() {
+    this.commandeList();
+  }
+
+  // lister les partenaire
+  commandeList() {
+    // On fait appel a l'api pour lister les commandes
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/commandes/partenaire`).subscribe(
+      (response: any) => {
+        console.log("liste des commandes", response);
+        this.listecommandes = response.data;
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+
+      }
+    )
+  }
+
+  visible: boolean = false;
+
+  showDialog() {
+    this.visible = true;
+  }
+
+  detailcommande:any;
+  articletab:any[]=[];
+  // détail partenaire
+  detailCommande(idCommande: string) {
+    // On fait appel a l'api pour afficher les détails d'un partenaire
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/commandes/${idCommande}`).subscribe(
+      (response: any) => {
+        this.detailcommande = response.data;
+        this.articletab = this.detailcommande.panier.articles
+        console.log("Detail du commande", this.detailcommande);
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+
+      }
+    )
+  }
 }

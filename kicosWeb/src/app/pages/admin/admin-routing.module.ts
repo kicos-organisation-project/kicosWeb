@@ -5,6 +5,7 @@ import { GestionCommerceComponent } from './gestion-commerce/gestion-commerce.co
 import { ListeCommandesComponent } from './liste-commandes/liste-commandes.component';
 import { GestionLivreurComponent } from './gestion-livreur/gestion-livreur.component';
 import { GestionPaiementsComponent } from './gestion-paiements/gestion-paiements.component';
+import { CategorieComponent } from './categorie/categorie.component';
 
 
 
@@ -14,6 +15,7 @@ const routes: Routes = [
     {path: 'commandes', component: ListeCommandesComponent},
     {path: 'livreur', component: GestionLivreurComponent},
     {path: 'paie', component: GestionPaiementsComponent},
+    {path: 'categorie', component: CategorieComponent},
     {path: '**', redirectTo: 'dashboard', pathMatch: 'full' },
 
 ];

@@ -7,7 +7,7 @@
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4NshHKqzTaToj0GKFn40reOu7doky-WRtXA&s"
             alt="logo">
           <!-- <img   *ngIf="!isSidebarVisible" src="../../../../assets/logo/logo.png" alt="logo"> -->
-          <strong class="text-center mx-2 titreLogo" *ngIf="isSidebarVisible">Kiscos<span>Express</span> </strong>
+          <strong class="text-center mx-2 titreLogo" *ngIf="isSidebarVisible">Kicos<span>Express</span> </strong>
         </div>
       </div>
       <nav>
@@ -33,8 +33,7 @@
         </div>
         <div class="d-flex align-items-center">
           <ul class="d-flex p-0 m-0 align-items-center headerIcon">
-            <li class="mx-2 iconhide"><i class="bi bi-chat-left text-pointer" pBadge severity="info"></i></li>
-            <div class="notification-wrapper">
+            <div class="notification-wrapper"  *ngIf="userInfo.role=='livreur'">
               <div class="notification-bell" (click)="toggleNotifications()">
                 <i class="pi pi-bell"></i>
                 <span *ngIf="hasNewNotifications" class="notification-badge"></span>
@@ -80,8 +79,8 @@
               <div class="relative group dropdown">
                 <div class="flex items-center border-0 rounded-t-lg py-1 px-2 dropdown-toggle" type="button"
                   data-bs-toggle="dropdown">
-                  <img [src]="userInfo.profil" class="photoUser">
-                  {{userInfo.prenom}} {{userInfo.nom}}
+                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjuDuz1yFx58viL_nbKYZUeyU6GC6Cp7tr7A&s" class="photoUser">
+                  {{userInfo.firstName}} {{userInfo.lastName}}
                 </div>
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item text-pointer" (click)="logout()">Se déconnecter</a></li>
@@ -109,14 +108,13 @@
     <div class="logoSide d-flex justify-content-center">
       <img *ngIf="!isSidebarVisible"
         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4NshHKqzTaToj0GKFn40reOu7doky-WRtXA&s" alt="logo">
-      <!-- <a><img src="../../../../assets/logo/logo.png" alt="logo" ></a> -->
     </div>
     <span class="text-pointer closeSidebar" (click)="toggleSidebar()">
       <i class="bi bi-x-circle"></i>
     </span>
   </div>
-  <nav class="mx-auto">
-    <ul class="navItemBar mx-auto">
+  <nav>
+    <ul class="navItemBar">
       @for (item of menus; track $index) {
       <a class="text-white text-decoration-none" routerLink="{{ item.route }}" routerLinkActive="ActiveMenu"
         [routerLinkActiveOptions]="{ exact: true }" (click)="closeSidebar()">
@@ -126,42 +124,3 @@
     </ul>
   </nav>
 </div>
-
-
-<p-dialog header="Edit Profile" [modal]="true" [(visible)]="visible" [position]="position" [style]="{ width: '35rem' }">
-  <div class="notification">
-    <div class="new-commande">
-      <div>
-        <span>Nouveau commande</span>
-      </div>
-      <div>
-        <button type="button" class="btn position-relative">
-          <i class="bi bi-bell"></i>
-          <span
-            class="position-absolute top-6 start-85 translate-middle p-1 bg-danger border border-light rounded-circle">
-            <span class="visually-hidden">New alerts</span>
-          </span>
-        </button>
-      </div>
-    </div>
-    <!-- ----------------- -->
-    <div class="contenu">
-      <div class="image">
-        <img src="youth.jpg" alt="Image 1" />
-      </div>
-      <div class="nom">
-        <h5>Jenny Wilson</h5>
-        <span>1mn ago</span>
-        <p>Adresse de livraison: Ouakam</p>
-        <div class="boutons">
-          <div class="accept">
-            <button>Accepter</button>
-          </div>
-          <div>
-            <button class="reject">Rejeter</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</p-dialog>

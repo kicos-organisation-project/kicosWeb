@@ -1,0 +1,46 @@
+<div id="avis">
+    <form class="promo-form" [formGroup]="categorieForm" #ngForm="ngForm" (ngSubmit)="ajouterCategorie()">
+        <div class="form-grid">
+            <div class="form-group  mb-3">
+                <label for="titre" class="mb-3">Nom Catégorie </label>
+                <input type="text" id="titre" class="form-control" formControlName="titre">
+            </div>
+            <!-- Affichage conditionnel des boutons -->
+            <ng-container *ngIf="!isEditMode; else editButtons">
+                <div class="form-group mb-3">
+                    <button type="submit" class="btn btnSave">Sauvegarder</button>
+                </div>
+            </ng-container>
+
+            <ng-template #editButtons>
+                <div class="form-group mb-3">
+                    <button type="button" class="btn btnAnnuler me-2" (click)="onCancel()">Annuler</button>
+                    <button type="button" class="btn btnSave" (click)="updateCategorie()">Modifier</button>
+                </div>
+            </ng-template>
+        </div>
+    </form>
+    <div class="promo-list">
+        <p-table [value]="categorieTab" [paginator]="true" [rows]="2" [tableStyle]="{ 'min-width': '50rem'}"
+            [styleClass]="'paginationTacheCustom'" [rowsPerPageOptions]="[2, 4, 6]">
+            <ng-template pTemplate="header">
+                <tr class="text-center py-2">
+                    <th class="">#</th>
+                    <th class="">Nom Catégorie </th>
+                    <th class="">Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-categrie let-index="rowIndex" class="">
+                <tr class="py-4">
+                    <td class="text-center text-xs px-3 tdimg" style="width: 10%;">{{index + 1}}</td>
+                    <td class="text-center text-xs px-3" style="width: 20%;">{{categrie.titre}} </td>
+                    <td class="text-center text-xs px-3" style="width: 20%;">
+                        <span (click)="toggleEditMode();chargerInfosCategorie(categrie)"><a><i
+                                    class="bi bi-pencil-square me-3"></i></a></span>
+                        <span (click)="deleteCategorie(categrie.id)"><a><i class="bi bi-trash"></i></a></span>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

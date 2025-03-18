@@ -3,22 +3,17 @@
   <p-tabPanel header="Général">
     <div id="details">
       <div class="image">
-        <img
-          src="https://img.freepik.com/photos-gratuite/legumes_1398-810.jpg?ga=GA1.1.112979598.1725359040&semt=ais_hybrid"
-          alt="">
+        <img src="https://kiccos.terangacode.com/{{detailArticle?.articleImage}}" class="card-img-top" alt="..." />
       </div>
       <div>
-        <h4>Panier légume</h4>
+        <h4>{{detailArticle?.articleName}}</h4>
         <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, ducimus quas dignissimos
-          consectetur nobis modi tempora eos excepturi, veniam, delectus in commodi voluptatibus animi
-          blanditiis
-          quae eligendi fugiat pariatur nam.
+          {{detailArticle?.articleDescription}}
         </p>
 
         <div class="d-flex">
           <h6 class="mb-3">Prix d’achat : </h6>
-          <span>&nbsp;10000 FCFA</span>
+          <span>&nbsp;{{detailArticle?.articlePrice}}</span>
         </div>
         <div class="d-flex" style="color: var(--bg-primary);">
           <h6 class="mb-3">Catégorie : </h6>

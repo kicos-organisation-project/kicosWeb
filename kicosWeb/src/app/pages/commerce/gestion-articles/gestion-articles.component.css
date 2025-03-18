@@ -1,6 +1,7 @@
 .new {
     position: absolute;
     left: 0;
+    top: 0;
     font-size: 15px;
     padding: 5px 10px 5px 10px;
     font-weight: 600;
@@ -15,6 +16,7 @@
 .Promo {
     position: absolute;
     left: 0;
+    top: 0;
     font-size: 15px;
     padding: 5px 10px 5px 10px;
     font-weight: 600;
@@ -33,6 +35,7 @@
 
 .card .img img {
     width: 100%;
+    height: 150px;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
 }
@@ -140,7 +143,7 @@ span a {
 }
 
 .pagination {
-    width: 450px;
+    /* width: 450px; */
     display: flex;
     justify-content: center;
     margin: 0 auto;
@@ -169,3 +172,74 @@ span a {
     background-color: transparent;
 }
 
+.card {
+    padding: 15px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+      rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+    border-color: rgb(212, 212, 212);
+  }
+  
+  .profil {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  
+  .profil img {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+  }
+  
+  .name p {
+    color: rgb(238, 164, 5);
+    font-size: 13.5px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
+  
+  .contenu-msg {
+    margin-top: 15px;
+    font-size: 14px;
+    color: rgb(180, 180, 180);
+  }
+  
+  ::ng-deep .paginationTacheCustom .p-paginator-page,
+  ::ng-deep .paginationTacheCustom .p-paginator-next,
+  ::ng-deep .paginationTacheCustom .p-paginator-prev,
+  ::ng-deep .paginationTacheCustom .p-paginator-first,
+  ::ng-deep .paginationTacheCustom .p-paginator-last {
+    @apply bg-transparent text-black hover:bg-slate-200 rounded px-3 py-1 mx-1;
+  }
+  
+  ::ng-deep .paginationTacheCustom .p-paginator-page.p-highlight {
+    background-color: var(--bg-primary);
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+  }
+  
+  ::ng-deep .paginationTacheCustom .p-paginator {
+    margin-top: 4%;
+    margin-bottom: 4%;
+    border-bottom: 0;
+    background-color: transparent;
+  }
+  
+  ::ng-deep .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+    color: var(--bg-blue2);
+    border-color: var(--bg-blue2);
+    text-decoration: none;
+  }
+  
+  ::ng-deep .p-tabview .p-tabview-nav .p-tabview-nav-link {
+    color: var(--text-dark);
+    text-decoration: none;
+  }
+  
+  ::ng-deep .p-tabview .p-tabview-panels {
+    background: transparent;
+    /* ou la couleur de votre choix */
+    border: none;
+    /* si vous voulez aussi enlever la bordure */
+  }
+  

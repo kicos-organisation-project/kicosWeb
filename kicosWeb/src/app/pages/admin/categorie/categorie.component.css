@@ -1,0 +1,60 @@
+  #avis {
+    display: grid;
+    grid-template-columns: 3fr 4fr;
+    gap: 20px;
+    padding-bottom: 20px;
+  }
+  
+  
+  .promo-form {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    height: 190px;
+  }
+  
+  .btnSave{
+    color: var(--bg-neutral)!important;
+    background-color: var(--bg-primary)!important;
+    /* padding: 8px 12px; */
+    border-radius: 8px;
+  }
+  
+  .btnAnnuler{
+    color: var(--bg-primary)!important;
+    border: thin solid var(--bg-primary)!important;
+    background-color: var(--bg-white)!important;
+    /* padding: 8px 12px; */
+    border-radius: 8px;
+  }
+  
+  .promo-list {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  ::ng-deep .paginationTacheCustom .p-paginator-page,
+  ::ng-deep .paginationTacheCustom .p-paginator-next,
+  ::ng-deep .paginationTacheCustom .p-paginator-prev,
+  ::ng-deep .paginationTacheCustom .p-paginator-first,
+  ::ng-deep .paginationTacheCustom .p-paginator-last {
+    @apply bg-transparent text-black hover:bg-slate-200 rounded px-3 py-1 mx-1;
+  }
+  
+  ::ng-deep .paginationTacheCustom .p-paginator-page.p-highlight {
+    background-color: var(--bg-primary);
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+  }
+  
+  ::ng-deep .paginationTacheCustom .p-paginator {
+    margin-top: 4%;
+    margin-bottom: 4%;
+    border-bottom: 0;
+    background-color: transparent;
+  }
+  

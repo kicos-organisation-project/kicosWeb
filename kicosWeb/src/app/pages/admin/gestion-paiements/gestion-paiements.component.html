@@ -22,26 +22,33 @@
 
             <!-- Liste des demande commerce  -->
             @if (demandeCommerce.length) {
-            <p-table [value]="demandeCommerce" [paginator]="true" [rows]="3" [tableStyle]="{ 'min-width': '50rem'}"
-                [styleClass]="'paginationTacheCustom'" [rowsPerPageOptions]="[3, 5, 10, 15]">
+            <p-table [value]="demandeCommerce" [paginator]="true" [rows]="5" [tableStyle]="{ 'min-width': '50rem'}"
+                [styleClass]="'paginationTacheCustom'" [rowsPerPageOptions]="[5, 7, 10]">
                 <ng-template pTemplate="header">
                     <tr class="text-center py-2">
                         <th class="">Photo </th>
                         <th class="">Responsable</th>
-                        <th class="">Date demande</th>
-                        <th class="">Demande</th>
+                        <th class="">Motif</th>
+                        <th class="">Montant</th>
                         <th class="">Action</th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-livreur let-index="rowIndex" class="">
+                <ng-template pTemplate="body" let-demandePartenaire let-index="rowIndex" class="">
                     <tr class="py-4">
-                        <td class="text-center text-xs px-3" style="width: 20%;"><img [src]="livreur.photo" alt=""
-                                style="width: 50px;"></td>
-                        <td class="text-center text-xs px-3" style="width: 20%;">{{ livreur.responsable}}</td>
-                        <td class="text-center text-xs" style="width: 15%;">{{ livreur.dateDemande}}</td>
-                        <td class="text-center text-xs" style="width: 15%;">{{ livreur.demande}}</td>
+                        <td class="text-center text-xs px-3" style="width: 20%;">
+                            <img src="https://kiccos.terangacode.com/public/{{demandePartenaire.partenaire?.image}}" class="card-img-top" alt="..." />
+                        </td>
+                        <td class="text-center text-xs px-3" style="width: 20%;">{{ demandePartenaire.partenaire?.nom_partenaire}}</td>
+                        <td class="text-center text-xs px-3" style="width: 20%;">
+                            <div class="truncate"
+                                style="max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+                                :title="demande.motif">
+                                {{ demandePartenaire.motif.length > 30 ? demandePartenaire.motif.substring(0, 30) + '...' : demandePartenaire.motif }}
+                            </div>
+                        </td>
+                        <td class="text-center text-xs" style="width: 15%;">{{ demandePartenaire.montant}}</td>
                         <td class="text-center text-xs" style="width: 15%;">
-                            <i class="pi pi-eye me-3" style="font-size: 1rem; cursor: pointer;"></i>
+                            <i class="pi pi-wallet" style="font-size: 1rem; cursor: pointer;" (click)="traiterDemandePaiement(demandePartenaire.id)"></i>
                         </td>
                     </tr>
                 </ng-template>

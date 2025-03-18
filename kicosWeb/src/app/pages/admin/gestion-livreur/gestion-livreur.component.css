@@ -264,3 +264,24 @@ ul li a {
   border: none;
   /* si vous voulez aussi enlever la bordure */
 }
+
+
+#details {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+  padding-bottom: 20px;
+}
+
+.image {
+  height: 330px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+img {
+  height: 100%;
+}

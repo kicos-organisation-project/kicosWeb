@@ -1,5 +1,16 @@
 import { AbstractControl, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
+export interface ValidationOptions {
+  minLength?: number; // Longueur minimale (optionnelle)
+  regex?: RegExp; // Expression régulière (optionnelle)
+  required?: boolean; // Champ obligatoire (optionnel)
+  requiredMessage?: string; // Message si le champ est obligatoire (optionnel)
+  regexMessage?: string; // Message si l'expression régulière échoue (optionnel)
+  minLengthMessage?: string; // Message si la longueur minimale n'est pas respectée (optionnel)
+  match?: string; // Nom du champ à comparer (optionnel)
+  matchMessage?: string; // Message si les champs ne correspondent pas (optionnel)
+}
+
 export class ValidatorCore {
   /**
    * Valide les chaine en vérifiant si elle contient uniquement des espaces blancs
@@ -249,22 +260,27 @@ export class ValidatorCore {
    */
   static passWordValidator(controlName: string, lengthWord: number) {
     return (control: AbstractControl): ValidationErrors | null => {
-      return !control.value.length
-        ? { error: true, message: `${controlName} est obligatoire.` }
-        : control.value.length < lengthWord
-        ? {
-            error: true,
-            message: `${controlName} doit contenir au moins ${lengthWord} caractères.`,
-          }
-        : control.value != null &&
-          control.value.startsWith(' ') &&
-          control.value.endsWith(' ')
-        ? //invalid, return error object
-          {
-            error: true,
-            message: `Ce champs ne peut pas contenir des espaces.`,
-          }
-        : null;
+      // Vérifier d'abord si control.value existe
+      if (!control.value) {
+        return { error: true, message: `${controlName} est obligatoire.` };
+      }
+  
+      // Maintenant on peut accéder à length en toute sécurité
+      if (control.value.length < lengthWord) {
+        return {
+          error: true,
+          message: `${controlName} doit contenir au moins ${lengthWord} caractères.`,
+        };
+      }
+  
+      if (control.value.startsWith(' ') || control.value.endsWith(' ')) {
+        return {
+          error: true,
+          message: `Ce champs ne peut pas contenir des espaces.`,
+        };
+      }
+  
+      return null;
     };
   }
 
@@ -841,5 +857,33 @@ export class ValidatorCore {
       }
       return null;
     };
+  }
+
+   // Fonction de validation générique
+   static verifInputFonction(inputValue: any, fieldName: string, options: ValidationOptions = {}) {
+    const {
+      minLength = 2,
+      regex = /^[a-zA-Z]+$/,
+      required = true,
+      requiredMessage = `Le ${fieldName} est obligatoire.`,
+      regexMessage = `Le ${fieldName} contient des caractères non autorisés.`,
+      minLengthMessage = `Le ${fieldName} ne doit pas être inférieur à ${minLength} caractères.`,
+    } = options;
+
+    let verifMessage = "";
+    let isValid = false;
+
+    if (required && inputValue === "") {
+      verifMessage = requiredMessage;
+    } else if (regex && !regex.test(inputValue)) {
+      verifMessage = regexMessage;
+    } else if (inputValue.length < minLength) {
+      verifMessage = minLengthMessage;
+    } else {
+      verifMessage = "";
+      isValid = true;
+    }
+
+    return { verifMessage, isValid };
   }
 }

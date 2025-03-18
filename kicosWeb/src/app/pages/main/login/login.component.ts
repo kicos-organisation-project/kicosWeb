@@ -11,13 +11,17 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { AuthService } from '../../../core/services/auth.service';
+import { MessageService } from '../../../core/services/message.service';
+import { ApiService } from '../../../core/services/api.service';
+import { LoaderService } from '../../../core/services/loader.service';
 // import { PrimeModule } from '../../../../prime/prime.module';
 // import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule,RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -31,37 +35,28 @@ export class LoginComponent {
   // form Variables
   loginForm!: FormGroup;
 
-  // fermeture du modal sur clique en dehors
-  @HostListener('document:click', ['$event'])
-  onClick(event: MouseEvent) {
-    const targetElement = event.target as HTMLElement;
 
-    // Vérifiez si le clic a eu lieu en dehors du modal
-    if (this.visibleBoutiques && !targetElement.closest('.ui-dialog')) {
-      this.visibleBoutiques = false;
-    }
-  }
 
   // Injection de dépendances
-  // authService = inject(AuthService);
+  authService = inject(AuthService);
   router = inject(Router);
   formBuilder = inject(FormBuilder);
-  // messageService = inject(MessageService);
-  // apiService = inject(ApiService);
-  // loaderService = inject(LoaderService);
+  messageService = inject(MessageService);
+  apiService = inject(ApiService);
+  loaderService = inject(LoaderService);
 
 
-// tableau de trois utilisateur
- users = [
-  {login: 'admin', password: 'admin123@', role: 'admin', nom: 'Diop', prenom: 'Moussa',profil:'https://attic.sh/atvxa8lu3yg4jk7hb8vidiogkyyi'},
-  {login: 'commerce', password: 'commerce123@', role: 'commerce', nom: 'Ndiaye', prenom: 'Fatou',profil:'https://france-fraternites.org/wp-content/uploads/2017/07/o-EMOJI-570.jpg'},
-  {login: 'livreur', password: 'livreur123@', role: 'livreur', nom: 'Sall', prenom: 'Ibrahima',profil:'https://attic.sh/7bs32pvmv7v4cyne6je5cty95cdp'}
-];
+  // tableau de trois utilisateur
+  users = [
+    { login: 'admin', password: 'admin123@', role: 'admin', nom: 'Diop', prenom: 'Moussa', profil: 'https://attic.sh/atvxa8lu3yg4jk7hb8vidiogkyyi' },
+    { login: 'commerce', password: 'commerce123@', role: 'commerce', nom: 'Ndiaye', prenom: 'Fatou', profil: 'https://france-fraternites.org/wp-content/uploads/2017/07/o-EMOJI-570.jpg' },
+    { login: 'livreur', password: 'livreur123@', role: 'livreur', nom: 'Sall', prenom: 'Ibrahima', profil: 'https://attic.sh/7bs32pvmv7v4cyne6je5cty95cdp' }
+  ];
 
   ngOnInit() {
     this.loginForm = this.createLoginForm();
-    if (!localStorage.getItem("userConnected")) {
-      localStorage.setItem("userConnected", JSON.stringify(""));
+    if (!localStorage.getItem("userInfo")) {
+      localStorage.setItem("userInfo", JSON.stringify(""));
     }
   }
 
@@ -73,32 +68,83 @@ export class LoginComponent {
   // login form submit
   createLoginForm(): FormGroup {
     return this.formBuilder.group({
-      login: ['', Validators.required],
+      email: ['', Validators.required],
       password: ['', Validators.required],
     });
   }
 
   // méthode login
+  //   onSubmitLoginForm() {
+  //     if (this.loginForm.valid) {
+  //       const formData = this.loginForm.value;
+  //     const user = this.users.find((u) => u.login === formData.login && u.password === formData.password);
+  //     if (user) {
+  //       if(user.role === 'admin') {
+  //         this.router.navigate(['kicos/admin']);
+  //       }else if(user.role === 'commerce'){
+  //         this.router.navigate(['kicos/commerce']);
+  //       }else{
+  //         this.router.navigate(['kicos/livreur']);
+  //       }
+
+  //       localStorage.setItem('userConnected', JSON.stringify(user));
+  //       // TODO: Afficher le dialogue boutique et réinitialiser le formulaire
+  //     } else {
+  //       console.error("Réponse d'authentification invalide");
+  //       // TODO: Afficher un message d'erreur
+  //     }
+  //   }
+  // }
+
+  // méthode login
   onSubmitLoginForm() {
     if (this.loginForm.valid) {
       const formData = this.loginForm.value;
-    const user = this.users.find((u) => u.login === formData.login && u.password === formData.password);
-    if (user) {
-      if(user.role === 'admin') {
-        this.router.navigate(['kicos/admin']);
-      }else if(user.role === 'commerce'){
-        this.router.navigate(['kicos/commerce']);
-      }else{
-        this.router.navigate(['kicos/livreur']);
-      }
-      
-      localStorage.setItem('userConnected', JSON.stringify(user));
-      // TODO: Afficher le dialogue boutique et réinitialiser le formulaire
+      this.authService.login(formData).subscribe(
+        (response: any) => {
+          console.log('response', response);
+
+          const { user, access_token } =
+            response;
+          console.log(response);
+
+          // Vérifiez si la réponse contient toutes les informations nécessaires
+          if (access_token) {
+            // console.log('tokenStore', access_token);
+
+            // Stocker le jeton et la durée d'expiration
+            this.authService.setToken(access_token);
+
+            // Stocker les informations utilisateur
+            localStorage.setItem('userInfo', JSON.stringify(user));
+            this.loginForm.reset();
+            if (response.user.role === 'admin') {
+              this.router.navigate(['kicos/admin']);
+            } else if (response.user.role === 'partenaire') {
+              this.router.navigate(['kicos/commerce']);
+            } else {
+              this.router.navigate(['kicos/livreur']);
+            }
+            this.messageService.createMessage(
+              'success',
+              'Connexion réussie avec succés'
+            );
+          } else {
+            console.error("Réponse d'authentification invalide");
+            this.messageService.createMessage('error', 'Erreur de connexion');
+          }
+        },
+        (error) => {
+          console.log('Erreur de connexion: ', error);
+          this.messageService.createMessage('error', 'Erreur de connexion');
+        }
+      );
     } else {
-      console.error("Réponse d'authentification invalide");
-      // TODO: Afficher un message d'erreur
+      this.messageService.createMessage(
+        'error',
+        'Veuillez remplir tous les champs'
+      );
     }
   }
-}
 
 }

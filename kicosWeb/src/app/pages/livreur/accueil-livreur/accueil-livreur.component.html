@@ -1,52 +1,71 @@
 <div class="dashboard-container">
-    <!-- Première rangée -->
-    <div class="chart-row">
-      <div class="gauge-card">
-        <h2>Montant Reçu</h2>
-        <div class="gauge-container">
-          <p-chart type="doughnut" 
-                  [data]="gaugeData" 
-                  [options]="gaugeOptions"
-                  [style]="{'width': '100%', 'height': '200px'}">
-          </p-chart>
-          <div class="gauge-value">
-            <span class="money-label">Your Money</span>
-            <span class="money-value">25,430.39F FCA</span>
-          </div>
+
+   <!-- Première rangée -->
+  <div class="row mb-4">
+    <div class="col-4">
+      <p-card>
+        <div class="flex flex-column align-items-center">
+          <i class="pi pi-money-bill text-4xl text-primary mb-2 me-3"></i>
+          <span class="text-xl font-bold me-1">{{ totalEarningsToday | currency:'EUR' }}</span>
+          <span class="text-sm">Gains aujourd'hui</span>
         </div>
-      </div>
-  
-      <div class="line-card">
-        <div class="chart-header">
-          <h5>Nombre de livraison effectuer</h5>
-          <div class="period-selector">
-            <button *ngFor="let period of timePeriods" 
-                    [class.active]="period === selectedPeriod"
-                    (click)="selectedPeriod = period">
-              {{period}}
-            </button>
-          </div>
+      </p-card>
+    </div>
+    <div class="col-4">
+      <p-card>
+        <div class="flex flex-column align-items-center">
+          <i class="pi pi-calendar text-4xl text-primary mb-2 me-3"></i>
+          <span class="text-xl font-bold me-1">{{ totalEarningsWeek | currency:'EUR' }}</span>
+          <span class="text-sm">Gains de la semaine</span>
         </div>
-        <div class="chart-stats">
-          <div class="stat-value">
-            <span class="number">623</span>
-            <span class="label">nombre</span>
-          </div>
+      </p-card>
+    </div>
+    <div class="col-4">
+      <p-card>
+        <div class="flex flex-column align-items-center">
+          <i class="pi pi-check-circle text-4xl text-primary mb-2 me-3"></i>
+          <span class="text-xl font-bold me-1">{{ completedDeliveries }}</span>
+          <span class="text-sm">Livraisons effectuées</span>
         </div>
-        <p-chart type="line" 
-                [data]="lineData" 
-                [options]="lineOptions"
-                [style]="{'width': '100%', 'height': '300px'}">
+      </p-card>
+    </div>
+  </div>
+
+
+     <!-- Deuxième rangée -->
+  <div class="chart-row">
+    <div class="gauge-card">
+      <h2>Montant Reçu</h2>
+      <div class="gauge-container">
+        <p-chart type="doughnut" [data]="gaugeData" [options]="gaugeOptions"
+          [style]="{'width': '100%', 'height': '200px'}">
         </p-chart>
+        <div class="gauge-value">
+          <span class="money-label">Your Money</span>
+          <span class="money-value">25,430.39F FCA</span>
+        </div>
       </div>
     </div>
-  
-    <!-- Deuxième rangée -->
-    <div class="bar-chart-container">
-      <p-chart type="bar" 
-              [data]="barData" 
-              [options]="barOptions"
-              [style]="{'width': '100%', 'height': '300px'}">
+
+    <div class="line-card">
+      <div class="chart-header">
+        <h5>Nombre de livraison effectuer</h5>
+        <div class="period-selector">
+          <button *ngFor="let period of timePeriods" [class.active]="period === selectedPeriod"
+            (click)="selectedPeriod = period">
+            {{period}}
+          </button>
+        </div>
+      </div>
+      <div class="chart-stats">
+        <div class="stat-value">
+          <span class="number">623</span>
+          <span class="label">nombre</span>
+        </div>
+      </div>
+      <p-chart type="line" [data]="lineData" [options]="lineOptions" [style]="{'width': '100%', 'height': '300px'}">
       </p-chart>
     </div>
   </div>
+
+</div>

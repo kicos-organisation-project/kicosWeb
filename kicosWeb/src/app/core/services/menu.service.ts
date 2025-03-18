@@ -10,9 +10,10 @@ export class MenuService {
     {
       admin: [
         { title: 'Tableau de bord', route: './admin/dashboard', icon: 'pi pi-home', access: [] },
-        { title: 'Gestion Commerces', route: './admin/commerce', icon: 'bi bi-basket2', access: [] },
-        { title: 'Commandes', route: './admin/commandes', icon: 'pi pi-cart-arrow-down', access: [] },
+        { title: 'Gestion Partenaires', route: './admin/commerce', icon: 'bi bi-basket2', access: [] },
         { title: 'Gestion Livreurs', route: './admin/livreur', icon: 'pi pi-user', access: [] },
+        { title: 'Gestion Catégories', route: './admin/categorie', icon: 'pi pi-objects-column', access: [] },
+        // { title: 'livraisons', route: './admin/commandes', icon: 'pi pi-truck', access: [] },
         { title: 'Paiements', route: './admin/paie', icon: 'pi pi-money-bill', access: [] }
 
       ],
@@ -20,6 +21,7 @@ export class MenuService {
         { title: 'Tableau de bord', route: './commerce/dashboard', icon: 'pi  pi-home', access: [] },
         { title: 'Gestion des Articles', route: './commerce/articles', icon: 'bi  bi-bag', access: [] },
         { title: 'Commandes', route: './commerce/commandes', icon: 'pi pi-cart-arrow-down', access: [] },
+        { title: 'Demande paiement', route: './commerce/paiement', icon: 'pi pi-wallet', access: [] },
       ],
       livreur: [
         { title: 'Tableau de bord', route: './livreur/dashboard', icon: 'pi  pi-home', access: [] },

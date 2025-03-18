@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { TabViewModule } from 'primeng/tabview';
 import { TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
@@ -6,75 +6,70 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormControl, } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { ApiService } from '../../../core/services/api.service';
+import { MessageService } from '../../../core/services/message.service';
+import { ValidationOptions, ValidatorCore } from '../../../core/validators/validator';
+import { environment } from '../../../../environments/environment';
+import Swal from 'sweetalert2';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { RatingModule } from 'primeng/rating';
+import { TagModule } from 'primeng/tag';
+import { ToastModule } from 'primeng/toast';
 
-
+interface DeliveryPerformance {
+  id: number;
+  name: string;
+  deliveriesCompleted: number;
+  onTimeDeliveryRate: number;
+  customerRating: number;
+  status: 'active' | 'inactive';
+  lastDelivery: Date;
+}
 
 @Component({
   selector: 'app-gestion-livreur',
   standalone: true,
-  imports: [TabViewModule, TableModule, ChartModule, FormsModule, CommonModule, ReactiveFormsModule, DialogModule,],
+  imports: [TabViewModule, TableModule, ChartModule, FormsModule, CommonModule, ReactiveFormsModule, DialogModule, FormsModule, CardModule, ButtonModule, InputTextModule, ProgressBarModule, RatingModule, TagModule,ToastModule],
   templateUrl: './gestion-livreur.component.html',
   styleUrl: './gestion-livreur.component.css'
 })
 export class GestionLivreurComponent {
+  // Injection de dépendances
+  router = inject(Router);
+  http = inject(HttpClient);
+  apiService = inject(ApiService);
+  messageService = inject(MessageService);
+  fb = inject(FormBuilder)
+
   date: Date[] | undefined;
 
-  tabLivreur = [
-    {
-      id: 1,
-      photo: 'https://img.freepik.com/free-vector/young-man-with-glasses-illustration_1308-174706.jpg?ga=GA1.1.2125268813.1733426263&semt=ais_hybrid',
-      nomComplet: 'Jean Dupont',
-      telephone: '06 12 34 56 78',
-      adresse: '15 rue de la Paix, Paris',
-      etat: 'Actif',
 
-    },
-    {
-      id: 2,
-      photo: 'https://img.freepik.com/free-psd/3d-render-avatar-character_23-2150611759.jpg?ga=GA1.1.2125268813.1733426263&semt=ais_hybrid',
-      nomComplet: 'Marie Martin',
-      telephone: '07 23 45 67 89',
-      adresse: '8 avenue des Champs-Élysées, Paris',
-      etat: 'Inactif',
 
-    },
-    {
-      id: 3,
-      photo: 'https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436190.jpg?ga=GA1.1.2125268813.1733426263&semt=ais_hybrid',
-      nomComplet: 'Pierre Bernard',
-      telephone: '06 34 56 78 90',
-      adresse: '25 rue Victor Hugo, Lyon',
-      etat: 'En attente',
-
-    },
-    {
-      id: 4,
-      photo: 'https://img.freepik.com/free-psd/3d-rendering-hair-style-avatar-design_23-2151869127.jpg?ga=GA1.1.2125268813.1733426263&semt=ais_hybrid',
-      nomComplet: 'Sophie Dubois',
-      telephone: '07 45 67 89 01',
-      adresse: '12 rue de la République, Marseille',
-      etat: 'Actif',
-
-    },
-    {
-      id: 5,
-      photo: 'https://img.freepik.com/premium-psd/3d-male-cute-cartoon-character-avatar-isolated-3d-rendering_235528-1296.jpg?ga=GA1.1.2125268813.1733426263&semt=ais_hybrid',
-      nomComplet: 'Lucas Petit',
-      telephone: '06 56 78 90 12',
-      adresse: '5 place Bellecour, Lyon',
-      etat: 'Inactif',
-
-    },
-    {
-      id: 6,
-      photo: 'https://img.freepik.com/free-psd/3d-illustration-with-online-avatar_23-2151303091.jpg?ga=GA1.1.2125268813.1733426263&semt=ais_hybrid',
-      nomComplet: 'Emma Leroy',
-      telephone: '07 67 89 01 23',
-      adresse: '30 rue du Commerce, Bordeaux',
-      etat: 'Actif',
-
-    }
-  ];
+  // Le formulaire ajout livreur
+  LivreurForm = this.fb.group({
+    firstName: new FormControl('', Validators.required),
+    lastName: new FormControl('', [ValidatorCore.nameValidator("Le motif du depense ", 10, 100)]),
+    password: new FormControl('', [
+      ValidatorCore.passWordValidator('Le mot de passe', 8),
+    ]),
+    password_confirm: new FormControl('', [
+      ValidatorCore.passWordValidator('Le mot de passe de confirmation', 8),
+    ]),
+    licence_driver_number: new FormControl('', [
+      ValidatorCore.isValidAlphNumValidator("Le licence", 10, 10),
+    ]),
+    phoneNumber: new FormControl('', [
+      ValidatorCore.nameValidator('Le numero de telephone', 10, 100),
+    ]),
+    email: new FormControl('', [
+      ValidatorCore.nameValidator('L email', 10, 100),
+    ]),
+  });
 
   openMenuId: number | null = null;
 
@@ -83,21 +78,7 @@ export class GestionLivreurComponent {
     this.openMenuId = this.openMenuId === rowId ? null : rowId;
   }
 
-  onAction(action: 'view' | 'edit' | 'delete', rowId: number) {
-    // Implémentez vos actions ici
-    switch (action) {
-      case 'view':
-        console.log(`Voir les détails de l'item ${rowId}`);
-        break;
-      case 'edit':
-        console.log(`Éditer l'item ${rowId}`);
-        break;
-      case 'delete':
-        console.log(`Supprimer l'item ${rowId}`);
-        break;
-    }
-    this.openMenuId = null; // Ferme le menu après l'action
-  }
+
 
   @HostListener('document:click')
   closeMenu() {
@@ -106,152 +87,226 @@ export class GestionLivreurComponent {
 
   // Initialisation avec ngOnInit
   ngOnInit() {
-    this.initializeChartDataCategorie();
-    this.initializeChartDataLivreur();
+    this.loadData();
+    this.calculateStats();
+    this.getLivreur();
+    // Validation en temps réel pour chaque champ
+    Object.keys(this.LivreurForm.controls).forEach((controlName) => {
+      this.LivreurForm.get(controlName)?.valueChanges.subscribe(() => {
+        this.validateField(controlName);
+      });
+    });
   }
 
+  // Declaration des variables 
+  baseUrl = environment.base_url;
+  ListeLivreur: any[] = [];
+  detailLivreur: any;
+
+  // Valider un champ spécifique
+  validateField(controlName: string) {
+    const control = this.LivreurForm.get(controlName);
+    if (control) {
+      const value = control.value;
+      let options: ValidationOptions = {};
+
+      switch (controlName) {
+        case 'firstName':
+          options = { regex: /^[a-zA-Z]+$/, regexMessage: 'Le prénom ne doit contenir que des lettres.' };
+          break;
+        case 'lastName':
+          options = { regex: /^[a-zA-Z]+$/, regexMessage: 'Le nom ne doit contenir que des lettres.' };
+          break;
+        case 'phoneNumber':
+          options = { regex: /^\+\d{1,4}\d{7,14}$/, regexMessage: 'Le numéro de téléphone doit contenir exactement 13 chiffres.' };
+          break;
+        case 'licence_driver_number':
+          options = { regex: /^[\p{L}\p{N}\s.,!?-]+$/u, regexMessage: 'La description contient des caractères non autorisés.' };
+          break;
+        case 'password':
+          options = {
+            regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
+            regexMessage: 'Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial.',
+            required: true,
+            requiredMessage: 'Le mot de passe est obligatoire.'
+          };
+          break;
+
+        case 'password_confirm':
+          options = {
+            regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
+            regexMessage: 'Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial.',
+            required: true,
+            requiredMessage: 'La confirmation du mot de passe est obligatoire.',
+            match: 'password',
+            matchMessage: 'Les mots de passe ne correspondent pas.'
+          };
+          break;
+        case 'email':
+          options = { regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, regexMessage: 'Veuillez entrer une adresse email valide.' };
+          break;
+        // case 'image':
+        //   options = { regex: /\.(jpg|jpeg|png|gif|bmp|webp)$/, regexMessage: 'Le fichier n\'est pas une image valide.' };
+        //   break;
+        default:
+          options = { regex: /^[a-zA-Z0-9]+$/, regexMessage: 'Ce champ ne doit contenir que des lettres et ou des chiffres.' };
+      }
+
+      const result = ValidatorCore.verifInputFonction(value, controlName, options);
+      console.log(`Validation for ${controlName}:`, result); // Debug log
+      control.setErrors(result.isValid ? null : { invalid: true });
+    }
+  }
+
+  error: any;
+  // ajouter livreur
+  addLivreur() {
+    // Envoyer la requête POST avec FormData
+    this.apiService.postWithSessionId(`${this.baseUrl}/livreur`, this.LivreurForm.value).subscribe(
+      (response: any) => {
+        console.log(response.status_code);
+        if (response.status_code === 422) {
+          this.messageService.createMessage('error', response.message);
+          this.error = response.errorList;
+          return;
+        } else
+          this.resetLivreurForm();
+        this.getLivreur();
+        this.closeModal();
+        this.messageService.createMessage('success', response.message);
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+      }
+    );
+  }
+
+  // lister livreur
+  getLivreur() {
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/livreur`).subscribe(
+      (response: any) => {
+        console.log(response.livreurs);
+        this.ListeLivreur = response.livreurs;
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+      }
+    );
+  }
+
+  id_livreur: any;
+  // charger les données du livreur
+  chargerInfosLivreur(livreur: any) {
+    this.id_livreur = livreur.id;
+    console.log("Charger les informations du livreur", livreur.id);
+    this.LivreurForm.patchValue({
+      firstName: livreur.user.firstName,
+      lastName: livreur.user.lastName,
+      licence_driver_number: livreur.licence_driver_number,
+      phoneNumber: livreur.user.phoneNumber,
+      email: livreur.user.email,
+    })
+  }
+
+  //modifier livreur
+  updateLivreur() {
+    this.apiService.postWithSessionId(`${this.baseUrl}/livreur/${this.id_livreur}`, this.LivreurForm.value).subscribe(
+      (response: any) => {
+        console.log(response);
+        if (response.status_code === 422) {
+          this.messageService.createMessage('error', response.message);
+          return;
+        } else
+          this.resetLivreurForm();
+        this.closeModal();
+        this.getLivreur();
+        this.messageService.createMessage('success', response.message);
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+      }
+    );
+  }
+
+  onAction(action: 'view' | 'edit' | 'delete', rowId: number) {
+    // Implémentez vos actions ici
+    switch (action) {
+      case 'view':
+        console.log(`Voir les détails de l'item ${rowId}`);
+        // On fait appel a l'api pour afficher les détails d'un partenaire
+        this.apiService.get(`${this.baseUrl}/livreur/${rowId}`).subscribe(
+          (response: any) => {
+            this.detailLivreur = response;
+            console.log("Detail du partenaire", this.detailLivreur);
+          },
+          (error: any) => {
+            console.log("Partie erreur");
+            console.log(error);
+
+          }
+        )
+        break;
+      case 'edit':
+        console.log(`Éditer l'item ${rowId}`);
+        break;
+      case 'delete':
+        Swal.fire({
+          title: "Êtes vous sûres?",
+          text: "Vous ne pourrez pas revenir en arrière !",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Oui, supprime-le !"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // On fait appel a l'api pour supprimer un partenaire
+            this.apiService.deleteWithSessionId(`${this.baseUrl}/livreur/${rowId}`).subscribe(
+              (response: any) => {
+                console.log("Partenaire supprimé", response);
+                this.getLivreur();
+                Swal.fire({
+                  title: "Supprimé !",
+                  text: "Le livreur a été supprimé.",
+                  icon: "success"
+                });
+                this.messageService.createMessage('success', response.message);
+              },
+              (error: any) => {
+                console.log("Partie erreur");
+                console.log(error);
+
+              }
+            )
+          }
+        });
+        break;
+    }
+    this.openMenuId = null; // Ferme le menu après l'action
+  }
+
+
+  // Méthode pour réinitialiser les champs du formulaire 
+  resetLivreurForm() {
+    this.LivreurForm.reset({
+      firstName: '',
+      lastName: '',
+      password: '',
+      licence_driver_number: '',
+      phoneNumber: '',
+      email: '',
+    });
+  }
 
   dataLivraison: any;
   optionsLivraison: any;
   chartDataLivreur: any;
   chartOptionsCategorie: any;
 
-  // Données Paiement recu par mois
-  initializeChartDataCategorie(): void {
-    const documentStyle = getComputedStyle(document.documentElement);
-    const textColor = documentStyle.getPropertyValue('--text-color');
-    const textColorSecondary = documentStyle.getPropertyValue(
-      '--text-color-secondary'
-    );
 
-    this.dataLivraison = {
-      labels: [
-        'Janvier',
-        'Fevrier',
-        'Mars',
-        'Avril',
-        'Mai',
-        'Juin',
-        'Juillet',
-        'Aout',
-        'Septembre',
-        'Octobre',
-        'Novembre',
-        'Décembre',
-      ],
-      datasets: [
-        {
-          label: 'Nombre de livraisons ',
-          backgroundColor: documentStyle.getPropertyValue('--bg-blue2'),
-          borderColor: documentStyle.getPropertyValue('--bg-blue2'),
-          data: [450, 500, 350, 420, 560, 390, 340, 310, 480, 390, 450, 620],
-          barThickness: 15,
-        },
-      ],
-    };
-
-    this.optionsLivraison = {
-      maintainAspectRatio: false,
-      aspectRatio: 0.8,
-      plugins: {
-        legend: {
-          labels: {
-            color: textColor,
-          },
-        },
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: textColorSecondary,
-            font: {
-              weight: 500,
-            },
-          },
-          grid: {
-            display: false,
-          },
-          categoryPercentage: 0.2,
-          barPercentage: 0.3,
-        },
-        y: {
-          ticks: {
-            color: textColorSecondary,
-            font: {
-              weight: 500,
-            },
-            stepSize: 10,
-            beginAtZero: true,
-            max: 100,
-          },
-          grid: {
-            display: false,
-          },
-        },
-      },
-    };
-  }
-
-  livreurs = [
-    { id: 1, name: 'Alioune Ndiaye' },
-    { id: 2, name: 'Chloé Moulin' },
-    { id: 3, name: 'Maxence Dufresne' },
-    { id: 4, name: 'Emma Leroy' },
-    { id: 5, name: 'Lucas Petit' },
-    { id: 6, name: 'Sophie Dubois' },
-    { id: 7, name: 'Hugo Boisvert' },
-    { id: 8, name: 'Valérie Perrin' },
-    { id: 9, name: 'Mathilde Brunel' },
-    { id: 10, name: 'Aurélien Dufour' },
-    { id: 11, name: 'Yannick Delmas' },
-  ]
-
-  initializeChartDataLivreur(): void {
-    const documentStyle = getComputedStyle(document.documentElement);
-    const bgColorBlue = documentStyle.getPropertyValue('--bg-blue2');
-    const bgColorGreen = documentStyle.getPropertyValue('--bg-primary');
-    const bgColorCyan = documentStyle.getPropertyValue('--bg-blue1');
-
-    this.chartDataLivreur = [
-      {
-        labels: ['Progression', 'Reste'],
-        datasets: [
-          {
-            data: [28, 72],
-            backgroundColor: [bgColorBlue, '#E0E0E0'], // Bleu et gris
-          },
-        ],
-      },
-      {
-        labels: ['Progression', 'Reste'],
-        datasets: [
-          {
-            data: [22, 78],
-            backgroundColor: [bgColorCyan, '#E0E0E0'], // Cyan et gris
-          },
-        ],
-      },
-      {
-        labels: ['Progression', 'Reste'],
-        datasets: [
-          {
-            data: [32, 68],
-            backgroundColor: [bgColorGreen, '#E0E0E0'], // Vert et gris
-          },
-        ],
-      },
-    ];
-
-    this.chartOptionsCategorie = {
-      cutout: '70%',
-      plugins: {
-        tooltip: { enabled: false },
-        legend: { display: false },
-      },
-      responsive: true,
-      maintainAspectRatio: false,
-    };
-  }
 
   showPassword = false;
   // afficher mot de passe
@@ -262,13 +317,74 @@ export class GestionLivreurComponent {
   // contrôler la visibilité du modal ajout livreur
   visibleAddLivreur: boolean = false;
   showDialogAddLivreur() {
+    console.log('helloooo!!!!')
     this.visibleAddLivreur = true;
+    console.log('test')
   }
+  // contrôler la visibilité du modal detail livreur  
+  visibleDetailLivreur: boolean = false;
+  showDialogDetailLivreur() {
+    this.visibleDetailLivreur = true;
+  }
+  // contrôler la visibilité du modal modifier livreur
+  visibleEditLivreur: boolean = false;
+  showDialogEditLivreur() {
+    this.visibleEditLivreur = true;
+  }
+
   //fermer modal
   closeModal() {
     this.visibleAddLivreur = false;
+    this.visibleEditLivreur = false;
   }
 
 
+  drivers: DeliveryPerformance[] = [];
+  selectedDriver: DeliveryPerformance | null = null;
+  displayDialog: boolean = false;
+  activeDrivers: number = 0;
+  avgDeliveryRate: number = 0;
+  avgRating: number = 0;
+
+  loadData() {
+    // Simuler le chargement des données
+    this.drivers = [
+      {
+        id: 1,
+        name: 'Jean Dupont',
+        deliveriesCompleted: 150,
+        onTimeDeliveryRate: 95,
+        customerRating: 4.8,
+        status: 'active',
+        lastDelivery: new Date()
+      },
+      {
+        id: 2,
+        name: 'Marie Martin',
+        deliveriesCompleted: 120,
+        onTimeDeliveryRate: 88,
+        customerRating: 4.5,
+        status: 'active',
+        lastDelivery: new Date()
+      }
+    ];
+  }
+
+  calculateStats() {
+    const activeDrivers = this.drivers.filter(d => d.status === 'active');
+    this.activeDrivers = activeDrivers.length;
+    this.avgDeliveryRate = Math.round(
+      activeDrivers.reduce((acc, curr) => acc + curr.onTimeDeliveryRate, 0) / activeDrivers.length
+    );
+    this.avgRating = Number(
+      (activeDrivers.reduce((acc, curr) => acc + curr.customerRating, 0) / activeDrivers.length)
+        .toFixed(1)
+    );
+  }
+
+  hideDialog() {
+    this.displayDialog = false;
+    this.selectedDriver = null;
+  }
 
 }
