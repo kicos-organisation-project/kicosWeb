@@ -3,7 +3,7 @@
     <!-- recherche et bouton d'ajout -->
     <div class="search-add">
         <div class="srch">
-            <input type="text"  [(ngModel)]="searchText" (input)="filterPartenaire()"  placeholder="Recherche ...">
+            <input type="text"  [(ngModel)]="searchText" (input)="onSearch()"  placeholder="Recherche ...">
         </div>
         <div class="add" (click)="showDialogAddCommerce()">
             <button class="btn btnValidate"> <i class="pi pi-plus me-2"></i> Ajouter</button>

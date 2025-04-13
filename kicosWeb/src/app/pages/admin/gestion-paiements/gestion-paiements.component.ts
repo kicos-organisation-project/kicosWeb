@@ -7,11 +7,15 @@ import { HttpClient } from '@angular/common/http';
 import { ApiService } from '../../../core/services/api.service';
 import { environment } from '../../../../environments/environment';
 import { MessageService } from '../../../core/services/message.service';
+import { FormsModule } from '@angular/forms';
+import { DialogModule } from 'primeng/dialog';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-gestion-paiements',
   standalone: true,
-  imports: [TabViewModule, TableModule],
+  imports: [TabViewModule, TableModule, FormsModule, DialogModule,CommonModule],
   templateUrl: './gestion-paiements.component.html',
   styleUrl: './gestion-paiements.component.css'
 })
@@ -23,7 +27,7 @@ export class GestionPaiementsComponent {
   apiService = inject(ApiService);
   messageService = inject(MessageService);
   baseUrl = environment.base_url;
-  demandeCommerce: any []=[];
+  demandeCommerce: any[] = [];
 
   ngOnInit() {
     this.listDemandePartenaire();
@@ -34,7 +38,7 @@ export class GestionPaiementsComponent {
     // On fait appel a l'api pour lister les demande de paiement des  partenaires
     this.apiService.getRequestWithSessionId(`${this.baseUrl}/admin/demandes`).subscribe(
       (response: any) => {
-        console.log("liste des partenaires", response);
+        console.log("liste des partenaires", response.demandes);
         this.demandeCommerce = response.demandes;
       },
       (error: any) => {
@@ -45,20 +49,46 @@ export class GestionPaiementsComponent {
     )
   }
 
- 
+  visible: boolean = false;
+
+  showDialog() {
+    this.visible = true;
+  }
+
+  closeModal() {
+    this.visible = false;
+  }
+
+  statusDemande:any;
+  motifPaiement:any;
+
+  idDemande:any;
+  recupDemandeID(demande:any){
+    this.idDemande = demande.id;
+    this.statusDemande = demande.status;
+  }
+
+  resetvalueDemande(){
+    this.statusDemande = '';
+    this.motifPaiement = '';
+  }
+
   // traiter demande paiements
-  traiterDemandePaiement(idDemande:any) {
-      // On fait appel a l'api pour traiter les demande de paiement des  partenaires
-      this.apiService.postWithSessionId(`${this.baseUrl}/admin/demandes/${idDemande}`, { status: "Traité" }).subscribe(
-        (response: any) => {
-          console.log("Demande traitée", response);
-          this.listDemandePartenaire();
-        },
-        (error: any) => {
-          console.log("Partie erreur");
-          console.log(error);
-        }
-      )
+  traiterDemandePaiement() {
+    // On fait appel a l'api pour traiter les demande de paiement des  partenaires
+    this.apiService.postWithSessionId(`${this.baseUrl}/admin/demandes/${this.idDemande}/traiter`, { status: this.statusDemande, motif: this.motifPaiement}).subscribe(
+      (response: any) => {
+        console.log("Demande traitée", response);
+        this.listDemandePartenaire();
+        this.messageService.createMessage('success', response.message);
+        this.resetvalueDemande();
+        this.closeModal();
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+      }
+    )
   }
 
 
@@ -107,5 +137,42 @@ export class GestionPaiementsComponent {
     }
   ];
 
+  filterTerm: string = "";
+  searchText: string = "";
+  filterliste: any[] = [];
+  filterPaiement() {
+    this.filterTerm = this.searchText;
+
+    // Si le terme de recherche est vide, restaurer la liste complète
+    if (!this.filterTerm || this.filterTerm.trim() === '') {
+      this.listDemandePartenaire(); // Réinitialiser la liste
+      return;
+    }
+
+    // Sinon, filtrer normalement
+    this.filterliste = this.apiService.filterByTerm(
+      this.demandeCommerce,
+      this.filterTerm,
+      ['status', 'montant', 'partenaire.nom_partenaire', 'partenaire.localisation']
+    );
+
+    if (this.filterliste.length === 0) {
+      this.listDemandePartenaire();
+    } else {
+      this.demandeCommerce = this.filterliste;
+    }
+  }
+  debounceTimer: any = null;
+
+  // Appelez cette méthode depuis votre input
+  onSearch() {
+    // Annuler le timer existant
+    clearTimeout(this.debounceTimer);
+
+    // Créer un nouveau timer
+    this.debounceTimer = setTimeout(() => {
+      this.filterPaiement();
+    }, 300);
+  }
 
 }

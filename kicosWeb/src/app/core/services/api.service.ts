@@ -93,24 +93,33 @@ export class ApiService {
   
   // ------------------------ Autres ---------------------------------
   //  filtre general 
-filterByTerm(list: any[], filterTerm: string, keys: string[]): any[] {
-  if (!list || !filterTerm || !keys || keys.length === 0) return list;
-
-  const filteredList = list.filter(item => {
-    return keys.some(key => {
-      if (item[key] && typeof item[key] === 'string') {
-        return item[key].toLowerCase().includes(filterTerm.toLowerCase());
-      }
-      return false;
+  filterByTerm(items: any[], term: string, properties: string[]): any[] {
+    if (!term) return items;
+    
+    term = term.toLowerCase();
+    
+    return items.filter(item => {
+      return properties.some(prop => {
+        // Gérer les propriétés imbriquées (comme 'user.firstName')
+        const props = prop.split('.');
+        let value = item;
+        
+        for (const p of props) {
+          if (value && value[p] !== undefined) {
+            value = value[p];
+          } else {
+            return false;
+          }
+        }
+        
+        // Vérifier si la valeur contient le terme de recherche
+        if (value !== null && value !== undefined) {
+          return String(value).toLowerCase().includes(term);
+        }
+        
+        return false;
+      });
     });
-  });
-
-  // If no matches are found, show an alert and return the original list
-  if (filteredList.length === 0) {
-    alert('Aucune correspondance trouvée');
   }
-
-  return filteredList;
-}
 
 }

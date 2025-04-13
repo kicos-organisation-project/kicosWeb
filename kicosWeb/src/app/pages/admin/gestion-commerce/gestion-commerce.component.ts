@@ -358,11 +358,36 @@ export class GestionCommerceComponent implements OnInit {
   filterliste: any[] = [];
   filterPartenaire() {
     this.filterTerm = this.searchText;
-    this.filterliste = this.apiService.filterByTerm( this.listePartenaire, this.filterTerm, ['nom_partenaire','type','localisation']);
-    if (this.filterliste.length == 0) {
+    
+    // Si le terme de recherche est vide, restaurer la liste complète
+    if (!this.filterTerm || this.filterTerm.trim() === '') {
+      this.listPartenaire(); // Réinitialiser la liste
+      return;
+    }
+    
+    // Sinon, filtrer normalement
+    this.filterliste = this.apiService.filterByTerm(
+      this.listePartenaire, 
+      this.filterTerm, 
+      ['nom_partenaire', 'type', 'localisation']
+    );
+    
+    if (this.filterliste.length === 0) {
       this.listPartenaire();
     } else {
-      this.listePartenaire= this.filterliste;
+      this.listePartenaire = this.filterliste;
     }
+  }
+  debounceTimer: any = null;
+  
+  // Appelez cette méthode depuis votre input
+  onSearch() {
+    // Annuler le timer existant
+    clearTimeout(this.debounceTimer);
+    
+    // Créer un nouveau timer
+    this.debounceTimer = setTimeout(() => {
+      this.filterPartenaire();
+    }, 300);
   }
 }

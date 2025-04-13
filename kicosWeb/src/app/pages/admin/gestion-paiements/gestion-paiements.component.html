@@ -4,17 +4,13 @@
         <div class="card border-0 p-4">
             <!-- Titre, recherche et ajout  -->
             <div class="d-flex justify-content-between mb-3">
-                <h5 class="fw-bold">Liste des  paiements   |</h5>
+                <h5 class="fw-bold">Liste des paiements |</h5>
                 <div class="search-and d-flex justify-content-between">
                     <!-- Input de recherche  -->
                     <div class="me-3">
-                        <div class="input-group">
-                            <span class="input-group-text border inputSearch" id="inputGroup-sizing-sm"
-                                style="background-color: transparent;">
-                                <i class="pi pi-search"></i>
-                            </span>
-                            <input type="search" class="inputSearch form-control" aria-label="Sizing example input"
-                                aria-describedby="inputGroup-sizing-sm" placeholder="Rechercher">
+                        <div class="srch">
+                            <input type="text" [(ngModel)]="searchText" (input)="onSearch()"
+                                placeholder="Recherche ...">
                         </div>
                     </div>
                 </div>
@@ -26,29 +22,34 @@
                 [styleClass]="'paginationTacheCustom'" [rowsPerPageOptions]="[5, 7, 10]">
                 <ng-template pTemplate="header">
                     <tr class="text-center py-2">
-                        <th class="">Photo </th>
                         <th class="">Responsable</th>
                         <th class="">Motif</th>
                         <th class="">Montant</th>
+                        <th class="">Status </th>
                         <th class="">Action</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-demandePartenaire let-index="rowIndex" class="">
                     <tr class="py-4">
-                        <td class="text-center text-xs px-3" style="width: 20%;">
-                            <img src="https://kiccos.terangacode.com/public/{{demandePartenaire.partenaire?.image}}" class="card-img-top" alt="..." />
-                        </td>
-                        <td class="text-center text-xs px-3" style="width: 20%;">{{ demandePartenaire.partenaire?.nom_partenaire}}</td>
+                        <td class="text-center text-xs px-3" style="width: 20%;">{{
+                            demandePartenaire.partenaire?.nom_partenaire}}</td>
                         <td class="text-center text-xs px-3" style="width: 20%;">
                             <div class="truncate"
                                 style="max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
                                 :title="demande.motif">
-                                {{ demandePartenaire.motif.length > 30 ? demandePartenaire.motif.substring(0, 30) + '...' : demandePartenaire.motif }}
+                                {{ demandePartenaire.motif.length > 30 ? demandePartenaire.motif.substring(0, 30) +
+                                '...' : demandePartenaire.motif }}
                             </div>
                         </td>
-                        <td class="text-center text-xs" style="width: 15%;">{{ demandePartenaire.montant}}</td>
+                        <td class="text-center text-xs" style="width: 15%;">{{demandePartenaire.montant}}</td>
+                        <td class="text-center text-xs px-3" style="width: 20%;">
+                            <span *ngIf="demandePartenaire.status == 'en_attente'" style="color: gainsboro;" >En attente</span>
+                            <span *ngIf="demandePartenaire.status == 'approuvee'" style="color: greenyellow;" >Approuvée</span>
+                            <span *ngIf="demandePartenaire.status == 'rejetee'" style="color: red;" >Rejetée</span>
+                        </td>
                         <td class="text-center text-xs" style="width: 15%;">
-                            <i class="pi pi-wallet" style="font-size: 1rem; cursor: pointer;" (click)="traiterDemandePaiement(demandePartenaire.id)"></i>
+                            <i class="pi pi-wallet" style="font-size: 1rem; cursor: pointer;"
+                                (click)="showDialog();recupDemandeID(demandePartenaire)"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -65,7 +66,7 @@
         <div class="card border-0 p-4">
             <!-- Titre, recherche et ajout  -->
             <div class="d-flex justify-content-between mb-3">
-                <h5 class="fw-bold">Liste des  paiements  |</h5>
+                <h5 class="fw-bold">Liste des paiements |</h5>
                 <div class="search-and d-flex justify-content-between">
                     <!-- Input de recherche  -->
                     <div class="me-3">
@@ -113,3 +114,30 @@
         </div>
     </p-tabPanel>
 </p-tabView>
+
+
+<div class="card flex justify-center">
+    <p-dialog header="Traiter demande de paiement" [(visible)]="visible" [style]="{ width: '25rem' }">
+
+        <div class="form-group">
+            <div class="mb-3">
+                <label for="status">Satus</label>
+                <select class="form-select" id="status" [(ngModel)]="statusDemande">
+                    <option value="en_attente">En attente</option>
+                    <option value="approuvee">Approuvée</option>
+                    <option value="rejetee">Rejetée</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="motif">Motif</label>
+                <textarea class="form-control" id="motif" rows="3" [(ngModel)]="motifPaiement"></textarea>
+            </div>
+        </div>
+
+        <div class="flex justify-center gap-2">
+            <button type="button" class="btn btnAnnuler me-2" label="Cancel" severity="secondary"
+                (click)="visible = false" (click)="resetvalueDemande()">Annuler</button>
+            <button type="button" class="btn btnSave" (click)="traiterDemandePaiement()">Traiter</button>
+        </div>
+    </p-dialog>
+</div>
