@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterModule, RouterOutlet } from '@angular/router';
 import { MenuService } from '../../../core/services/menu.service';
 import { CommonModule } from '@angular/common';
 import { BadgeModule } from 'primeng/badge'
 import { DialogModule } from 'primeng/dialog';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { NotificationService } from '../../../core/services/notification.service';
 
 type DialogPosition = 'center' | 'top' | 'bottom' | 'left' | 'right' | 'topleft' | 'topright' | 'bottomleft' | 'bottomright';
 
@@ -36,22 +39,23 @@ export class DashboardComponent {
   userRole!: string;
   userInfo: any;
   isSidebarVisible: boolean = true;
+  message: string = '';
 
   // Constructeur
   constructor(
     private menuService: MenuService,
     private router: Router,
-  ) {}
+  ) { }
 
+  notification = inject(NotificationService);
 
-  
   visible: boolean = false;
 
   position: DialogPosition = 'topright';
 
   showDialog(position: DialogPosition) {
-      this.position = position;
-      this.visible = true;
+    this.position = position;
+    this.visible = true;
   }
 
   ngOnInit(): void {
@@ -63,9 +67,9 @@ export class DashboardComponent {
       console.log('role userInfo: ' + this.userRole);
       if (this.userRole === 'admin') {
         this.menus = this.menuService.menus.admin;
-      }else if (this.userRole === 'partenaire') {
+      } else if (this.userRole === 'partenaire') {
         this.menus = this.menuService.menus.commerce;
-      }else{
+      } else {
         this.menus = this.menuService.menus.livreur;
       }
       console.log('Menus chargés:', this.menus);
@@ -80,6 +84,15 @@ export class DashboardComponent {
         image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFuv3XV-_htCR1zFqSflq8enLxArHNPDEY9Q&s'
       },
     ];
+
+    console.log('Initialisation de l\'abonnement aux notifications');
+    const livreurId = this.userInfo.id; 
+
+    this.notification.subscribeToLivreurNotifications(livreurId, (data) => {
+      console.log('Notification reçue dans le composant:', data);
+      // Ici tu peux déclencher une alerte, mettre à jour l'interface, etc.
+    });
+  
   }
 
 
@@ -115,7 +128,7 @@ export class DashboardComponent {
       this.hasNewNotifications = false;
     }
   }
-
+ 
   acceptNotification(id: number) {
     // Implémentez la logique d'acceptation
     this.notifications = this.notifications.filter(n => n.id !== id);

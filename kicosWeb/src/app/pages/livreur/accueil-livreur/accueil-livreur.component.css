@@ -19,7 +19,6 @@
   
   .gauge-container {
     position: relative;
-    height: 200px;
   }
   
   .gauge-value {
@@ -113,4 +112,8 @@
       font-size: 12px;
       padding: 6px 10px;
     }
+  }
+
+  .icone{
+    color: var(--bg-primary);
   }

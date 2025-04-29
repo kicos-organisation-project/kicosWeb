@@ -6,7 +6,7 @@
                 <h3>Commandes total</h3>
                 <span class="icon"><i class="pi pi-shopping-cart"></i></span>
             </div>
-            <div class="stat-value">924 </div>
+            <div class="stat-value">{{nombreTotalCommande}}</div>
         </div>
 
         <div class="stat-card">
@@ -14,7 +14,7 @@
                 <h3>Commandes en attente</h3>
                 <span class="icon"><i class="pi pi-dollar"></i></span>
             </div>
-            <div class="stat-value">322 </div>
+            <div class="stat-value">{{nombreCommandesPending}}</div>
         </div>
 
         <div class="stat-card">
@@ -22,9 +22,36 @@
                 <h3>Commandes annuler</h3>
                 <span class="icon"><i class="pi pi-users"></i></span>
             </div>
-            <div class="stat-value">298</div>
+            <div class="stat-value">{{nombreCommandescancelled}}</div>
         </div>
     </div>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-header">
+                <h3>Commandes confirmée</h3>
+                <span class="icon"><i class="pi pi-shopping-cart"></i></span>
+            </div>
+            <div class="stat-value">{{nombreCommandesconfirmed}}</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <h3>Commandes en cours</h3>
+                <span class="icon"><i class="pi pi-dollar"></i></span>
+            </div>
+            <div class="stat-value">{{nombreCommandesprocessing}}</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <h3>Commandes livrer</h3>
+                <span class="icon"><i class="pi pi-users"></i></span>
+            </div>
+            <div class="stat-value">{{nombreCommandesshipped}}</div>
+        </div>
+    </div>
+
 
     <div class="secondContainer">
         <div class="chart-container">
@@ -34,24 +61,17 @@
             </p-chart>
         </div>
 
-        <div class="best-sellers">
-            <h2>les plus vendues</h2>
-            <p class="subtitle">best sellers</p>
-
-            <div class="product-list">
-                <div class="product-card" *ngFor="let i of [1,2,3]">
-                    <div class="product-image"></div>
-                    <div class="product-info">
-                        <h3>Berry Blast Smoothie</h3>
-                        <div class="rating">
-                            <span class="stars">⭐</span>
-                            <span class="score">4.8/5</span>
-                            <span class="reviews">(1k+ reviews)</span>
-                        </div>
-                        <div class="price">$320</div>
-                    </div>
-                </div>
+        <div class="gauge-card">
+            <h2>Montant Reçu</h2>
+            <div class="gauge-container">
+              <p-chart type="doughnut" [data]="gaugeData" [options]="gaugeOptions"
+                [style]="{'width': '100%', 'height': '100%'}">
+              </p-chart>
+              <div class="gauge-value">
+                <span class="money-label">Votre argent</span>
+                <span class="money-value">25,430.39F CFA</span>
+              </div>
             </div>
-        </div>
+          </div>
     </div>
 </div>

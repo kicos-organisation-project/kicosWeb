@@ -3,7 +3,6 @@
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
 @import "primeicons/primeicons.css";
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap');
 
 :root {
     --bg-neutral: #F8F9FA;

@@ -12,7 +12,7 @@
                                <i class="pi pi-shop" style="color: var(--bg-neutral);"></i>
                             </span>
                         </div>
-                        <p class="mt-2">320</p>
+                        <p class="mt-2">{{nombrePartenaire}}</p>
                     </div>
                 </div>
             </div>
@@ -25,7 +25,7 @@
                                 <i class="pi pi-user" style="color: var(--bg-neutral);"></i>
                             </span>
                         </div>
-                        <p class="mt-2">245</p>
+                        <p class="mt-2">{{nombreLivreur}}</p>
                     </div>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                                 <i class="pi pi-users" style="color: var(--bg-neutral);"></i>
                             </span>
                         </div>
-                        <p class="mt-2">329</p>
+                        <p class="mt-2">{{nombreClient}}</p>
                     </div>
                 </div>
             </div>
@@ -50,9 +50,4 @@
         <span class="font-medium text-color">Paiement recu par mois</span>
         <p-chart type="bar" [data]="dataCategogrie" [options]="optionsCategogrie" />
     </div>
-
-
- 
-
-
 </div>

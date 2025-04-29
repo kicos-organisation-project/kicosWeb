@@ -43,7 +43,7 @@ export class GestionCommandesComponent {
     this.commandeList();
   }
 
-  // lister les partenaire
+  // lister les commandes
   commandeList() {
     // On fait appel a l'api pour lister les commandes
     this.apiService.getRequestWithSessionId(`${this.baseUrl}/commandes/partenaire`).subscribe(
