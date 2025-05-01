@@ -1,4 +1,4 @@
 
 export const environment = {
-  base_url: 'https://kiccos.terangacode.com/api',
+  base_url: 'http://127.0.0.1:8000/api',
 };
