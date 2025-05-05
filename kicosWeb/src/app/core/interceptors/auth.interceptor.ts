@@ -14,7 +14,7 @@ export function authInterceptor(
   const tokenKey = 'session_id';
 
   // Récupération du jeton depuis le localStorage
-  const token = localStorage.getItem(tokenKey);
+  const token = localStorage.getItem('session_id');
 
   if (!token) {
     console.log("Token d'utilisateur non présent");

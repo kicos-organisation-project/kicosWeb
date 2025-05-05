@@ -88,7 +88,7 @@ export class DashboardComponent {
     console.log('Initialisation de l\'abonnement aux notifications');
     const livreurId = this.userInfo.id; 
 
-    this.notification.subscribeToLivreurNotifications(livreurId, (data) => {
+    this.notification.subscribeToLivreurNotifications( (data) => {
       console.log('Notification reçue dans le composant:', data);
       // Ici tu peux déclencher une alerte, mettre à jour l'interface, etc.
     });
