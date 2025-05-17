@@ -1,0 +1,123 @@
+<div class="container">
+    <div class="profile-header">
+        <h1>Mon Profil</h1>
+    </div>
+
+    <div class="profile-section">
+        <h2 class="section-title">Photo de Profil</h2>
+
+        <div class="profile-image-section">
+            <div class="profile-image-container">
+                <img class="profile-image" src="{{profilLivreur?.admin.avatar}}" alt="Photo de profil" id="profileImagePreview">
+            </div>
+
+            <div class="image-upload-container">
+                <form id="imageUploadForm" enctype="multipart/form-data">
+                    <label for="profileImage" class="custom-file-upload">
+                        <i class="fa fa-cloud-upload"></i> Sélectionner une image
+                    </label>
+                    <input type="file" id="profileImage" class="file-input" accept="image/*"
+                        (change)="onFileSelected($event)">
+
+                    <div class="selected-file-name" id="selectedFileName"></div>
+
+                    <p class="upload-info">Formats acceptés: JPG, PNG, JPEG. Taille max: 5 MB</p>
+
+                    <div class="image-actions">
+                        <button type="button" class="btn btn-blue" id="uploadImageBtn"
+                            (click)="uploadImage()">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-section">
+        <h2 class="section-title">Informations Personnelles</h2>
+        <div class="form-row">
+            <div class="form-column">
+                <div class="form-group">
+                    <label for="firstName">Prénom</label>
+                    <input type="text" id="firstName" value="{{profilLivreur?.firstName}}">
+                </div>
+            </div>
+            <div class="form-column">
+                <div class="form-group">
+                    <label for="lastName">Nom</label>
+                    <input type="text" id="lastName" value="{{profilLivreur?.lastName}}">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" value="{{profilLivreur?.email}}">
+        </div>
+
+        <div class="form-group">
+            <label for="phoneNumber">Téléphone</label>
+            <input type="tel" id="phoneNumber" value="{{profilLivreur?.phoneNumber}}" disabled>
+        </div>
+
+        <div class="form-group">
+            <label for="role">Rôle</label>
+            <input type="text" id="role" value="{{profilLivreur?.role}}" disabled>
+        </div>
+
+        <div class="action-links mb-4" data-bs-toggle="modal" data-bs-target="#profil">Modifier mon mot de passe</div>
+        <button class="btn" (click)="modifierProfilLivreur()">Enregistrer les modifications</button>
+    </div>
+
+    <!-- Nouvelle section pour les informations administratives -->
+    <div class="profile-section">
+        <h2 class="section-title">Informations Administratives</h2>
+        
+        <div class="form-group">
+            <label for="avatar">Avatar</label>
+            <input type="text" id="avatar" value="{{profilLivreur?.admin.avatar}}">
+        </div>
+
+        <div class="form-group">
+            <label for="address">Adresse</label>
+            <input type="text" id="address" value="{{profilLivreur?.admin.address}}">
+        </div>
+
+        <button class="btn" (click)="modifierInformationsAdmin()">Enregistrer les modifications</button>
+    </div>
+</div>
+
+<!-- Modal existant pour changer le mot de passe inchangé -->
+
+<!-- Script pour la gestion basique de l'interface -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Code existant pour la gestion des images
+        document.getElementById('profileImage').addEventListener('change', function (e) {
+            const fileInput = e.target;
+            if (fileInput.files && fileInput.files.length > 0) {
+                const fileName = fileInput.files[0].name;
+                document.getElementById('selectedFileName').textContent = fileName;
+
+                // Prévisualisation de l'image
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('profileImagePreview').src = e.target.result;
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        });
+
+        // Gestion des boutons d'upload et de suppression
+        document.getElementById('uploadImageBtn').addEventListener('click', function () {
+            alert('Fonction de téléchargement à implémenter. Endpoint: /api/livreurs/profile/upload-image');
+        });
+
+        // Ajout d'un événement pour le bouton de modification des informations administratives
+        const btnModifierAdmin = document.querySelector('.profile-section:last-child .btn');
+        if (btnModifierAdmin) {
+            btnModifierAdmin.addEventListener('click', function() {
+                alert('Fonction de modification des informations administratives à implémenter.');
+            });
+        }
+    });
+</script>

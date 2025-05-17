@@ -6,17 +6,19 @@ import { ListeCommandesComponent } from './liste-commandes/liste-commandes.compo
 import { GestionLivreurComponent } from './gestion-livreur/gestion-livreur.component';
 import { GestionPaiementsComponent } from './gestion-paiements/gestion-paiements.component';
 import { CategorieComponent } from './categorie/categorie.component';
+import { ProfilComponent } from './profil/profil.component';
 
 
 
 const routes: Routes = [
-    {path: 'dashboard', component:AccueilAdminComponent},
-    {path: 'commerce', component: GestionCommerceComponent},
-    {path: 'commandes', component: ListeCommandesComponent},
-    {path: 'livreur', component: GestionLivreurComponent},
-    {path: 'paie', component: GestionPaiementsComponent},
-    {path: 'categorie', component: CategorieComponent},
-    {path: '**', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: 'dashboard', component: AccueilAdminComponent },
+  { path: 'commerce', component: GestionCommerceComponent },
+  { path: 'commandes', component: ListeCommandesComponent },
+  { path: 'livreur', component: GestionLivreurComponent },
+  { path: 'paie', component: GestionPaiementsComponent },
+  { path: 'categorie', component: CategorieComponent },
+  { path: 'profil', component: ProfilComponent },
+  { path: '**', redirectTo: 'dashboard', pathMatch: 'full' },
 
 ];
 

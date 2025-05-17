@@ -3,7 +3,7 @@
     <!-- recherche et bouton d'ajout -->
     <div class="search-add">
         <div class="srch">
-            <input type="text"  [(ngModel)]="searchText" (input)="onSearch()"  placeholder="Recherche ...">
+            <input type="text" [(ngModel)]="searchText" (input)="onSearch()" placeholder="Recherche ...">
         </div>
         <div class="add" (click)="showDialogAddCommerce()">
             <button class="btn btnValidate"> <i class="pi pi-plus me-2"></i> Ajouter</button>
@@ -270,34 +270,10 @@
 
 <!-- Modal modifier partenaire -->
 <p-dialog [modal]="true" [(visible)]="visibleUpdateCommerce"
-    [style]="{ width: '60rem', height:'50rem', backgroundColor: '#F8F9FD'}" header="Modifier partenaire">
+    [style]="{ width: '40rem', height:'20rem', backgroundColor: '#F8F9FD'}" header="Modifier partenaire">
     <form novalidate [formGroup]="PaternaireForm" #ngForm="ngForm" (ngSubmit)="modifierPartenaire()">
         <div class="contentInput">
             <div>
-                <!-- Nom -->
-                <div class="mb-2">
-                    <label class="mb-1" for="name">Nom</label>
-                    <input id="name" type="text" class="input-field" formControlName="lastName">
-                    <p *ngIf="error" class="text-danger">{{error.lastName}}</p>
-                    <div *ngIf="PaternaireForm.get('lastName')?.invalid && PaternaireForm.get('lastName')?.touched"
-                        class="text-danger">
-                        {{ PaternaireForm.get('lastName')?.errors?.['invalid'] ? 'Le nom est invalide.' : 'Le nom est \n
-                        obligatoire.' }}
-                    </div>
-                </div>
-
-                <!-- Nom établissement -->
-                <div class="mb-2">
-                    <label class="mb-1" for="nom_partenaire">Nom Etablissement</label>
-                    <input id="nom_partenaire" type="text" class="input-field" formControlName="nom_partenaire">
-                    <p *ngIf="error" class="text-danger">{{error.nom_partenaire}}</p>
-                    <div *ngIf="PaternaireForm.get('nom_partenaire')?.invalid && PaternaireForm.get('nom_partenaire')?.touched"
-                        class="text-danger">
-                        {{ PaternaireForm.get('nom_partenaire')?.errors?.['invalid'] ? 'Le nom de l\'établissement est \n
-                        invalide.' : 'Le nom de l\'établissement est obligatoire.' }}
-                    </div>
-                </div>
-
                 <!-- Ninea -->
                 <div class="mb-2">
                     <label for="ninea" class="mb-1">Ninea</label>
@@ -309,45 +285,9 @@
                         chiffres.' : 'Le NINEA est obligatoire.' }}
                     </div>
                 </div>
-
-                <!-- Horaire -->
-                <div class="mb-2">
-                    <label for="horaire" class="mb-1">Horaire</label>
-                    <input type="text" class="input-field" id="horaire" formControlName="horaire">
-                    <p *ngIf="error" class="text-danger">{{error.horaire}}</p>
-                    <div *ngIf="PaternaireForm.get('horaire')?.invalid && PaternaireForm.get('horaire')?.touched"
-                        class="text-danger">
-                        {{ PaternaireForm.get('horaire')?.errors?.['required'] ? 'L\'horaire est invalide .' : 'Le \n
-                        format de l\'horaire est invalide (ex: 08h - 18h).' }}
-                    </div>
-                </div>
-
-                <!-- Téléphone -->
-                <div class="mb-2">
-                    <label for="phoneNumber" class="mb-1">Téléphone</label>
-                    <input type="tel" class="input-field" id="phoneNumber" formControlName="phoneNumber">
-                    <p *ngIf="error" class="text-danger">{{error.phoneNumber}}</p>
-                    <div *ngIf="PaternaireForm.get('phoneNumber')?.invalid && PaternaireForm.get('phoneNumber')?.touched"
-                        class="text-danger">
-                        {{ PaternaireForm.get('phoneNumber')?.errors?.['invalid'] ? 'Le numéro de téléphone doit \n
-                        contenir exactement 13 chiffres.' : 'Le numéro de téléphone est obligatoire.' }}
-                    </div>
-                </div>
             </div>
 
             <div>
-                <!-- Prénom -->
-                <div class="mb-2">
-                    <label for="firstName" class="mb-1">Prénom</label>
-                    <input type="text" class="input-field" id="firstName" formControlName="firstName">
-                    <p *ngIf="error" class="text-danger">{{error.firstName}}</p>
-                    <div *ngIf="PaternaireForm.get('firstName')?.invalid && PaternaireForm.get('firstName')?.touched"
-                        class="text-danger">
-                        {{ PaternaireForm.get('firstName')?.errors?.['invalid'] ? 'Le prénom est invalide.' : 'Le prénom \n
-                        est obligatoire.' }}
-                    </div>
-                </div>
-
                 <!-- Type -->
                 <div class="mb-2">
                     <label for="type" class="mb-1">Type</label>
@@ -362,60 +302,23 @@
                         obligatoire.' }}
                     </div>
                 </div>
-
-                <!-- Localisation -->
-                <div class="mb-2">
-                    <label for="localisation" class="mb-1">Localisation</label>
-                    <input type="text" class="input-field" id="localisation" formControlName="localisation">
-                    <p *ngIf="error" class="text-danger">{{error.localisation}}</p>
-                    <div *ngIf="PaternaireForm.get('localisation')?.invalid && PaternaireForm.get('localisation')?.touched"
-                        class="text-danger">
-                        {{ PaternaireForm.get('localisation')?.errors?.['invalid'] ? 'La localisation est invalide.' : '
-                        La localisation est obligatoire.' }}
-
-                    </div>
-                </div>
-
-                <!-- Description -->
-                <div class="mb-2">
-                    <label for="description" class="mb-1">Description</label>
-                    <input type="text" class="input-field" id="description" formControlName="description">
-                    <p *ngIf="error" class="text-danger">{{error.description}}</p>
-                    <div *ngIf="PaternaireForm.get('description')?.invalid && PaternaireForm.get('description')?.touched"
-                        class="text-danger">
-                        {{ PaternaireForm.get('description')?.errors?.['invalid'] ? 'La description est invalide.' : '
-                        La description contient des caractères non autorisés.' }}
-
-                    </div>
-                </div>
-
-                <!-- Email -->
-                <div class="mb-2">
-                    <label for="email" class="mb-1">Email</label>
-                    <input type="email" class="input-field" id="email" formControlName="email">
-                    <p *ngIf="error" class="text-danger">{{error.email}}</p>
-                    <div *ngIf="PaternaireForm.get('email')?.invalid && PaternaireForm.get('email')?.touched"
-                        class="text-danger">
-                        {{ PaternaireForm.get('email')?.errors?.['invalid'] ? 'Veuillez entrer une adresse email \n
-                        valide.' : 'L\'email est obligatoire.' }}
-                    </div>
-                </div>
             </div>
         </div>
 
-        <!-- Photo établissement -->
+        <!-- etat -->
         <div class="mb-2">
-            <label for="photoLivreur" class="mb-1">Photo</label>
-            <input accept="image/*" name="image" (change)="addPhotoEtablissement($event)"
-                class="form-control w-full py-1 inputPhoto" id="photoLivreur" type="file">
-            <p *ngIf="error" class="text-danger">{{error.photoLivreur}}</p>
+            <label for="etat" class="mb-1">Etat</label>
+            <select id="etat" class="input-field" formControlName="etat">
+                <option value="active">Active</option>
+                <option value="attente">No active</option>
+            </select>
         </div>
 
 
         <!-- Boutons -->
         <div class="d-flex mt-5 justify-content-center">
             <button type="button" class="btn btnAnnuler me-2" (click)="closeModal()">Annuler</button>
-            <button type="submit" class="btn btnSave" [disabled]="PaternaireForm.invalid">Enregistrer</button>
+            <button type="submit" class="btn btnSave">Enregistrer</button>
         </div>
     </form>
 </p-dialog>

@@ -93,7 +93,7 @@ export class GestionCommerceComponent implements OnInit {
       type: partenaire.type,
       image: partenaire.image,
       nom_partenaire: partenaire.nom_partenaire,
-
+      etat: partenaire.etat,
     });
     this.id_partenaire = partenaire.id;
   }
@@ -137,6 +137,7 @@ export class GestionCommerceComponent implements OnInit {
     ]),
 
     image: new FormControl(''),
+    etat: new FormControl(''),
   }
 
   );
@@ -333,7 +334,7 @@ export class GestionCommerceComponent implements OnInit {
   // modifier un partenaire
   modifierPartenaire() {
     // On fait appel a l'api pour modifier les partenaires
-    this.apiService.postWithSessionId(`${this.baseUrl}/partenaires/${this.id_partenaire}`, this.PaternaireForm.value).subscribe(
+    this.apiService.postWithSessionId(`${this.baseUrl}/admin/partenaires/${this.id_partenaire}/update`, this.PaternaireForm.value).subscribe(
       (response: any) => {
         console.log(response);
         if(response.status_code===422){

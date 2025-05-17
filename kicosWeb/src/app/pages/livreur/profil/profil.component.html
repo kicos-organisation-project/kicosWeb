@@ -1,0 +1,186 @@
+<div class="container">
+    <div class="profile-header">
+        <h1>Mon Profil</h1>
+    </div>
+
+    <div class="profile-section">
+        <h2 class="section-title">Photo de Profil</h2>
+
+        <div class="profile-image-section">
+            <div class="profile-image-container">
+                <!-- <img class="profile-image" src="{{profilLivreur?.partenaire.image_url}}" alt="Photo de profil" id="profileImagePreview"> -->
+            </div>
+
+            <div class="image-upload-container">
+                <form id="imageUploadForm" enctype="multipart/form-data">
+                    <label for="profileImage" class="custom-file-upload">
+                        <i class="fa fa-cloud-upload"></i> Sélectionner une image
+                    </label>
+                    <input type="file" id="profileImage" class="file-input" accept="image/*"
+                        (change)="onFileSelected($event)">
+
+                    <div class="selected-file-name" id="selectedFileName"></div>
+
+                    <p class="upload-info">Formats acceptés: JPG, PNG, JPEG. Taille max: 5 MB</p>
+
+                    <div class="image-actions">
+                        <button type="button" class="btn btn-blue" id="uploadImageBtn"
+                            (click)="uploadImage()">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="profile-section">
+        <h2 class="section-title">Informations Personnelles</h2>
+        <div class="form-row">
+            <div class="form-column">
+                <div class="form-group">
+                    <label for="firstName">Prénom</label>
+                    <input type="text" id="firstName" value="{{profilLivreur?.firstName}}">
+                </div>
+            </div>
+            <div class="form-column">
+                <div class="form-group">
+                    <label for="lastName">Nom</label>
+                    <input type="text" id="lastName" value="{{profilLivreur?.lastName}}">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" value="{{profilLivreur?.email}}">
+        </div>
+
+        <div class="form-group">
+            <label for="phoneNumber">Téléphone</label>
+            <input type="tel" id="phoneNumber" value="{{profilLivreur?.phoneNumber}}" disabled>
+        </div>
+
+        <div class="form-group">
+            <label for="role">Rôle</label>
+            <input type="text" id="role" value="{{profilLivreur?.role}}" disabled>
+        </div>
+
+        <div class="action-links mb-4" data-bs-toggle="modal" data-bs-target="#profil">Modifier mon mot de passe</div>
+        <button class="btn" (click)="modifierProfilLivreur()">Enregistrer les modifications</button>
+    </div>
+
+    <div class="profile-section">
+        <h2 class="section-title">Informations Livreur</h2>
+
+        <div class="form-group">
+            <label>Position actuelle</label>
+            <div class="form-row">
+              <div class="form-column">
+                <input type="text" id="latitude" value="14.724346209389799" readonly>
+              </div>
+              <div class="form-column">
+                <input type="text" id="longitude" value="-17.48901084355535" readonly>
+              </div>
+            </div>
+            <div class="map-container">
+              <!-- La carte serait intégrée ici avec une librairie comme Google Maps -->
+            </div>
+          </div>
+
+        <div class="form-row">
+            <div class="form-column">
+                <div class="form-group">
+                    <label for="status">Statut</label>
+                    <div>
+                        <span class="status-badge status-attente">{{profilLivreur?.livreur.etat}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-column">
+                <div class="form-group">
+                    <label for="availability">Disponibilité</label>
+                    <select id="availability">
+                        <option value="1" [selected]="profilLivreur?.livreur.estDisponible === 1">Disponible</option>
+                        <option value="0" [selected]="profilLivreur?.livreur.estDisponible === 0">Non disponible
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn">Enregistrer les modifications</button>
+    </div>
+</div>
+
+<!-- Modal pour changer le mot de passe -->
+<div class="modal fade" id="profil" tabindex="-1" aria-labelledby="profilLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="profilLabel">Modifier mon mot de passe</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="current_password">Mot de passe actuel</label>
+                    <input [type]="showPassword ? 'text' : 'password'" id="current_password">
+                    <button type="button" (click)="togglePassword()" class="iconEye">
+                        <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label for="new_password">Nouveau mot de passe</label>
+                    <input [type]="showPassword ? 'text' : 'password'" id="new_password">
+                    <button type="button" (click)="togglePassword()" class="iconEye">
+                        <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label for="new_password_confirmation">Confirmer le mot de passe</label>
+                    <input [type]="showPassword ? 'text' : 'password'" id="new_password_confirmation">
+                    <button type="button" (click)="togglePassword()" class="iconEye">
+                        <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-blue" (click)="modifierPassword()">Valider</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script pour la gestion basique de l'interface (sans la partie AJAX) -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Affichage du nom du fichier sélectionné
+    document.getElementById('profileImage').addEventListener('change', function(e) {
+        const fileInput = e.target;
+        if (fileInput.files && fileInput.files.length > 0) {
+            const fileName = fileInput.files[0].name;
+            document.getElementById('selectedFileName').textContent = fileName;
+            
+            // Prévisualisation de l'image
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('profileImagePreview').src = e.target.result;
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+    });
+    
+    // Ces fonctions seraient à implémenter dans votre code TypeScript
+    // Ajout d'événements pour les boutons (sans la partie AJAX)
+    document.getElementById('uploadImageBtn').addEventListener('click', function() {
+        alert('Fonction de téléchargement à implémenter. Endpoint: /api/livreurs/profile/upload-image');
+    });
+    
+    document.getElementById('removeImageBtn').addEventListener('click', function() {
+        alert('Fonction de suppression à implémenter. Endpoint: /api/livreurs/profile/remove-image');
+        // Réinitialisation de l'image à l'image par défaut
+        document.getElementById('profileImagePreview').src = '/assets/img/default-avatar.png';
+    });
+});
+</script>

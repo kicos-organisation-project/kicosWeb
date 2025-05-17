@@ -9,8 +9,8 @@
           <!-- Input de recherche  -->
           <div class="me-3">
             <div class="srch">
-              <input type="text"  [(ngModel)]="searchText" (input)="onSearch()"  placeholder="Recherche ...">
-          </div>
+              <input type="text" [(ngModel)]="searchText" (input)="onSearch()" placeholder="Recherche ...">
+            </div>
           </div>
           <button class="btn btnValidate" (click)="showDialogAddLivreur()"> <i class="pi pi-plus me-2"></i>
             Ajouter</button>
@@ -179,297 +179,206 @@
     </div>
   </p-tabPanel>
 
-    <!-- Modal ajout livreur -->
-    <p-dialog [modal]="true" [(visible)]="visibleAddLivreur"
-      [style]="{ width: '60rem', height:'50rem', backgroundColor: '#F8F9FD'}" header="Ajout Livreur">
-      <form novalidate [formGroup]="LivreurForm" #ngForm="ngForm" (ngSubmit)="addLivreur()">
-        <div class="contentInput">
-          <div class="">
-            <!-- nom -->
-            <div class="mb-3">
-              <label class="mb-2" for="lastName">Nom </label>
-              <input id="lastName" type="text" class="input-field" formControlName="lastName">
-              <p *ngIf="error" class="text-danger">{{error.lastName}}</p>
-              <div *ngIf="LivreurForm.get('lastName')?.invalid && LivreurForm.get('lastName')?.touched"
-                class="text-danger">
-                {{ LivreurForm.get('lastName')?.errors?.['invalid'] ? 'Le nom est invalide.' : 'Le nom est obligatoire.'
-                }}
-              </div>
-            </div>
-
-            <!-- Télephone -->
-            <div class="mb-3">
-              <label for="phoneNumber" class="mb-2">Téléphone</label>
-              <input type="tel" class="input-field" id="phoneNumber" formControlName="phoneNumber">
-              <p *ngIf="error" class="text-danger">{{error.phoneNumber}}</p>
-              <div *ngIf="LivreurForm.get('phoneNumber')?.invalid && LivreurForm.get('phoneNumber')?.touched"
-                class="text-danger">
-                {{ LivreurForm.get('phoneNumber')?.errors?.['invalid'] ? 'Le numéro de téléphone est invalide.' : 'Le numéro de téléphone est obligatoire.' }}
-              </div>
-            </div>
-
-            <!-- Numéro licence -->
-            <div class="mb-2">
-              <label for="licence" class="mb-1">Numéro licence</label>
-              <input type="text" class="input-field" id="licence" formControlName="licence_driver_number">
-              <p *ngIf="error" class="text-danger">{{error.licence_driver_number}}</p>
-              <div
-                *ngIf="LivreurForm.get('licence_driver_number')?.invalid && LivreurForm.get('licence_driver_number')?.touched"
-                class="text-danger">
-                {{ LivreurForm.get('licence_driver_number')?.errors?.['invalid'] ? 'Le numéro de licence est invalide.'
-                :
-                'Le numéro de licence est obligatoire.' }}
-              </div>
-            </div>
-
-            <!-- Password -->
-            <div class="form-group mb-3 inputP">
-              <label for="password" class="textLabel">Mot de passe</label>
-              <input [type]="showPassword ? 'text' : 'password'" class="input-field" id="password"
-                formControlName="password">
-              <button type="button" (click)="togglePassword()" class="iconEye">
-                <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-              </button>
-              <p *ngIf="error" class="text-danger">{{error.password}}</p>
-              <div *ngIf="LivreurForm.get('password')?.invalid && LivreurForm.get('password')?.touched"
-                class="text-danger">
-                {{ LivreurForm.get('password')?.errors?.['invalid'] ? 'Le mot de passe est invalide.' : 'Le mot de passe est obligatoire.' }}
-              </div>
+  <!-- Modal ajout livreur -->
+  <p-dialog [modal]="true" [(visible)]="visibleAddLivreur"
+    [style]="{ width: '60rem', height:'50rem', backgroundColor: '#F8F9FD'}" header="Ajout Livreur">
+    <form novalidate [formGroup]="LivreurForm" #ngForm="ngForm" (ngSubmit)="addLivreur()">
+      <div class="contentInput">
+        <div class="">
+          <!-- nom -->
+          <div class="mb-3">
+            <label class="mb-2" for="lastName">Nom </label>
+            <input id="lastName" type="text" class="input-field" formControlName="lastName">
+            <p *ngIf="error" class="text-danger">{{error.lastName}}</p>
+            <div *ngIf="LivreurForm.get('lastName')?.invalid && LivreurForm.get('lastName')?.touched"
+              class="text-danger">
+              {{ LivreurForm.get('lastName')?.errors?.['invalid'] ? 'Le nom est invalide.' : 'Le nom est obligatoire.'
+              }}
             </div>
           </div>
 
-          <div class="">
-            <!-- prénom -->
-            <div class="mb-3">
-              <label class="mb-2" for="firstName">Prénom </label>
-              <input id="firstName" type="text" class="input-field" formControlName="firstName">
-              <p *ngIf="error" class="text-danger">{{error.firstName}}</p>
-              <div *ngIf="LivreurForm.get('firstName')?.invalid && LivreurForm.get('firstName')?.touched"
-                class="text-danger">
-                {{ LivreurForm.get('firstName')?.errors?.['invalid'] ? 'Le prénom est invalide.' : 'Le prénom est obligatoire.' }}
-              </div>
+          <!-- Télephone -->
+          <div class="mb-3">
+            <label for="phoneNumber" class="mb-2">Téléphone</label>
+            <input type="tel" class="input-field" id="phoneNumber" formControlName="phoneNumber">
+            <p *ngIf="error" class="text-danger">{{error.phoneNumber}}</p>
+            <div *ngIf="LivreurForm.get('phoneNumber')?.invalid && LivreurForm.get('phoneNumber')?.touched"
+              class="text-danger">
+              {{ LivreurForm.get('phoneNumber')?.errors?.['invalid'] ? 'Le numéro de téléphone est invalide.' : 'Le
+              numéro de téléphone est obligatoire.' }}
             </div>
+          </div>
 
-            <!-- Email -->
-            <div class="mb-3">
-              <label for="email" class="mb-2">Email</label>
-              <input type="email" class="input-field" id="email" formControlName="email">
-              <p *ngIf="error" class="text-danger">{{error.email}}</p>
-              <div *ngIf="LivreurForm.get('email')?.invalid && LivreurForm.get('email')?.touched" class="text-danger">
-                {{ LivreurForm.get('email')?.errors?.['invalid'] ? 'L\'adresse email est invalide.' : 'L\'adresse email est obligatoire.' }}
-              </div>
+          <!-- Numéro licence -->
+          <div class="mb-2">
+            <label for="licence" class="mb-1">Numéro licence</label>
+            <input type="text" class="input-field" id="licence" formControlName="licence_driver_number">
+            <p *ngIf="error" class="text-danger">{{error.licence_driver_number}}</p>
+            <div
+              *ngIf="LivreurForm.get('licence_driver_number')?.invalid && LivreurForm.get('licence_driver_number')?.touched"
+              class="text-danger">
+              {{ LivreurForm.get('licence_driver_number')?.errors?.['invalid'] ? 'Le numéro de licence est invalide.'
+              :
+              'Le numéro de licence est obligatoire.' }}
             </div>
+          </div>
 
-            <!-- Photo livreur-->
-            <div class="mb-3">
-              <label for="photoLivreur" class="mb-1">Photo</label>
-              <input accept="image/*" name="photo_Livreur" class="form-control w-full py-1 inputPhoto" id="photoLivreur"
-                type="file">
-              <!-- Si vous avez besoin de validation pour la photo -->
-              <div *ngIf="LivreurForm.get('photo_Livreur')?.invalid && LivreurForm.get('photo_Livreur')?.touched"
-                class="text-danger">
-                {{ LivreurForm.get('photo_Livreur')?.errors?.['invalid'] ? 'Le format de la photo est invalide.' : 'La  photo est obligatoire.' }}
-              </div>
-            </div>
-
-            <!-- Password Confirm -->
-            <div class="form-group mb-3 inputP">
-              <label for="password_confirm" class="textLabel">Confirmer mot de passe</label>
-              <input [type]="showPassword ? 'text' : 'password'" class="input-field" id="password_confirm"
-                formControlName="password_confirm">
-              <button type="button" (click)="togglePassword()" class="iconEye">
-                <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-              </button>
-              <div *ngIf="LivreurForm.get('password_confirm')?.invalid && LivreurForm.get('password_confirm')?.touched"
-                class="text-danger">
-                <span *ngIf="LivreurForm.get('password_confirm')?.errors?.['invalid']">La confirmation du mot de passe
-                  est
-                  invalide.</span>
-                <span *ngIf="LivreurForm.get('password_confirm')?.errors?.['required']">La confirmation du mot de passe
-                  est
-                  obligatoire.</span>
-                <span *ngIf="LivreurForm.get('password_confirm')?.errors?.['match']">Les mots de passe ne correspondent
-                  pas.</span>
-              </div>
+          <!-- Password -->
+          <div class="form-group mb-3 inputP">
+            <label for="password" class="textLabel">Mot de passe</label>
+            <input [type]="showPassword ? 'text' : 'password'" class="input-field" id="password"
+              formControlName="password">
+            <button type="button" (click)="togglePassword()" class="iconEye">
+              <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+            </button>
+            <p *ngIf="error" class="text-danger">{{error.password}}</p>
+            <div *ngIf="LivreurForm.get('password')?.invalid && LivreurForm.get('password')?.touched"
+              class="text-danger">
+              {{ LivreurForm.get('password')?.errors?.['invalid'] ? 'Le mot de passe est invalide.' : 'Le mot de passe
+              est obligatoire.' }}
             </div>
           </div>
         </div>
-        <div class="d-flex justify-content-center">
-          <button type="button" class="btn btnAnnuler me-2" (click)="closeModal()">Annuler</button>
-          <button type="submit" class="btn btnSave" [disabled]="LivreurForm.invalid">Enregistrer</button>
-        </div>
-      </form>
-    </p-dialog>
 
-    <!--Modal details livreur -->
-    <p-dialog [modal]="true" [(visible)]="visibleDetailLivreur"
-      [style]="{ width: '60rem', height:'30rem', backgroundColor: '#F8F9FD'}" header="Détail livreur">
-      <div id="details">
-        <div class="image">
-          <!-- <img src="https://kiccos.terangacode.com/{{detailLivreur?.image}}" class="card-img-top" alt="..." /> -->
-          <img
-            src="https://img.freepik.com/free-photo/medium-shot-black-woman-running-small-business_23-2150171799.jpg?t=st=1733949765~exp=1733953365~hmac=e039e07cff51d03a4f789b972b88cfa6de5a84d76ba20a693fdf734f477f6683&w=900"
-            alt="">
-        </div>
-        <div>
-          <h4>{{detailLivreur?.nom_partenaire}}</h4>
-          <p>
-            {{detailLivreur?.description}}
-          </p>
+        <div class="">
+          <!-- prénom -->
+          <div class="mb-3">
+            <label class="mb-2" for="firstName">Prénom </label>
+            <input id="firstName" type="text" class="input-field" formControlName="firstName">
+            <p *ngIf="error" class="text-danger">{{error.firstName}}</p>
+            <div *ngIf="LivreurForm.get('firstName')?.invalid && LivreurForm.get('firstName')?.touched"
+              class="text-danger">
+              {{ LivreurForm.get('firstName')?.errors?.['invalid'] ? 'Le prénom est invalide.' : 'Le prénom est
+              obligatoire.' }}
+            </div>
+          </div>
 
-          <div class="d-flex">
-            <h6 class="mb-3">Responsable : </h6>
-            <span>&nbsp;{{detailLivreur?.user.firstName}} {{detailLivreur?.user.lastName}}</span>
+          <!-- Email -->
+          <div class="mb-3">
+            <label for="email" class="mb-2">Email</label>
+            <input type="email" class="input-field" id="email" formControlName="email">
+            <p *ngIf="error" class="text-danger">{{error.email}}</p>
+            <div *ngIf="LivreurForm.get('email')?.invalid && LivreurForm.get('email')?.touched" class="text-danger">
+              {{ LivreurForm.get('email')?.errors?.['invalid'] ? 'L\'adresse email est invalide.' : 'L\'adresse email
+              est obligatoire.' }}
+            </div>
           </div>
-          <div class="d-flex">
-            <h6 class="mb-3">Licence : </h6>
-            <span>&nbsp;{{detailLivreur?.licence_driver_number}}</span>
+
+          <!-- Photo livreur-->
+          <div class="mb-3">
+            <label for="photoLivreur" class="mb-1">Photo</label>
+            <input accept="image/*" name="photo_Livreur" class="form-control w-full py-1 inputPhoto" id="photoLivreur"
+              type="file">
+            <!-- Si vous avez besoin de validation pour la photo -->
+            <div *ngIf="LivreurForm.get('photo_Livreur')?.invalid && LivreurForm.get('photo_Livreur')?.touched"
+              class="text-danger">
+              {{ LivreurForm.get('photo_Livreur')?.errors?.['invalid'] ? 'Le format de la photo est invalide.' : 'La
+              photo est obligatoire.' }}
+            </div>
           </div>
-          <div class="d-flex">
-            <h6 class="mb-3">Etat: </h6>
-            <span>&nbsp;{{detailLivreur?.etat}}</span>
-          </div>
-          <div class="d-flex">
-            <h6 class="mb-3">Téléphone : </h6>
-            <span>&nbsp;{{detailLivreur?.user.phoneNumber}}</span>
+
+          <!-- Password Confirm -->
+          <div class="form-group mb-3 inputP">
+            <label for="password_confirm" class="textLabel">Confirmer mot de passe</label>
+            <input [type]="showPassword ? 'text' : 'password'" class="input-field" id="password_confirm"
+              formControlName="password_confirm">
+            <button type="button" (click)="togglePassword()" class="iconEye">
+              <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+            </button>
+            <div *ngIf="LivreurForm.get('password_confirm')?.invalid && LivreurForm.get('password_confirm')?.touched"
+              class="text-danger">
+              <span *ngIf="LivreurForm.get('password_confirm')?.errors?.['invalid']">La confirmation du mot de passe
+                est
+                invalide.</span>
+              <span *ngIf="LivreurForm.get('password_confirm')?.errors?.['required']">La confirmation du mot de passe
+                est
+                obligatoire.</span>
+              <span *ngIf="LivreurForm.get('password_confirm')?.errors?.['match']">Les mots de passe ne correspondent
+                pas.</span>
+            </div>
           </div>
         </div>
       </div>
+      <div class="d-flex justify-content-center">
+        <button type="button" class="btn btnAnnuler me-2" (click)="closeModal()">Annuler</button>
+        <button type="submit" class="btn btnSave" [disabled]="LivreurForm.invalid">Enregistrer</button>
+      </div>
+    </form>
+  </p-dialog>
+
+  <!--Modal details livreur -->
+  <p-dialog [modal]="true" [(visible)]="visibleDetailLivreur"
+    [style]="{ width: '60rem', height:'30rem', backgroundColor: '#F8F9FD'}" header="Détail livreur">
+    <div id="details">
+      <div class="image">
+        <!-- <img src="https://kiccos.terangacode.com/{{detailLivreur?.image}}" class="card-img-top" alt="..." /> -->
+        <img
+          src="https://img.freepik.com/free-photo/medium-shot-black-woman-running-small-business_23-2150171799.jpg?t=st=1733949765~exp=1733953365~hmac=e039e07cff51d03a4f789b972b88cfa6de5a84d76ba20a693fdf734f477f6683&w=900"
+          alt="">
+      </div>
+      <div>
+        <h4>{{detailLivreur?.nom_partenaire}}</h4>
+        <p>
+          {{detailLivreur?.description}}
+        </p>
+
+        <div class="d-flex">
+          <h6 class="mb-3">Responsable : </h6>
+          <span>&nbsp;{{detailLivreur?.user.firstName}} {{detailLivreur?.user.lastName}}</span>
+        </div>
+        <div class="d-flex">
+          <h6 class="mb-3">Licence : </h6>
+          <span>&nbsp;{{detailLivreur?.licence_driver_number}}</span>
+        </div>
+        <div class="d-flex">
+          <h6 class="mb-3">Etat: </h6>
+          <span>&nbsp;{{detailLivreur?.etat}}</span>
+        </div>
+        <div class="d-flex">
+          <h6 class="mb-3">Téléphone : </h6>
+          <span>&nbsp;{{detailLivreur?.user.phoneNumber}}</span>
+        </div>
+      </div>
+    </div>
 
 
-    </p-dialog>
+  </p-dialog>
 
-    <!-- Modal modifier livreur -->
-    <p-dialog [modal]="true" [(visible)]="visibleEditLivreur"
-      [style]="{ width: '60rem', height:'50rem', backgroundColor: '#F8F9FD'}" header="Modifier Livreur">
-      <form novalidate [formGroup]="LivreurForm" #ngForm="ngForm" (ngSubmit)="updateLivreur()">
-        <div class="contentInput">
-          <div class="">
-            <!-- nom -->
-            <div class="mb-3">
-              <label class="mb-2" for="lastName">Nom </label>
-              <input id="lastName" type="text" class="input-field" formControlName="lastName">
-              <p *ngIf="error" class="text-danger">{{error.lastName}}</p>
-              <div *ngIf="LivreurForm.get('lastName')?.invalid && LivreurForm.get('lastName')?.touched"
-                class="text-danger">
-                {{ LivreurForm.get('lastName')?.errors?.['invalid'] ? 'Le nom est invalide.' : 'Le nom est obligatoire.'
-                }}
-              </div>
-            </div>
+  <!-- Modal modifier livreur -->
+  <p-dialog [modal]="true" [(visible)]="visibleEditLivreur"
+    [style]="{ width: '40rem', height:'20rem', backgroundColor: '#F8F9FD'}" header="Modifier Livreur">
+    <form novalidate [formGroup]="LivreurForm" #ngForm="ngForm" (ngSubmit)="updateLivreur()">
+      <div class="contentInput">
 
-            <!-- Télephone -->
-            <div class="mb-3">
-              <label for="phoneNumber" class="mb-2">Téléphone</label>
-              <input type="tel" class="input-field" id="phoneNumber" formControlName="phoneNumber">
-              <p *ngIf="error" class="text-danger">{{error.phoneNumber}}</p>
-              <div *ngIf="LivreurForm.get('phoneNumber')?.invalid && LivreurForm.get('phoneNumber')?.touched"
-                class="text-danger">
-                {{ LivreurForm.get('phoneNumber')?.errors?.['invalid'] ? 'Le numéro de téléphone est invalide.' : 'Le
-                numéro
-                \n
-                de téléphone est obligatoire.' }}
-              </div>
-            </div>
-
-            <!-- Numéro licence -->
-            <div class="mb-2">
-              <label for="licence" class="mb-1">Numéro licence</label>
-              <input type="text" class="input-field" id="licence" formControlName="licence_driver_number">
-              <p *ngIf="error" class="text-danger">{{error.licence_driver_number}}</p>
-              <div
-                *ngIf="LivreurForm.get('licence_driver_number')?.invalid && LivreurForm.get('licence_driver_number')?.touched"
-                class="text-danger">
-                {{ LivreurForm.get('licence_driver_number')?.errors?.['invalid'] ? 'Le numéro de licence est invalide.'
-                :
-                'Le numéro de licence est obligatoire.' }}
-              </div>
-            </div>
-
-            <!-- Password -->
-            <div class="form-group mb-3 inputP">
-              <label for="password" class="textLabel">Mot de passe</label>
-              <input [type]="showPassword ? 'text' : 'password'" class="input-field" id="password"
-                formControlName="password">
-              <button type="button" (click)="togglePassword()" class="iconEye">
-                <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-              </button>
-              <p *ngIf="error" class="text-danger">{{error.password}}</p>
-              <div *ngIf="LivreurForm.get('password')?.invalid && LivreurForm.get('password')?.touched"
-                class="text-danger">
-                {{ LivreurForm.get('password')?.errors?.['invalid'] ? 'Le mot de passe est invalide.' : 'Le mot de passe
-                est
-                \n
-                obligatoire.' }}
-              </div>
-            </div>
-          </div>
-
-          <div class="">
-            <!-- prénom -->
-            <div class="mb-3">
-              <label class="mb-2" for="firstName">Prénom </label>
-              <input id="firstName" type="text" class="input-field" formControlName="firstName">
-              <p *ngIf="error" class="text-danger">{{error.firstName}}</p>
-              <div *ngIf="LivreurForm.get('firstName')?.invalid && LivreurForm.get('firstName')?.touched"
-                class="text-danger">
-                {{ LivreurForm.get('firstName')?.errors?.['invalid'] ? 'Le prénom est invalide.' : 'Le prénom est \n
-                obligatoire.' }}
-              </div>
-            </div>
-
-            <!-- Email -->
-            <div class="mb-3">
-              <label for="email" class="mb-2">Email</label>
-              <input type="email" class="input-field" id="email" formControlName="email">
-              <p *ngIf="error" class="text-danger">{{error.email}}</p>
-              <div *ngIf="LivreurForm.get('email')?.invalid && LivreurForm.get('email')?.touched" class="text-danger">
-                {{ LivreurForm.get('email')?.errors?.['invalid'] ? 'L\'adresse email est invalide.' : 'L\'adresse email
-                est
-                \n
-                obligatoire.' }}
-              </div>
-            </div>
-
-            <!-- Photo livreur-->
-            <div class="mb-3">
-              <label for="photoLivreur" class="mb-1">Photo</label>
-              <input accept="image/*" name="photo_Livreur" class="form-control w-full py-1 inputPhoto" id="photoLivreur"
-                type="file">
-              <!-- Si vous avez besoin de validation pour la photo -->
-              <div *ngIf="LivreurForm.get('photo_Livreur')?.invalid && LivreurForm.get('photo_Livreur')?.touched"
-                class="text-danger">
-                {{ LivreurForm.get('photo_Livreur')?.errors?.['invalid'] ? 'Le format de la photo est invalide.' : 'La
-                photo
-                \n
-                est obligatoire.' }}
-              </div>
-            </div>
-
-            <!-- Password Confirm -->
-            <div class="form-group mb-3 inputP">
-              <label for="password_confirm" class="textLabel">Confirmer mot de passe</label>
-              <input [type]="showPassword ? 'text' : 'password'" class="input-field" id="password_confirm"
-                formControlName="password_confirm">
-              <button type="button" (click)="togglePassword()" class="iconEye">
-                <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-              </button>
-              <div *ngIf="LivreurForm.get('password_confirm')?.invalid && LivreurForm.get('password_confirm')?.touched"
-                class="text-danger">
-                <span *ngIf="LivreurForm.get('password_confirm')?.errors?.['invalid']">La confirmation du mot de passe
-                  est
-                  invalide.</span>
-                <span *ngIf="LivreurForm.get('password_confirm')?.errors?.['required']">La confirmation du mot de passe
-                  est
-                  obligatoire.</span>
-                <span *ngIf="LivreurForm.get('password_confirm')?.errors?.['match']">Les mots de passe ne correspondent
-                  pas.</span>
-              </div>
-            </div>
+        <div class="mb-2">
+          <label for="licence" class="mb-1">Numéro licence</label>
+          <input type="text" class="input-field" id="licence" formControlName="licence_driver_number">
+          <p *ngIf="error" class="text-danger">{{error.licence_driver_number}}</p>
+          <div
+            *ngIf="LivreurForm.get('licence_driver_number')?.invalid && LivreurForm.get('licence_driver_number')?.touched"
+            class="text-danger">
+            {{ LivreurForm.get('licence_driver_number')?.errors?.['invalid'] ? 'Le numéro de licence est invalide.'
+            :
+            'Le numéro de licence est obligatoire.' }}
           </div>
         </div>
-        <div class="d-flex justify-content-center">
-          <button type="button" class="btn btnAnnuler me-2" (click)="closeModal()">Annuler</button>
-          <button type="submit" class="btn btnSave" [disabled]="LivreurForm.invalid">Enregistrer</button>
+
+        <div class="mb-2">
+          <label for="licence" class="mb-1">Numéro licence</label>
+          <input type="text" class="input-field" id="licence" formControlName="is_livreur_externe">
         </div>
-      </form>
-    </p-dialog>
+      </div>
+      <!-- etat -->
+      <div class="mb-2">
+        <label for="etat" class="mb-1">Etat</label>
+        <select id="etat" class="input-field" formControlName="etat">
+          <option value="active">Active</option>
+          <option value="attente">Désactiver</option>
+        </select>
+      </div>
+      <div class="d-flex justify-content-center">
+        <button type="button" class="btn btnAnnuler me-2" (click)="closeModal()">Annuler</button>
+        <button type="submit" class="btn btnSave">Enregistrer</button>
+      </div>
+    </form>
+  </p-dialog>

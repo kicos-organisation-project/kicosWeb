@@ -5,6 +5,7 @@ import { GestionArticlesComponent } from './gestion-articles/gestion-articles.co
 import { GestionCommandesComponent } from './gestion-commandes/gestion-commandes.component';
 import { GestionAvisComponent } from './gestion-avis/gestion-avis.component';
 import { DemandePaiementComponent } from './demande-paiement/demande-paiement.component';
+import { ProfilComponent } from './profil/profil.component';
 
 
 
@@ -15,6 +16,7 @@ const routes: Routes = [
     {path: 'detailArticle/:id', component: GestionAvisComponent},
     {path: 'commandes', component: GestionCommandesComponent},
     {path: 'paiement', component: DemandePaiementComponent},
+    {path: 'profil', component: ProfilComponent},
     {path: '**', redirectTo: 'dashboard', pathMatch: 'full' },
 
 ];

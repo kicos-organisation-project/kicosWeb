@@ -7,6 +7,8 @@ import { DialogModule } from 'primeng/dialog';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { NotificationService } from '../../../core/services/notification.service';
+import { environment } from '../../../../environments/environment';
+import { ApiService } from '../../../core/services/api.service';
 
 type DialogPosition = 'center' | 'top' | 'bottom' | 'left' | 'right' | 'topleft' | 'topright' | 'bottomleft' | 'bottomright';
 
@@ -40,6 +42,9 @@ export class DashboardComponent {
   userInfo: any;
   isSidebarVisible: boolean = true;
   message: string = '';
+
+  baseUrl = environment.base_url;
+  apiService = inject(ApiService);
 
   // Constructeur
   constructor(
@@ -75,24 +80,33 @@ export class DashboardComponent {
       console.log('Menus chargés:', this.menus);
     }
 
-    this.notifications = [
-      {
-        id: 1,
-        name: 'Jenny Wilson',
-        time: '1mn ago',
-        address: 'Ouakam',
-        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFuv3XV-_htCR1zFqSflq8enLxArHNPDEY9Q&s'
-      },
-    ];
-
     console.log('Initialisation de l\'abonnement aux notifications');
-    const livreurId = this.userInfo.id; 
+    const livreurId = this.userInfo.id;
 
-    this.notification.subscribeToLivreurNotifications( (data) => {
+    this.notification.subscribeToLivreurNotifications((data) => {
       console.log('Notification reçue dans le composant:', data);
       // Ici tu peux déclencher une alerte, mettre à jour l'interface, etc.
     });
-  
+
+
+    this.listNotif();
+
+  }
+
+  notificationlist:any;
+  // recup notif
+  listNotif() {
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/notifications`).subscribe(
+      (response: any) => {
+        this.notificationlist = response.notifications;
+
+        console.log(this.notificationlist);
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+      }
+    );
   }
 
 
@@ -128,7 +142,7 @@ export class DashboardComponent {
       this.hasNewNotifications = false;
     }
   }
- 
+
   acceptNotification(id: number) {
     // Implémentez la logique d'acceptation
     this.notifications = this.notifications.filter(n => n.id !== id);

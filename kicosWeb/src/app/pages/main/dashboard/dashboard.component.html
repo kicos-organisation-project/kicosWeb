@@ -48,15 +48,15 @@
                 </div>
 
                 <div class="notification-list">
-                  <div class="notification-item" *ngFor="let notif of notifications">
+                  <div class="notification-item" *ngFor="let notif of notificationlist">
                     <div class="notification-content">
                       <div class="notification-image">
-                        <img [src]="notif.image" [alt]="notif.name" onerror="this.src='assets/default-avatar.png'" />
+                        <!-- <img [src]="notif.image" [alt]="notif.name" onerror="this.src='assets/default-avatar.png'" /> -->
                       </div>
                       <div class="notification-details">
-                        <h5>{{notif.name}}</h5>
-                        <span class="time">{{notif.time}}</span>
-                        <p class="address">Adresse de livraison: {{notif.address}}</p>
+                        <h5>{{notif.data.nom_client}}</h5>
+                        <!-- <span class="time">{{notif.time}}</span> -->
+                        <p class="address">Adresse de livraison: {{notif.data.adresse_delivery}}</p>
                         <div class="action-buttons">
                           <button class="accept-btn" (click)="acceptNotification(notif.id)">
                             Accepter
