@@ -31,8 +31,8 @@ export class GestionPaiementsComponent {
 
   // Le formulaire ajout article
   demandeForm = this.fb.group({
-    montant: new FormControl('', Validators.required),
-    motif: new FormControl('', Validators.required),
+    amount: new FormControl('', Validators.required),
+    note: new FormControl('', Validators.required),
 
   });
 
@@ -40,8 +40,8 @@ export class GestionPaiementsComponent {
   // Méthode pour réinitialiser les champs du formulaire
   resetDemandeForm() {
     this.demandeForm.patchValue({
-      montant: '',
-      motif: '',
+      amount: '',
+      note: '',
     });
   }
 
@@ -67,10 +67,10 @@ export class GestionPaiementsComponent {
   // Méthode pour ajouter une demande de paiement
   addDemandePaiement() {
     // On récupère les données du formulaire
-    const { montant, motif } = this.demandeForm.value;
+    const { amount, note } = this.demandeForm.value;
 
     // On fait appel a l'api pour ajouter une demande de paiement
-    this.apiService.postWithSessionId(`${environment.base_url}/demandes/creer`, { montant, motif }).subscribe(
+    this.apiService.postWithSessionId(`${environment.base_url}/solde/request-payout`, { amount, note }).subscribe(
       (response: any) => {
         console.log("Demande de paiement ajoutée", response);
         this.messageService.createMessage('success', response.message);
@@ -80,6 +80,7 @@ export class GestionPaiementsComponent {
       (error: any) => {
         console.log("Partie erreur");
         console.log(error);
+         this.messageService.createMessage('error', error.error.message);
       }
     );
   }

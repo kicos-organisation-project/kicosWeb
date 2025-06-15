@@ -504,6 +504,7 @@ aside nav a {
 
   .action-buttons {
     display: flex;
+    justify-content: end;
     gap: 8px;
     margin-top: 12px;
   }

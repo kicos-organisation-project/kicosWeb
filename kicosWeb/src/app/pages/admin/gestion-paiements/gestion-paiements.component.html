@@ -36,20 +36,19 @@
                         <td class="text-center text-xs px-3" style="width: 20%;">
                             <div class="truncate"
                                 style="max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
-                                :title="demande.motif">
-                                {{ demandePartenaire.motif.length > 30 ? demandePartenaire.motif.substring(0, 30) +
-                                '...' : demandePartenaire.motif }}
+                                :title="demande?.informations_paiement">
+                                {{ demandePartenaire?.informations_paiement?.length > 30 ?
+                                demandePartenaire?.informations_paiement?.substring(0, 30) + '...' :
+                                demandePartenaire?.informations_paiement }}
                             </div>
                         </td>
                         <td class="text-center text-xs" style="width: 15%;">{{demandePartenaire.montant}}</td>
-                        <td class="text-center text-xs px-3" style="width: 20%;">
-                            <span *ngIf="demandePartenaire.status == 'en_attente'" style="color: gainsboro;" >En attente</span>
-                            <span *ngIf="demandePartenaire.status == 'approuvee'" style="color: greenyellow;" >Approuvée</span>
-                            <span *ngIf="demandePartenaire.status == 'rejetee'" style="color: red;" >Rejetée</span>
-                        </td>
+                        <td class="text-center text-xs" style="width: 15%;">{{ demandePartenaire.status}}</td>
                         <td class="text-center text-xs" style="width: 15%;">
-                            <i class="pi pi-wallet" style="font-size: 1rem; cursor: pointer;"
-                                (click)="showDialog();recupDemandeID(demandePartenaire)"></i>
+                            <i class="pi pi-pen-to-square me-3" style="font-size: 1rem; cursor: pointer;"
+                                (click)="showDialog();recupDemandeID(demandePartenaire)"
+                                title="Traiter demande de paiement"></i>
+                            <i class="pi pi-wallet" style="font-size: 1rem; cursor: pointer;" (click)="markDemande(demandePartenaire.id)"></i>
                         </td>
                     </tr>
                 </ng-template>

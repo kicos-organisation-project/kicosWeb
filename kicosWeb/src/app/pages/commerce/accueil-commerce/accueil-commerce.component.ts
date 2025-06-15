@@ -28,6 +28,9 @@ export class AccueilCommerceComponent {
     this.initChart();
     this.initGaugeChart();
     this.commandeList();
+    this.paiementstat();
+    this.getInfolivreur();
+    
   }
 
   private initChart() {
@@ -91,12 +94,12 @@ export class AccueilCommerceComponent {
     };
   }
 
-  nombreTotalCommande:number=0;
-  nombreCommandesPending:number=0;
-  nombreCommandescancelled:number=0;
-  nombreCommandesconfirmed:number=0;
-  nombreCommandesprocessing:number=0;
-  nombreCommandesshipped:number=0;
+  nombreTotalCommande: number = 0;
+  nombreCommandesPending: number = 0;
+  nombreCommandescancelled: number = 0;
+  nombreCommandesconfirmed: number = 0;
+  nombreCommandesprocessing: number = 0;
+  nombreCommandesshipped: number = 0;
   // lister les commandes
   commandeList() {
     // On fait appel a l'api pour lister les commandes
@@ -104,15 +107,15 @@ export class AccueilCommerceComponent {
       (response: any) => {
         console.log("liste des commandes", response);
         this.nombreTotalCommande = response.data.length;
-        let commandesPending = response.data.filter((commande:any) => commande.status === "pending");
+        let commandesPending = response.data.filter((commande: any) => commande.status === "pending");
         this.nombreCommandesPending = commandesPending.length;
-        let commandescancelled = response.data.filter((commande:any) => commande.status === "cancelled");
+        let commandescancelled = response.data.filter((commande: any) => commande.status === "cancelled");
         this.nombreCommandescancelled = commandescancelled.length;
-        let commandesconfirmed = response.data.filter((commande:any) => commande.status === "confirmed");
+        let commandesconfirmed = response.data.filter((commande: any) => commande.status === "confirmed");
         this.nombreCommandesconfirmed = commandesconfirmed.length;
-        let commandesprocessing = response.data.filter((commande:any) => commande.status === "processing");
+        let commandesprocessing = response.data.filter((commande: any) => commande.status === "processing");
         this.nombreCommandesprocessing = commandesprocessing.length;
-        let commandesshipped = response.data.filter((commande:any) => commande.status === "shipped");
+        let commandesshipped = response.data.filter((commande: any) => commande.status === "shipped");
         this.nombreCommandesshipped = commandesshipped.length;
 
       },
@@ -122,6 +125,49 @@ export class AccueilCommerceComponent {
 
       }
     )
+  }
+
+  statPayement: any;
+  paiementstat() {
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/partenaire/payments/stats`).subscribe(
+      (response: any) => {
+        this.statPayement = response.data;
+        console.log(this.statPayement);
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+      }
+    );
+  }
+
+  profilLivreur: any;
+  // infos profil livreur
+  getInfolivreur() {
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/profile`).subscribe(
+      (response: any) => {
+        this.profilLivreur = response.data;
+
+        console.log(this.profilLivreur);
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+      }
+    );
+  }
+
+  // liste article 
+  listeArticles: any[] = [];
+  listeArticle() {
+    this.apiService.get(`${this.baseUrl}/articles-partenaire`).subscribe(
+      (response: any) => {
+        this.listeArticles = response.length;
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
   }
 
 }

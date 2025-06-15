@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse  } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MessageService } from './message.service';
-import { environment } from '../../../environments/environment'; 
+import { environment } from '../../../environments/environment';
 import { tap, catchError } from 'rxjs/operators';
 import { throwError, Observable, Subject } from 'rxjs';
 
@@ -16,16 +16,19 @@ interface AuthResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  
+
   private tokenKey = 'session_id';
   private tokenExpirationKey = 'tokenExpiration';
   private logoutSubject = new Subject<void>();
+  private sessionWarningTimer: any = null;
+  private readonly TOKEN_DURATION_MS = 60 * 60 * 1000; // 1h
+
 
   constructor(
     private http: HttpClient,
     private router: Router,
     private messageService: MessageService
-  ) {}
+  ) { }
 
   // Connexion de l'utilisateur
   login(credentials: any): Observable<AuthResponse> {
@@ -43,36 +46,16 @@ export class AuthService {
   }
 
   // Déconnexion de l'utilisateur
-  logout() {
-    const token = this.getToken();
+  logout(): void {
+    this.clearSession();
+    this.router.navigate(['/login']);
+    this.messageService.createMessage('info', 'Vous avez été déconnecté.');
+    this.logoutSubject.next();
 
-    if (token) {
-      console.log('Jeton trouvé pour la déconnexion');
-      // return
-    } else if (!token) {
-      console.error('Aucun jeton trouvé pour la déconnexion');
-      return;
+    if (this.sessionWarningTimer) {
+      clearTimeout(this.sessionWarningTimer);
+      this.sessionWarningTimer = null;
     }
-
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this.http
-      .post(`${environment.base_url}/deconnexion`, {}, { headers })
-      .subscribe(
-        () => {
-          this.clearSession();
-          this.router.navigate(['/login']);
-          this.messageService.createMessage(
-            'success',
-            'Déconnexion réussie avec succés'
-          );
-          this.logoutSubject.next(); // Notifie les abonnés de la déconnexion
-          console.log('Déconnexion réussie avec succés');
-        },
-        (error) => {
-          console.error('Erreur de déconnexion: ', error);
-        }
-      );
   }
 
   // Vérifie si l'utilisateur est authentifié
@@ -106,7 +89,7 @@ export class AuthService {
 
   // Gestion de la réponse d'authentification
   private handleAuthResponse(response: AuthResponse): void {
-    if (response && response.access_token && response.expires_in) {
+    if (response && response.access_token) {
       // this.setToken(response.access_token, response.expires_in);
       this.logTokenExpiration();
     } else {
@@ -117,9 +100,13 @@ export class AuthService {
   // Stocke le jeton d'authentification
   setToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
-    // const expirationDate = new Date().getTime() + expiresIn * 1000;
-    // localStorage.setItem('tokenExpiration', expirationDate.toString());
+
+    const expirationDate = new Date().getTime() + (59 * 60 * 1000); // 1h
+    localStorage.setItem(this.tokenExpirationKey, expirationDate.toString());
+
+    this.startSessionWarningTimer(); // ⬅️ Ajoute cette ligne
   }
+
 
   // Récupère le jeton d'authentification
   getToken(): string | null {
@@ -190,4 +177,31 @@ export class AuthService {
       })
     );
   }
+
+
+  private startSessionWarningTimer(): void {
+    if (this.sessionWarningTimer) {
+      clearTimeout(this.sessionWarningTimer);
+    }
+
+    const expiration = this.getTokenExpiration();
+    if (!expiration) return;
+
+    const now = Date.now();
+    const timeUntilLogout = expiration - now;
+
+    if (timeUntilLogout <= 0) {
+      this.logout();
+      return;
+    }
+
+    this.sessionWarningTimer = setTimeout(() => {
+      this.messageService.createMessage('warning', 'Session expirée. Déconnexion dans 10 secondes...');
+      setTimeout(() => {
+        this.logout();
+      }, 10000); // délai de 10 secondes
+    }, timeUntilLogout);
+  }
+
+
 }

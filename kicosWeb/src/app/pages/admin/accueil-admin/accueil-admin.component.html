@@ -1,53 +1,73 @@
-<div class="p-0">
+<div class="container-fluid">
+    <!-- Welcome Banner -->
+    <div class="welcome-banner">
+        <h1>Bienvenue, {{profilLivreur?.firstName}} {{profilLivreur?.lastName}}</h1>
+        <p>Voici un aperçu de votre activité et des statistiques importantes.</p>
+    </div>
 
-    <!-- cartes des statistiques  -->
-    <div class="mx-2">
-        <div class="row g-3"> <!-- g-3 ajoute un espace entre les colonnes -->
-            <div class="col-md-4 col-sm-12">
-                <div class="card rounded shadow p-0">
-                    <div class="mx-3 mt-3">
-                        <div class="d-flex justify-content-between">
-                            <span class="fw-medium">Partenaires</span>
-                            <span class="iconRounded B">
-                               <i class="pi pi-shop" style="color: var(--bg-neutral);"></i>
-                            </span>
-                        </div>
-                        <p class="mt-2">{{nombrePartenaire}}</p>
+    <div class="main-content">
+        <div class="row">
+            <!-- Quick Actions -->
+            <div class="col-lg-8  quick-actions">
+                <h2>Statistiques</h2>
+                <div class="actions-grid">
+
+                    <div class="action-item">
+                        <a class="action-btn">
+                            <i class="bi bi-basket2"></i>
+                            <span class="count">{{nombrePartenaire}}</span>
+                            <span class="label">Partenaires</span>
+                        </a>
+                    </div>
+
+                    <div class="action-item">
+                        <a class="action-btn">
+                            <i class="pi pi-user"></i>
+                            <span class="count">{{nombreLivreur}}</span>
+                            <span class="label">Livreurs</span>
+                        </a>
+                    </div>
+
+                    <div class="action-item">
+                        <a class="action-btn">
+                            <i class="pi pi-objects-column"></i>
+                            <span class="count">{{categorieTab}}</span>
+                            <span class="label">Catégories</span>
+                        </a>
+                    </div>
+                    <div class="action-item">
+                        <a class="action-btn">
+                            <i class="pi pi-users"></i>
+                            <span class="count">{{nombreClient}}</span>
+                            <span class="label">Utilisateurs</span>
+                        </a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-12">
-                <div class="card rounded shadow p-0">
-                    <div class="mx-3 mt-3">
-                        <div class="d-flex justify-content-between">
-                            <span class="fw-medium">Livreurs</span>
-                            <span class="iconRounded A">
-                                <i class="pi pi-user" style="color: var(--bg-neutral);"></i>
-                            </span>
+            <div class="col-lg-4 ">
+                <!-- Revenue Card -->
+                <div class="revenue-card">
+                    <h2>Revenus mensuels</h2>
+                    <div class="revenue-content">
+                        <div class="revenue-icon">
+                            <i class="pi pi-chart-line"></i>
                         </div>
-                        <p class="mt-2">{{nombreLivreur}}</p>
+                        <div class="revenue-details">
+                            <!-- Affiche le dernier élément de statPayement -->
+                            <div class="revenue-amount">{{ statPayement[statPayement.length - 1]?.total_gain }}</div>
+                            <div class="revenue-period">{{ statPayement[statPayement.length - 1]?.month }}/{{
+                                statPayement[statPayement.length - 1]?.year }}</div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-12">
-                <div class="card rounded shadow p-0">
-                    <div class="mx-3 mt-3">
-                        <div class="d-flex justify-content-between">
-                            <span class="fw-medium">Utilisateurs</span>
-                            <span class="iconRounded card2">
-                                <i class="pi pi-users" style="color: var(--bg-neutral);"></i>
-                            </span>
+
+                    <div class="revenue-breakdown">
+                        <!-- Boucle sur tous les éléments de statPayement -->
+                        <div class="breakdown-item" *ngFor="let stat of statPayement">
+                            <span class="breakdown-label">{{ stat.month }} / {{ stat.year }}</span>
+                            <span class="breakdown-value">{{ stat.total_gain }}</span>
                         </div>
-                        <p class="mt-2">{{nombreClient}}</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Diagramme Paiement recu par mois -->
-    <div class="my-4 mx-2 py-4 px-2 card shadow p-2">
-        <span class="font-medium text-color">Paiement recu par mois</span>
-        <p-chart type="bar" [data]="dataCategogrie" [options]="optionsCategogrie" />
-    </div>
-</div>

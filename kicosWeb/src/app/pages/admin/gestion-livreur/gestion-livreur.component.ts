@@ -70,6 +70,7 @@ export class GestionLivreurComponent {
       ValidatorCore.nameValidator('L email', 10, 100),
     ]),
     etat: new FormControl(''),
+    is_livreur_externe: new FormControl(''),
   });
 
   openMenuId: number | null = null;
@@ -206,6 +207,7 @@ export class GestionLivreurComponent {
       firstName: livreur.user.firstName,
       lastName: livreur.user.lastName,
       licence_driver_number: livreur.licence_driver_number,
+      is_livreur_externe: livreur.is_livreur_externe,
       phoneNumber: livreur.user.phoneNumber,
       email: livreur.user.email,
       etat: livreur.etat,
@@ -214,7 +216,7 @@ export class GestionLivreurComponent {
 
   //modifier livreur
   updateLivreur() {
-    this.apiService.postWithSessionId(`${this.baseUrl}/admin/livreur/${this.id_livreur}/update`, this.LivreurForm.value).subscribe(
+    this.apiService.postWithSessionId(`${this.baseUrl}/admin/livreurs/${this.id_livreur}/update`, this.LivreurForm.value).subscribe(
       (response: any) => {
         console.log(response);
         if (response.status_code === 422) {

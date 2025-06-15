@@ -91,6 +91,23 @@ export class GestionPaiementsComponent {
     )
   }
 
+  // marquer une demande comme payer 
+  markDemande(idDemande:any){
+    this.apiService.postWithSessionId(`${this.baseUrl}/admin/demandes/${idDemande}/traiter`, { status: this.statusDemande, motif: this.motifPaiement}).subscribe(
+      (response: any) => {
+        console.log("Demande traitée", response);
+        this.listDemandePartenaire();
+        this.messageService.createMessage('success', response.message);
+        this.resetvalueDemande();
+        this.closeModal();
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+      }
+    )
+  }
+
 
   demandeLivreur = [
     {

@@ -4,6 +4,9 @@ import { ChartModule } from 'primeng/chart';
 import { CardModule } from 'primeng/card';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+import { ApiService } from '../../../core/services/api.service';
+
 @Component({
   selector: 'app-accueil-livreur',
   standalone: true,
@@ -11,6 +14,7 @@ import { Observable } from 'rxjs';
   templateUrl: './accueil-livreur.component.html',
   styleUrl: './accueil-livreur.component.css'
 })
+
 export class AccueilLivreurComponent implements OnInit {
   gaugeData: any;
   gaugeOptions: any;
@@ -22,10 +26,14 @@ export class AccueilLivreurComponent implements OnInit {
 
 
   http = inject(HttpClient);
+  apiService = inject(ApiService);
+  baseUrl = environment.base_url;
 
   ngOnInit() {
     this.initGaugeChart();
     this.initLineChart();
+    // this.getInfolivreur();
+    this.paiementstat();
     // this.get_actual_localisation();
   }
 
@@ -140,4 +148,35 @@ export class AccueilLivreurComponent implements OnInit {
   totalEarningsWeek: number = 286.75;
   completedDeliveries: number = 8;
   totalDistance: number = 64;
+
+  profilLivreur: any;
+  // infos profil livreur
+  getInfolivreur() {
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/profile`).subscribe(
+      (response: any) => {
+        this.profilLivreur = response.data;
+
+        console.log(this.profilLivreur);
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+      }
+    );
+  }
+
+  statPayement:any;
+  paiementstat() {
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/livreur/payments/stats`).subscribe(
+      (response: any) => {
+        this.statPayement = response.data;
+        console.log(this.statPayement);
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+      }
+    );
+  }
+
 }

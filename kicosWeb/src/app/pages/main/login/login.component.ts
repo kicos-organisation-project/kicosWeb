@@ -46,12 +46,6 @@ export class LoginComponent {
   loaderService = inject(LoaderService);
 
 
-  // tableau de trois utilisateur
-  users = [
-    { login: 'admin', password: 'admin123@', role: 'admin', nom: 'Diop', prenom: 'Moussa', profil: 'https://attic.sh/atvxa8lu3yg4jk7hb8vidiogkyyi' },
-    { login: 'commerce', password: 'commerce123@', role: 'commerce', nom: 'Ndiaye', prenom: 'Fatou', profil: 'https://france-fraternites.org/wp-content/uploads/2017/07/o-EMOJI-570.jpg' },
-    { login: 'livreur', password: 'livreur123@', role: 'livreur', nom: 'Sall', prenom: 'Ibrahima', profil: 'https://attic.sh/7bs32pvmv7v4cyne6je5cty95cdp' }
-  ];
 
   ngOnInit() {
     this.loginForm = this.createLoginForm();
@@ -72,29 +66,6 @@ export class LoginComponent {
       password: ['', Validators.required],
     });
   }
-
-  // méthode login
-  //   onSubmitLoginForm() {
-  //     if (this.loginForm.valid) {
-  //       const formData = this.loginForm.value;
-  //     const user = this.users.find((u) => u.login === formData.login && u.password === formData.password);
-  //     if (user) {
-  //       if(user.role === 'admin') {
-  //         this.router.navigate(['kicos/admin']);
-  //       }else if(user.role === 'commerce'){
-  //         this.router.navigate(['kicos/commerce']);
-  //       }else{
-  //         this.router.navigate(['kicos/livreur']);
-  //       }
-
-  //       localStorage.setItem('userConnected', JSON.stringify(user));
-  //       // TODO: Afficher le dialogue boutique et réinitialiser le formulaire
-  //     } else {
-  //       console.error("Réponse d'authentification invalide");
-  //       // TODO: Afficher un message d'erreur
-  //     }
-  //   }
-  // }
 
   // méthode login
   onSubmitLoginForm() {

@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { NotificationService } from '../../../core/services/notification.service';
 import { environment } from '../../../../environments/environment';
 import { ApiService } from '../../../core/services/api.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 type DialogPosition = 'center' | 'top' | 'bottom' | 'left' | 'right' | 'topleft' | 'topright' | 'bottomleft' | 'bottomright';
 
@@ -45,6 +46,7 @@ export class DashboardComponent {
 
   baseUrl = environment.base_url;
   apiService = inject(ApiService);
+  authService = inject(AuthService);
 
   // Constructeur
   constructor(
@@ -88,19 +90,28 @@ export class DashboardComponent {
       // Ici tu peux déclencher une alerte, mettre à jour l'interface, etc.
     });
 
+    if (this.userRole == 'livreur') {
+      this.listNotif();
+    }
+    // this.listNotif();
 
-    this.listNotif();
+
+    this.getInfolivreur();
 
   }
 
-  notificationlist:any;
+  notificationlist: any;
   // recup notif
   listNotif() {
     this.apiService.getRequestWithSessionId(`${this.baseUrl}/notifications`).subscribe(
       (response: any) => {
         this.notificationlist = response.notifications;
 
-        console.log(this.notificationlist);
+        console.log('liste notif', this.notificationlist);
+
+        if (this.notificationlist.length > 0) {
+          this.hasNewNotifications = true;
+        }
       },
       (error: any) => {
         console.log("Partie erreur");
@@ -122,34 +133,47 @@ export class DashboardComponent {
 
   // Méthode pour la déconnexion
   logout() {
-    localStorage.removeItem('userInfo');
-    localStorage.removeItem('session_id');
-    this.router.navigate(['/login']);
-    this.menus = [];
-    this.userInfo = null;
-    this.userRole = '';
-    console.log('Déconnexion effectuée');
+    this.authService.logout();
   }
 
 
   isNotificationOpen = false;
-  hasNewNotifications = true;
+  hasNewNotifications = false;
   notifications: Notification[] = [];
 
-  toggleNotifications() {
-    this.isNotificationOpen = !this.isNotificationOpen;
-    if (this.isNotificationOpen) {
-      this.hasNewNotifications = false;
-    }
+  // toggleNotifications() {
+  //   this.isNotificationOpen = !this.isNotificationOpen;
+  // }
+
+  acceptNotification(id_commande: number) {
+    this.apiService.postWithSessionId(`${this.baseUrl}/livreurs/accept-order/${id_commande}/${this.profilLivreur.livreur.id}`, '').subscribe(
+      (response: any) => {
+        console.log(response);
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+      }
+    );
   }
 
-  acceptNotification(id: number) {
-    // Implémentez la logique d'acceptation
-    this.notifications = this.notifications.filter(n => n.id !== id);
-  }
+  // rejectNotification(id: number) {
+  //   this.notifications = this.notifications.filter(n => n.id !== id);
+  // }
 
-  rejectNotification(id: number) {
-    // Implémentez la logique de rejet
-    this.notifications = this.notifications.filter(n => n.id !== id);
+  profilLivreur: any;
+  // infos profil livreur
+  getInfolivreur() {
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/profile`).subscribe(
+      (response: any) => {
+        this.profilLivreur = response.data;
+
+        console.log(this.profilLivreur);
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+      }
+    );
   }
 }

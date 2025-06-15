@@ -1,14 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
-import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
 import { ApiService } from '../../../core/services/api.service';
+import { RouterLink, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-accueil-admin',
   standalone: true,
-  imports: [ChartModule, RouterModule, CommonModule],
+  imports: [ChartModule, CommonModule, RouterLink, RouterModule],
   templateUrl: './accueil-admin.component.html',
   styleUrl: './accueil-admin.component.css'
 })
@@ -35,6 +35,9 @@ export class AccueilAdminComponent {
     this.listPartenaire();
     this.getLivreur();
     this.getClient();
+    this.getInfolivreur();
+    this.listeCategorie();
+    this.paiementstat();
   }
 
   // Données Paiement recu par mois
@@ -115,7 +118,7 @@ export class AccueilAdminComponent {
   }
 
 
-  nombrePartenaire:number=0;
+  nombrePartenaire: number = 0;
   // lister les partenaire
   listPartenaire() {
     // On fait appel a l'api pour lister les partenaires
@@ -130,28 +133,70 @@ export class AccueilAdminComponent {
     )
   }
 
-  nombreLivreur:number=0;
-    // lister livreur
-    getLivreur() {
-      this.apiService.getRequestWithSessionId(`${this.baseUrl}/livreur`).subscribe(
-        (response: any) => {
-          this.nombreLivreur = response.livreurs.length;
-        },
-        (error: any) => {
+  nombreLivreur: number = 0;
+  // lister livreur
+  getLivreur() {
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/livreur`).subscribe(
+      (response: any) => {
+        this.nombreLivreur = response.livreurs.length;
+      },
+      (error: any) => {
 
-        }
-      );
-    }
+      }
+    );
+  }
 
-    nombreClient:number=0;
-    getClient() {
-      this.apiService.getRequestWithSessionId(`${this.baseUrl}/clients`).subscribe(
-        (response: any) => {
-          this.nombreClient = response.clients.length;
-        },
-        (error: any) => {
+  nombreClient: number = 0;
+  getClient() {
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/clients`).subscribe(
+      (response: any) => {
+        this.nombreClient = response.clients.length;
+      },
+      (error: any) => {
 
-        }
-      );
-    }
+      }
+    );
+  }
+
+  profilLivreur: any;
+  // infos profil livreur
+  getInfolivreur() {
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/profile`).subscribe(
+      (response: any) => {
+        this.profilLivreur = response.data;
+
+        console.log(this.profilLivreur);
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+      }
+    );
+  }
+  categorieTab: any[] = [];
+  listeCategorie() {
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/all-categories`).subscribe(
+      (response: any) => {
+        this.categorieTab = response.length;
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+      }
+    );
+  }
+
+  statPayement:any;
+  paiementstat() {
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/admin/payments/stats`).subscribe(
+      (response: any) => {
+        this.statPayement = response.data;
+        console.log(this.statPayement);
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
+      }
+    );
+  }
 }

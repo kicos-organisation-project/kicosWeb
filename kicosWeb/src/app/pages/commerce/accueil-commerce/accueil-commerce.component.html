@@ -1,77 +1,74 @@
-<!-- dashboard.component.html -->
-<div class="dashboard">
-    <div class="stats-container">
-        <div class="stat-card">
-            <div class="stat-header">
-                <h3>Commandes total</h3>
-                <span class="icon"><i class="pi pi-shopping-cart"></i></span>
-            </div>
-            <div class="stat-value">{{nombreTotalCommande}}</div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-header">
-                <h3>Commandes en attente</h3>
-                <span class="icon"><i class="pi pi-dollar"></i></span>
-            </div>
-            <div class="stat-value">{{nombreCommandesPending}}</div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-header">
-                <h3>Commandes annuler</h3>
-                <span class="icon"><i class="pi pi-users"></i></span>
-            </div>
-            <div class="stat-value">{{nombreCommandescancelled}}</div>
-        </div>
+<div class="container-fluid">
+    <!-- Welcome Banner -->
+    <div class="welcome-banner">
+        <h1>Bienvenue, {{profilLivreur?.firstName}} {{profilLivreur?.lastName}}</h1>
+        <p>Voici un aperçu de votre activité et des statistiques importantes.</p>
     </div>
 
-    <div class="stats-container">
-        <div class="stat-card">
-            <div class="stat-header">
-                <h3>Commandes confirmée</h3>
-                <span class="icon"><i class="pi pi-shopping-cart"></i></span>
-            </div>
-            <div class="stat-value">{{nombreCommandesconfirmed}}</div>
-        </div>
+    <div class="main-content">
+        <div class="row">
+            <!-- Quick Actions -->
+            <div class="col-lg-8  quick-actions">
+                <h2>Statistiques</h2>
+                <div class="actions-grid">
 
-        <div class="stat-card">
-            <div class="stat-header">
-                <h3>Commandes en cours</h3>
-                <span class="icon"><i class="pi pi-dollar"></i></span>
-            </div>
-            <div class="stat-value">{{nombreCommandesprocessing}}</div>
-        </div>
+                    <div class="action-item">
+                        <a class="action-btn">
+                            <i class="bi  bi-bag"></i>
+                            <span class="count">{{listeArticles}}</span>
+                            <span class="label">Articles</span>
+                        </a>
+                    </div>
 
-        <div class="stat-card">
-            <div class="stat-header">
-                <h3>Commandes livrer</h3>
-                <span class="icon"><i class="pi pi-users"></i></span>
+                    <div class="action-item">
+                        <a class="action-btn">
+                            <i class="pi pi-cart-arrow-down"></i>
+                            <span class="count">{{nombreTotalCommande}}</span>
+                            <span class="label">Total Commandes</span>
+                        </a>
+                    </div>
+
+                    <div class="action-item">
+                        <a class="action-btn">
+                            <i class="pi pi-cart-arrow-down"></i>
+                            <span class="count">{{nombreCommandesprocessing}}</span>
+                            <span class="label">Commandes En cours</span>
+                        </a>
+                    </div>
+
+                    <div class="action-item">
+                        <a class="action-btn">
+                            <i class="pi pi-cart-arrow-down"></i>
+                            <span class="count">{{nombreCommandesshipped}}</span>
+                            <span class="label">Commandes terminer</span>
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="stat-value">{{nombreCommandesshipped}}</div>
+            <div class="col-lg-4 ">
+                <!-- Revenue Card -->
+                <div class="revenue-card">
+                    <h2>Revenus mensuels</h2>
+                    <div class="revenue-content">
+                        <div class="revenue-icon">
+                            <i class="pi pi-chart-line"></i>
+                        </div>
+                        <div class="revenue-details">
+                            <!-- Affiche le dernier élément de statPayement -->
+                            <div class="revenue-amount">{{ statPayement[statPayement.length - 1]?.total_gain }}</div>
+                            <div class="revenue-period">{{ statPayement[statPayement.length - 1]?.month }}/{{
+                                statPayement[statPayement.length - 1]?.year }}</div>
+                        </div>
+                    </div>
+
+                    <div class="revenue-breakdown">
+                        <!-- Boucle sur tous les éléments de statPayement -->
+                        <div class="breakdown-item" *ngFor="let stat of statPayement">
+                            <span class="breakdown-label">{{ stat.month }} / {{ stat.year }}</span>
+                            <span class="breakdown-value">{{ stat.total_gain }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-
-    <div class="secondContainer">
-        <div class="chart-container">
-            <h2>Evolution des ventes</h2>
-            <p-chart type="bar" [data]="chartData" [options]="chartOptions"
-                [style]="{ 'width': '100%', 'height': '100%' }">
-            </p-chart>
-        </div>
-
-        <div class="gauge-card">
-            <h2>Montant Reçu</h2>
-            <div class="gauge-container">
-              <p-chart type="doughnut" [data]="gaugeData" [options]="gaugeOptions"
-                [style]="{'width': '100%', 'height': '100%'}">
-              </p-chart>
-              <div class="gauge-value">
-                <span class="money-label">Votre argent</span>
-                <span class="money-value">25,430.39F CFA</span>
-              </div>
-            </div>
-          </div>
-    </div>
-</div>

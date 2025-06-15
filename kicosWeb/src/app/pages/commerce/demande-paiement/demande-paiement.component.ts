@@ -10,13 +10,13 @@ import { HttpClient } from '@angular/common/http';
 import { MessageService } from '../../../core/services/message.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormControl, } from '@angular/forms';
 import { TooltipModule } from 'primeng/tooltip';
-
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-demande-paiement',
   standalone: true,
-  imports: [TabViewModule, TableModule, DialogModule, PaginatorModule, RouterModule,ReactiveFormsModule,TooltipModule],
+  imports: [TabViewModule, TableModule, DialogModule, PaginatorModule, RouterModule, ReactiveFormsModule, TooltipModule, CommonModule],
   templateUrl: './demande-paiement.component.html',
   styleUrl: './demande-paiement.component.css'
 })
@@ -28,12 +28,12 @@ export class DemandePaiementComponent {
   messageService = inject(MessageService);
   fb = inject(FormBuilder);
 
-  demandesPaiement: any[]=[];
+  demandesPaiement: any[] = [];
 
   // Le formulaire ajout article
   demandeForm = this.fb.group({
-    montant: new FormControl('', Validators.required),
-    motif: new FormControl('', Validators.required),
+    amount: new FormControl('', Validators.required),
+    note: new FormControl('', Validators.required),
 
   });
 
@@ -41,8 +41,8 @@ export class DemandePaiementComponent {
   // Méthode pour réinitialiser les champs du formulaire
   resetDemandeForm() {
     this.demandeForm.patchValue({
-      montant: '',
-      motif: '',
+      amount: '',
+      note: '',
     });
   }
 
@@ -55,8 +55,8 @@ export class DemandePaiementComponent {
     // On fait appel a l'api pour lister les demandes de paiement
     this.apiService.getRequestWithSessionId(`${environment.base_url}/demandes/mes-demandes`).subscribe(
       (response: any) => {
-        console.log("liste des demandes de paiement", response);
         this.demandesPaiement = response.demandes;
+        console.log("liste des demandes de paiement", this.demandesPaiement);
       },
       (error: any) => {
         console.log("Partie erreur");
@@ -68,10 +68,10 @@ export class DemandePaiementComponent {
   // Méthode pour ajouter une demande de paiement
   addDemandePaiement() {
     // On récupère les données du formulaire
-    const { montant, motif } = this.demandeForm.value;
+    const { amount, note } = this.demandeForm.value;
 
     // On fait appel a l'api pour ajouter une demande de paiement
-    this.apiService.postWithSessionId(`${environment.base_url}/demandes/creer`, { montant, motif }).subscribe(
+    this.apiService.postWithSessionId(`${environment.base_url}/solde/request-payout`, { amount, note }).subscribe(
       (response: any) => {
         console.log("Demande de paiement ajoutée", response);
         this.messageService.createMessage('success', response.message);

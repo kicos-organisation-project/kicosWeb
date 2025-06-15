@@ -4,15 +4,15 @@
 
 <div id="avis">
     <form class="promo-form" novalidate [formGroup]="demandeForm" #ngForm="ngForm" (ngSubmit)="addDemandePaiement()">
-        <div class="form-grid">
+       <div class="form-grid">
             <div class="form-group mb-3">
-                <label for="montant">Montant</label>
-                <input type="number" id="montant" class="form-control" formControlName="montant">
+                <label for="amount">Montant</label>
+                <input type="number" id="amount" class="form-control" formControlName="amount">
             </div>
 
             <div class="form-group mb-3">
-                <label for="motif">Motif</label>
-                <textarea n id="motif" class="form-control" formControlName="motif"></textarea>
+                <label for="note">Motif</label>
+                <textarea n id="note" class="form-control" formControlName="note"></textarea>
             </div>
 
             <div class="form-group mb-3">
@@ -29,22 +29,20 @@
                     <th class="">Motant </th>
                     <th class="">Motif </th>
                     <th class="">etat</th>
-                    <th class="">Action</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-demande let-index="rowIndex" class="">
                 <tr class="py-4">
                     <td class="text-center text-xs px-3 tdimg" style="width: 10%;">{{index + 1}}</td>
-                    <td class="text-center text-xs px-3" style="width: 20%;">{{ demande.motant}}</td>
+                    <td class="text-center text-xs px-3" style="width: 20%;">{{ demande?.montant}}</td>
                     <td class="text-center text-xs px-3" style="width: 20%;">
                         <div class="truncate"
                             style="max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
-                            :title="demande.motif">
-                            {{ demande.motif.length > 30 ? demande.motif.substring(0, 30) + '...' : demande.motif }}
+                            :title="demande?.informations_paiement">
+                            {{ demande?.informations_paiement?.length > 30 ? demande?.informations_paiement?.substring(0, 30) + '...' : demande?.informations_paiement }}
                         </div>
                     </td>
                     <td class="text-center text-xs" style="width: 15%;">{{ demande.status}}</td>
-                    <td class="text-center text-xs" style="width: 15%;"> <i class="pi pi-eye"></i> </td>
                 </tr>
             </ng-template>
         </p-table>

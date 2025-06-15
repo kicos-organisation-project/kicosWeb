@@ -29,65 +29,70 @@
           <span class="menu-burger" (click)="toggleSidebar()">
             <i class="bi bi-list"></i>
           </span>
-          <p class="px-2 m-0 font-medium nomBoutique">{{userInfo.role}}</p>
+          <p class="px-2 m-0 font-medium nomBoutique">{{profilLivreur?.role}}</p>
         </div>
-        <div class="d-flex align-items-center">
-          <ul class="d-flex p-0 m-0 align-items-center headerIcon">
-            <div class="notification-wrapper"  *ngIf="userInfo.role=='livreur'">
-              <div class="notification-bell" (click)="toggleNotifications()">
-                <i class="pi pi-bell"></i>
-                <span *ngIf="hasNewNotifications" class="notification-badge"></span>
-              </div>
-
-              <div class="notification-panel" *ngIf="isNotificationOpen">
-                <div class="notification-header">
-                  <div class="header-text">Nouveau commande</div>
-                  <div class="notification-count" *ngIf="notifications.length > 0">
-                    {{notifications.length}}
-                  </div>
+        <div class="d-flex justify-content-end ">
+          @if(profilLivreur?.role=='livreur'){
+          <div >
+            <div class="d-flex p-0 m-0 align-items-center headerIcon">
+              <div class="notification-wrapper" *ngIf="profilLivreur?.role=='livreur'">
+                <div class="notification-bell">
+                  <i class="pi pi-bell"></i>
+                  <span *ngIf="hasNewNotifications" class="notification-badge"></span>
                 </div>
 
-                <div class="notification-list">
-                  <div class="notification-item" *ngFor="let notif of notificationlist">
-                    <div class="notification-content">
-                      <div class="notification-image">
-                        <!-- <img [src]="notif.image" [alt]="notif.name" onerror="this.src='assets/default-avatar.png'" /> -->
-                      </div>
-                      <div class="notification-details">
-                        <h5>{{notif.data.nom_client}}</h5>
-                        <!-- <span class="time">{{notif.time}}</span> -->
-                        <p class="address">Adresse de livraison: {{notif.data.adresse_delivery}}</p>
-                        <div class="action-buttons">
-                          <button class="accept-btn" (click)="acceptNotification(notif.id)">
-                            Accepter
-                          </button>
-                          <button class="reject-btn" (click)="rejectNotification(notif.id)">
-                            Rejeter
-                          </button>
-                        </div>
-                      </div>
+                <div class="notification-panel" *ngIf="isNotificationOpen">
+                  <div class="notification-header">
+                    <div class="header-text">Nouveau commande</div>
+                    <div class="notification-count" *ngIf="notifications.length > 0">
+                      {{notifications.length}}
                     </div>
                   </div>
 
-                  <div class="no-notifications" *ngIf="notifications.length === 0">
-                    Aucune notification
+                  <div class="notification-list">
+                    <div class="notification-item" *ngFor="let notif of notificationlist">
+                      <div class="notification-content">
+                        <div class="notification-image">
+                          <!-- <img [src]="notif.image" [alt]="notif.name" onerror="this.src='assets/default-avatar.png'" /> -->
+                        </div>
+                        <div class="notification-details">
+                          <h5>{{notif.data.nom_client}}</h5>
+                          <!-- <span class="time">{{notif.time}}</span> -->
+                          <p class="address">Adresse de livraison: {{notif.data.adresse_delivery}}</p>
+                          <div class="action-buttons">
+                            <button class="accept-btn" (click)="acceptNotification(notif.data.commande_id)">
+                              Accepter
+                            </button>
+                            <!-- <button class="reject-btn" (click)="rejectNotification(notif.id)">
+                            Rejeter
+                          </button> -->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="no-notifications" *ngIf="notifications.length === 0">
+                      Aucune notification
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <li class="mx-2">
-              <div class="relative group dropdown">
-                <div class="flex items-center border-0 rounded-t-lg py-1 px-2 dropdown-toggle" type="button"
-                  data-bs-toggle="dropdown">
-                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjuDuz1yFx58viL_nbKYZUeyU6GC6Cp7tr7A&s" class="photoUser">
-                  {{userInfo.firstName}} {{userInfo.lastName}}
-                </div>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item text-pointer" (click)="logout()">Se déconnecter</a></li>
-                </ul>
+          </div>
+          }
+          <div class="mx-2">
+            <div class="relative group dropdown">
+              <div class="flex items-center border-0 rounded-t-lg py-1 px-2 dropdown-toggle" type="button"
+                data-bs-toggle="dropdown">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjuDuz1yFx58viL_nbKYZUeyU6GC6Cp7tr7A&s"
+                  class="photoUser">
+                {{profilLivreur?.firstName}} {{profilLivreur?.lastName}}
               </div>
-            </li>
-          </ul>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item text-pointer" (click)="logout()">Se déconnecter</a></li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </header>
