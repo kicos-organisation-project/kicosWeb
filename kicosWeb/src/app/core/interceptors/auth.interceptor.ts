@@ -17,12 +17,8 @@ export function authInterceptor(
   const token = localStorage.getItem('session_id');
 
   if (!token) {
-    console.log("Token d'utilisateur non présent");
     return next(req);
   }
-
-  console.log("Token d'utilisateur présent");
-
   // Données à ajouter dans l'en-tête de la requête
   const headers = req.headers.set('Authorization', `Bearer ${token}`);
 

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
 import { ApiService } from '../../../core/services/api.service';
 import { environment } from '../../../../environments/environment';
+import { MessageService } from '../../../core/services/message.service';
 
 @Component({
   selector: 'app-accueil-commerce',
@@ -15,7 +16,7 @@ export class AccueilCommerceComponent {
 
   apiService = inject(ApiService);
   baseUrl = environment.base_url;
-
+ messageService = inject(MessageService);
 
   chartData: any;
   chartOptions: any;
@@ -25,73 +26,10 @@ export class AccueilCommerceComponent {
 
 
   ngOnInit() {
-    this.initChart();
-    this.initGaugeChart();
     this.commandeList();
     this.paiementstat();
     this.getInfolivreur();
     
-  }
-
-  private initChart() {
-    this.chartData = {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July'],
-      datasets: [
-        {
-          label: 'Evolution des ventes',
-          data: [265, 359, 480, 156, 490, 788, 287],
-          backgroundColor: '#F97316',
-          borderRadius: 8,
-          barPercentage: 0.4,
-
-        }
-      ]
-    };
-
-    this.chartOptions = {
-      plugins: {
-        legend: {
-          display: false
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: false,
-          grid: {
-            display: false
-          }
-        },
-        x: {
-          grid: {
-            display: false
-          }
-        }
-      },
-      responsive: true,
-      maintainAspectRatio: false
-    };
-  }
-
-  private initGaugeChart() {
-    this.gaugeData = {
-      datasets: [{
-        data: [75],
-        backgroundColor: ['#00BCD4'],
-        borderWidth: 0,
-        circumference: 180,
-        rotation: 270,
-      }]
-    };
-
-    this.gaugeOptions = {
-      plugins: {
-        legend: { display: false },
-        tooltip: { enabled: false }
-      },
-      cutout: '85%',
-      responsive: true,
-      maintainAspectRatio: false
-    };
   }
 
   nombreTotalCommande: number = 0;
@@ -120,8 +58,7 @@ export class AccueilCommerceComponent {
 
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
 
       }
     )
@@ -129,14 +66,13 @@ export class AccueilCommerceComponent {
 
   statPayement: any;
   paiementstat() {
-    this.apiService.getRequestWithSessionId(`${this.baseUrl}/partenaire/payments/stats`).subscribe(
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/user/earnings`).subscribe(
       (response: any) => {
         this.statPayement = response.data;
         console.log(this.statPayement);
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }
@@ -151,8 +87,7 @@ export class AccueilCommerceComponent {
         console.log(this.profilLivreur);
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }

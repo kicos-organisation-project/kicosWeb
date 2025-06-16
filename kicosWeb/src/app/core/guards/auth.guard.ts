@@ -14,11 +14,9 @@ export const AuthGuard = () => {
   
     // définition du guard
      if (auth.isAuthenticated()) {
-      console.log("Vous etes connecté");
       return true;
     } else {
       router.navigate(['/login']);
-      console.log("Vous n'etes pas connecté");
       return false;
     }
 }

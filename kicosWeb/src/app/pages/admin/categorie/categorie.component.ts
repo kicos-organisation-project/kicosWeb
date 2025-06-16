@@ -58,8 +58,7 @@ export class CategorieComponent {
         this.messageService.createMessage('success', response.message);
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }
@@ -69,8 +68,7 @@ export class CategorieComponent {
         this.categorieTab = response;
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }
@@ -102,8 +100,7 @@ export class CategorieComponent {
         this.messageService.createMessage('success', response.message);
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }
@@ -133,8 +130,7 @@ export class CategorieComponent {
             this.listeCategorie();
           },
           (error: any) => {
-            console.log("Partie erreur");
-            console.log(error);
+          this.messageService.createMessage('error', error.error.message);
 
           }
         )

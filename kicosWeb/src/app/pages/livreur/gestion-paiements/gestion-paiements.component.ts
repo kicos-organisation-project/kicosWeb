@@ -45,21 +45,29 @@ export class GestionPaiementsComponent {
     });
   }
 
+  userInfo: any;
+  userid: any
   ngOnInit(): void {
+    const storedUserInfo = localStorage.getItem('userInfo');
+    if (storedUserInfo) {
+      this.userInfo = JSON.parse(storedUserInfo);
+      this.userid = this.userInfo.id
+    }
+    console.log(this.userid)
+
     this.listeDemandePaiement();
   }
 
   // Liste des demandes de paiement
   listeDemandePaiement() {
     // On fait appel a l'api pour lister les demandes de paiement
-    this.apiService.getRequestWithSessionId(`${environment.base_url}/demandes/mes-demandes`).subscribe(
+    this.apiService.getRequestWithSessionId(`${environment.base_url}/admin/transactions/livreur/${this.userid}`).subscribe(
       (response: any) => {
-        console.log("liste des demandes de paiement", response);
-        this.demandesPaiement = response.demandes;
+        this.demandesPaiement = response.data;
+        console.log("liste des demandes de paiement", this.demandesPaiement);
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }
@@ -78,8 +86,7 @@ export class GestionPaiementsComponent {
         this.listeDemandePaiement();
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
          this.messageService.createMessage('error', error.error.message);
       }
     );

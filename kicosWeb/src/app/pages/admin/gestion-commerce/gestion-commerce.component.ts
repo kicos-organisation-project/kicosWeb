@@ -258,8 +258,7 @@ export class GestionCommerceComponent implements OnInit {
         this.messageService.createMessage('success', response.message);
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }
@@ -274,8 +273,7 @@ export class GestionCommerceComponent implements OnInit {
         this.isLoading = false; // Désactivez le chargement une fois les données chargées
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
 
       }
     )
@@ -290,8 +288,7 @@ export class GestionCommerceComponent implements OnInit {
         console.log("Detail du partenaire", this.DetailPartenaire);
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
 
       }
     )
@@ -322,8 +319,7 @@ export class GestionCommerceComponent implements OnInit {
             this.messageService.createMessage('success', response.message);
           },
           (error: any) => {
-            console.log("Partie erreur");
-            console.log(error);
+          this.messageService.createMessage('error', error.error.message);
 
           }
         )
@@ -347,8 +343,7 @@ export class GestionCommerceComponent implements OnInit {
         this.resetFormPartenaire();
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
 
       }
     )

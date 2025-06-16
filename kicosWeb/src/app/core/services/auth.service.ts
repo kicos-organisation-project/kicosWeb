@@ -63,7 +63,6 @@ export class AuthService {
     const token = this.getToken();
     const expiration = this.getTokenExpiration();
     if (!token || expiration === null || expiration <= new Date().getTime()) {
-      console.log('Le token est expiré ou non présent');
       return false;
     }
 

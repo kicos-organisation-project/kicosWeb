@@ -1,354 +1,124 @@
-<p-tabView>
-  <p-tabPanel header="Listes livreurs">
-    <!-- Contenu livreurs -->
-    <div class="card border-0 p-4">
-      <!-- Titre, recherche et ajout  -->
-      <div class="d-flex justify-content-between mb-3">
-        <h5 class="fw-bold">Liste des livreurs |</h5>
-        <div class="search-and d-flex justify-content-between">
-          <!-- Input de recherche  -->
-          <div class="me-3">
-            <div class="srch">
-              <input type="text" [(ngModel)]="searchText" (input)="onSearch()" placeholder="Recherche ...">
-            </div>
-          </div>
-          <button class="btn btnValidate" (click)="showDialogAddLivreur()"> <i class="pi pi-plus me-2"></i>
-            Ajouter</button>
+<!-- Contenu livreurs -->
+<div class="card border-0 p-4">
+  <!-- Titre, recherche et ajout  -->
+  <div class="d-flex justify-content-between mb-3">
+    <h5 class="fw-bold">Liste des livreurs |</h5>
+    <div class="search-and d-flex justify-content-between">
+      <!-- Input de recherche  -->
+      <div class="me-3">
+        <div class="srch">
+          <input type="text" [(ngModel)]="searchText" (input)="onSearch()" placeholder="Recherche ...">
         </div>
       </div>
+      <button class="btn btnValidate" (click)="showDialogAddLivreur()"> <i class="pi pi-plus me-2"></i>
+        Ajouter</button>
+    </div>
+  </div>
 
-      <!-- Liste des livreurs  -->
-      @if (ListeLivreur.length) {
-      <p-table [value]="ListeLivreur" [paginator]="true" [rows]="3" [tableStyle]="{ 'min-width': '50rem'}"
-        [styleClass]="'paginationTacheCustom'" [rowsPerPageOptions]="[3, 5, 10, 15]">
-        <ng-template pTemplate="header">
-          <tr class="text-center py-2">
-            <th class="">#</th>
-            <th class="">Nom Complet </th>
-            <th class="">Téléphone</th>
-            <th class="">Licence</th>
-            <th class="">Etat</th>
-            <th class="">Action</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-livreur let-index="rowIndex" class="">
-          <tr class="py-4">
-            <td class="text-center text-xs px-3 tdimg" style="width: 10%;">{{index + 1}}</td>
-            <!-- <td class="text-center text-xs px-3" style="width: 20%;">
+  <!-- Liste des livreurs  -->
+  @if (ListeLivreur.length) {
+  <p-table [value]="ListeLivreur" [paginator]="true" [rows]="3" [tableStyle]="{ 'min-width': '50rem'}"
+    [styleClass]="'paginationTacheCustom'" [rowsPerPageOptions]="[3, 5, 10, 15]">
+    <ng-template pTemplate="header">
+      <tr class="text-center py-2">
+        <th class="">#</th>
+        <th class="">Nom Complet </th>
+        <th class="">Téléphone</th>
+        <th class="">Licence</th>
+        <th class="">Etat</th>
+        <th class="">Action</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-livreur let-index="rowIndex" class="">
+      <tr class="py-4">
+        <td class="text-center text-xs px-3 tdimg" style="width: 10%;">{{index + 1}}</td>
+        <!-- <td class="text-center text-xs px-3" style="width: 20%;">
               <img
                 src="https://img.freepik.com/premium-photo/happy-delivery-man-holding-parcel_107420-29739.jpg?ga=GA1.1.1509183608.1737718706&semt=ais_hybrid"
                 alt="" style="width: 50px;">
               <img src="https://kiccos.terangacode.com/{{livreur.image}}" class="card-img-top" alt="..." />
             </td> -->
-            <td class="text-center text-xs px-3" style="width: 20%;">{{ livreur.user.firstName}} {{
-              livreur.user.lastName}}</td>
-            <td class="text-center text-xs" style="width: 15%;">{{ livreur.user.phoneNumber}}</td>
-            <td class="text-center text-xs" style="width: 15%;">{{ livreur.licence_driver_number}}</td>
-            <td class="text-center text-xs" style="width: 20%;">{{ livreur.etat}}</td>
-            <td class="actions-cell">
-              <div class="speed-dial" [class.speed-dial--active]="openMenuId === livreur.id">
-                <button class="speed-dial__button" (click)="toggleMenu($event, livreur.id)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                  </svg>
-                </button>
-                <div class="speed-dial__items" *ngIf="openMenuId === livreur.id">
-                  <button (click)="onAction('view', livreur.id);showDialogDetailLivreur()" aria-label="Voir détails">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
-                      stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                  </button>
-                  <button (click)="chargerInfosLivreur(livreur);showDialogEditLivreur()" aria-label="Éditer">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
-                      stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                  </button>
-                  <button (click)="onAction('delete', livreur.id)" aria-label="Supprimer">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
-                      stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-      }
-      @else {
-      <p class="text-center fs-5 fw-bold">Aucun livreur enregistré pour le moment </p>
-      }
-
-    </div>
-
-  </p-tabPanel>
-  <p-tabPanel header="Performances">
-    <div class="">
-      <!-- Statistiques globales -->
-      <div class="row mb-4">
-        <div class="col-4">
-          <p-card>
-            <div class="flex flex-column align-items-center">
-              <i class="pi pi-users text-4xl text-primary mb-2 me-3"></i>
-              <span class="text-xl font-bold me-1">{{ activeDrivers }}</span>
-              <span class="text-sm">Livreurs Actifs</span>
-            </div>
-          </p-card>
-        </div>
-        <div class="col-4">
-          <p-card>
-            <div class="flex flex-column align-items-center">
-              <i class="pi pi-users text-4xl text-primary mb-2 me-3"></i>
-              <span class="text-xl font-bold me-1">{{ activeDrivers }}</span>
-              <span class="text-sm">Livreurs Inactifs</span>
-            </div>
-          </p-card>
-        </div>
-        <div class="col-4">
-          <p-card>
-            <div class="flex flex-column align-items-center">
-              <i class="pi pi-clock text-4xl text-primary mb-2 me-3"></i>
-              <span class="text-xl font-bold me-1">{{ avgDeliveryRate }}%</span>
-              <span class="text-sm">Taux Moyen de Livraison</span>
-            </div>
-          </p-card>
-        </div>
-      </div>
-      <div class="card border-0 p-4">
-
-        <div class="d-flex justify-content-between mb-3">
-          <h5 class="fw-bold">Gestion des Performances des Livreurs</h5>
-          <div class="search-and d-flex justify-content-between">
-            <!-- Input de recherche  -->
-            <div class="me-3">
-              <div class="input-group">
-                <span class="input-group-text border inputSearch" id="inputGroup-sizing-sm"
-                  style="background-color: transparent;">
-                  <i class="pi pi-search"></i>
-                </span>
-                <input type="search" class="inputSearch form-control" aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-sm" placeholder="Rechercher">
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tableau des performances -->
-        <p-table #dt [value]="drivers" [rows]="10" [paginator]="true" [globalFilterFields]="['name','id']"
-          [rowHover]="true" dataKey="id" [showCurrentPageReport]="true" [rowsPerPageOptions]="[3, 5, 10, 15]"
-          styleClass="paginationTacheCustom">
-          <ng-template pTemplate="header">
-            <tr class="text-center py-2">
-              <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
-              <th pSortableColumn="name">Nom <p-sortIcon field="name"></p-sortIcon></th>
-              <th pSortableColumn="deliveriesCompleted">
-                Livraisons <p-sortIcon field="deliveriesCompleted"></p-sortIcon>
-              </th>
-              <th pSortableColumn="status">Statut <p-sortIcon field="status"></p-sortIcon></th>
-              <th>Actions</th>
-            </tr>
-          </ng-template>
-
-          <ng-template pTemplate="body" let-driver>
-            <tr class="py-4">
-              <td class="text-center text-xs">{{driver.id}}</td>
-              <td class="text-center text-xs">{{driver.name}}</td>
-              <td class="text-center text-xs">{{driver.deliveriesCompleted}}</td>
-              <td class="text-center text-xs">
-                <p-tag [value]="driver.status === 'active' ? 'Actif' : 'Inactif'"
-                  [severity]="driver.status === 'active' ? 'success' : 'danger'"></p-tag>
-              </td>
-              <td class="text-center text-xs">
-                <i class="pi pi-eye"></i>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-    </div>
-  </p-tabPanel>
-
-  <!-- Modal ajout livreur -->
-  <p-dialog [modal]="true" [(visible)]="visibleAddLivreur"
-    [style]="{ width: '60rem', height:'50rem', backgroundColor: '#F8F9FD'}" header="Ajout Livreur">
-    <form novalidate [formGroup]="LivreurForm" #ngForm="ngForm" (ngSubmit)="addLivreur()">
-      <div class="contentInput">
-        <div class="">
-          <!-- nom -->
-          <div class="mb-3">
-            <label class="mb-2" for="lastName">Nom </label>
-            <input id="lastName" type="text" class="input-field" formControlName="lastName">
-            <p *ngIf="error" class="text-danger">{{error.lastName}}</p>
-            <div *ngIf="LivreurForm.get('lastName')?.invalid && LivreurForm.get('lastName')?.touched"
-              class="text-danger">
-              {{ LivreurForm.get('lastName')?.errors?.['invalid'] ? 'Le nom est invalide.' : 'Le nom est obligatoire.'
-              }}
-            </div>
-          </div>
-
-          <!-- Télephone -->
-          <div class="mb-3">
-            <label for="phoneNumber" class="mb-2">Téléphone</label>
-            <input type="tel" class="input-field" id="phoneNumber" formControlName="phoneNumber">
-            <p *ngIf="error" class="text-danger">{{error.phoneNumber}}</p>
-            <div *ngIf="LivreurForm.get('phoneNumber')?.invalid && LivreurForm.get('phoneNumber')?.touched"
-              class="text-danger">
-              {{ LivreurForm.get('phoneNumber')?.errors?.['invalid'] ? 'Le numéro de téléphone est invalide.' : 'Le
-              numéro de téléphone est obligatoire.' }}
-            </div>
-          </div>
-
-          <!-- Numéro licence -->
-          <div class="mb-2">
-            <label for="licence" class="mb-1">Numéro licence</label>
-            <input type="text" class="input-field" id="licence" formControlName="licence_driver_number">
-            <p *ngIf="error" class="text-danger">{{error.licence_driver_number}}</p>
-            <div
-              *ngIf="LivreurForm.get('licence_driver_number')?.invalid && LivreurForm.get('licence_driver_number')?.touched"
-              class="text-danger">
-              {{ LivreurForm.get('licence_driver_number')?.errors?.['invalid'] ? 'Le numéro de licence est invalide.'
-              :
-              'Le numéro de licence est obligatoire.' }}
-            </div>
-          </div>
-
-          <!-- Password -->
-          <div class="form-group mb-3 inputP">
-            <label for="password" class="textLabel">Mot de passe</label>
-            <input [type]="showPassword ? 'text' : 'password'" class="input-field" id="password"
-              formControlName="password">
-            <button type="button" (click)="togglePassword()" class="iconEye">
-              <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+        <td class="text-center text-xs px-3" style="width: 20%;">{{ livreur.user.firstName}} {{
+          livreur.user.lastName}}</td>
+        <td class="text-center text-xs" style="width: 15%;">{{ livreur.user.phoneNumber}}</td>
+        <td class="text-center text-xs" style="width: 15%;">{{ livreur.licence_driver_number}}</td>
+        <td class="text-center text-xs" style="width: 20%;">{{ livreur.etat}}</td>
+        <td class="actions-cell">
+          <div class="speed-dial" [class.speed-dial--active]="openMenuId === livreur.id">
+            <button class="speed-dial__button" (click)="toggleMenu($event, livreur.id)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+              </svg>
             </button>
-            <p *ngIf="error" class="text-danger">{{error.password}}</p>
-            <div *ngIf="LivreurForm.get('password')?.invalid && LivreurForm.get('password')?.touched"
-              class="text-danger">
-              {{ LivreurForm.get('password')?.errors?.['invalid'] ? 'Le mot de passe est invalide.' : 'Le mot de passe
-              est obligatoire.' }}
+            <div class="speed-dial__items" *ngIf="openMenuId === livreur.id">
+              <button (click)="onAction('view', livreur.id);showDialogDetailLivreur()" aria-label="Voir détails">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+              </button>
+              <button (click)="chargerInfosLivreur(livreur);showDialogEditLivreur()" aria-label="Éditer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              </button>
+              <button (click)="onAction('delete', livreur.id)" aria-label="Supprimer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
             </div>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  }
+  @else {
+  <p class="text-center fs-5 fw-bold">Aucun livreur enregistré pour le moment </p>
+  }
+
+</div>
+
+<!-- Modal ajout livreur -->
+<p-dialog [modal]="true" [(visible)]="visibleAddLivreur"
+  [style]="{ width: '60rem', height:'50rem', backgroundColor: '#F8F9FD'}" header="Ajout Livreur">
+  <form novalidate [formGroup]="LivreurForm" #ngForm="ngForm" (ngSubmit)="addLivreur()">
+    <div class="contentInput">
+      <div class="">
+        <!-- nom -->
+        <div class="mb-3">
+          <label class="mb-2" for="lastName">Nom </label>
+          <input id="lastName" type="text" class="input-field" formControlName="lastName">
+          <p *ngIf="error" class="text-danger">{{error.lastName}}</p>
+          <div *ngIf="LivreurForm.get('lastName')?.invalid && LivreurForm.get('lastName')?.touched" class="text-danger">
+            {{ LivreurForm.get('lastName')?.errors?.['invalid'] ? 'Le nom est invalide.' : 'Le nom est obligatoire.'
+            }}
           </div>
         </div>
 
-        <div class="">
-          <!-- prénom -->
-          <div class="mb-3">
-            <label class="mb-2" for="firstName">Prénom </label>
-            <input id="firstName" type="text" class="input-field" formControlName="firstName">
-            <p *ngIf="error" class="text-danger">{{error.firstName}}</p>
-            <div *ngIf="LivreurForm.get('firstName')?.invalid && LivreurForm.get('firstName')?.touched"
-              class="text-danger">
-              {{ LivreurForm.get('firstName')?.errors?.['invalid'] ? 'Le prénom est invalide.' : 'Le prénom est
-              obligatoire.' }}
-            </div>
-          </div>
-
-          <!-- Email -->
-          <div class="mb-3">
-            <label for="email" class="mb-2">Email</label>
-            <input type="email" class="input-field" id="email" formControlName="email">
-            <p *ngIf="error" class="text-danger">{{error.email}}</p>
-            <div *ngIf="LivreurForm.get('email')?.invalid && LivreurForm.get('email')?.touched" class="text-danger">
-              {{ LivreurForm.get('email')?.errors?.['invalid'] ? 'L\'adresse email est invalide.' : 'L\'adresse email
-              est obligatoire.' }}
-            </div>
-          </div>
-
-          <!-- Photo livreur-->
-          <div class="mb-3">
-            <label for="photoLivreur" class="mb-1">Photo</label>
-            <input accept="image/*" name="photo_Livreur" class="form-control w-full py-1 inputPhoto" id="photoLivreur"
-              type="file">
-            <!-- Si vous avez besoin de validation pour la photo -->
-            <div *ngIf="LivreurForm.get('photo_Livreur')?.invalid && LivreurForm.get('photo_Livreur')?.touched"
-              class="text-danger">
-              {{ LivreurForm.get('photo_Livreur')?.errors?.['invalid'] ? 'Le format de la photo est invalide.' : 'La
-              photo est obligatoire.' }}
-            </div>
-          </div>
-
-          <!-- Password Confirm -->
-          <div class="form-group mb-3 inputP">
-            <label for="password_confirm" class="textLabel">Confirmer mot de passe</label>
-            <input [type]="showPassword ? 'text' : 'password'" class="input-field" id="password_confirm"
-              formControlName="password_confirm">
-            <button type="button" (click)="togglePassword()" class="iconEye">
-              <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-            </button>
-            <div *ngIf="LivreurForm.get('password_confirm')?.invalid && LivreurForm.get('password_confirm')?.touched"
-              class="text-danger">
-              <span *ngIf="LivreurForm.get('password_confirm')?.errors?.['invalid']">La confirmation du mot de passe
-                est
-                invalide.</span>
-              <span *ngIf="LivreurForm.get('password_confirm')?.errors?.['required']">La confirmation du mot de passe
-                est
-                obligatoire.</span>
-              <span *ngIf="LivreurForm.get('password_confirm')?.errors?.['match']">Les mots de passe ne correspondent
-                pas.</span>
-            </div>
+        <!-- Télephone -->
+        <div class="mb-3">
+          <label for="phoneNumber" class="mb-2">Téléphone</label>
+          <input type="tel" class="input-field" id="phoneNumber" formControlName="phoneNumber">
+          <p *ngIf="error" class="text-danger">{{error.phoneNumber}}</p>
+          <div *ngIf="LivreurForm.get('phoneNumber')?.invalid && LivreurForm.get('phoneNumber')?.touched"
+            class="text-danger">
+            {{ LivreurForm.get('phoneNumber')?.errors?.['invalid'] ? 'Le numéro de téléphone est invalide.' : 'Le
+            numéro de téléphone est obligatoire.' }}
           </div>
         </div>
-      </div>
-      <div class="d-flex justify-content-center">
-        <button type="button" class="btn btnAnnuler me-2" (click)="closeModal()">Annuler</button>
-        <button type="submit" class="btn btnSave" [disabled]="LivreurForm.invalid">Enregistrer</button>
-      </div>
-    </form>
-  </p-dialog>
 
-  <!--Modal details livreur -->
-  <p-dialog [modal]="true" [(visible)]="visibleDetailLivreur"
-    [style]="{ width: '60rem', height:'30rem', backgroundColor: '#F8F9FD'}" header="Détail livreur">
-    <div id="details">
-      <div class="image">
-        <!-- <img src="https://kiccos.terangacode.com/{{detailLivreur?.image}}" class="card-img-top" alt="..." /> -->
-        <img
-          src="https://img.freepik.com/free-photo/medium-shot-black-woman-running-small-business_23-2150171799.jpg?t=st=1733949765~exp=1733953365~hmac=e039e07cff51d03a4f789b972b88cfa6de5a84d76ba20a693fdf734f477f6683&w=900"
-          alt="">
-      </div>
-      <div>
-        <h4>{{detailLivreur?.nom_partenaire}}</h4>
-        <p>
-          {{detailLivreur?.description}}
-        </p>
-
-        <div class="d-flex">
-          <h6 class="mb-3">Responsable : </h6>
-          <span>&nbsp;{{detailLivreur?.user.firstName}} {{detailLivreur?.user.lastName}}</span>
-        </div>
-        <div class="d-flex">
-          <h6 class="mb-3">Licence : </h6>
-          <span>&nbsp;{{detailLivreur?.licence_driver_number}}</span>
-        </div>
-        <div class="d-flex">
-          <h6 class="mb-3">Etat: </h6>
-          <span>&nbsp;{{detailLivreur?.etat}}</span>
-        </div>
-        <div class="d-flex">
-          <h6 class="mb-3">Téléphone : </h6>
-          <span>&nbsp;{{detailLivreur?.user.phoneNumber}}</span>
-        </div>
-      </div>
-    </div>
-
-
-  </p-dialog>
-
-  <!-- Modal modifier livreur -->
-  <p-dialog [modal]="true" [(visible)]="visibleEditLivreur"
-    [style]="{ width: '40rem', height:'20rem', backgroundColor: '#F8F9FD'}" header="Modifier Livreur">
-    <form novalidate [formGroup]="LivreurForm" #ngForm="ngForm" (ngSubmit)="updateLivreur()">
-      <div class="contentInput">
-
+        <!-- Numéro licence -->
         <div class="mb-2">
           <label for="licence" class="mb-1">Numéro licence</label>
           <input type="text" class="input-field" id="licence" formControlName="licence_driver_number">
@@ -362,25 +132,164 @@
           </div>
         </div>
 
-        <div class="mb-2">
-          <label for="is_livreur_" class="mb-1">Livreur Externe</label>
-          <select id="is_livreur_" class="input-field" formControlName="is_livreur_externe">
-            <option value="1">OUI</option>
-            <option value="0">Non</option>
-          </select>
+        <!-- Password -->
+        <div class="form-group mb-3 inputP">
+          <label for="password" class="textLabel">Mot de passe</label>
+          <input [type]="showPassword ? 'text' : 'password'" class="input-field" id="password"
+            formControlName="password">
+          <button type="button" (click)="togglePassword()" class="iconEye">
+            <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+          </button>
+          <p *ngIf="error" class="text-danger">{{error.password}}</p>
+          <div *ngIf="LivreurForm.get('password')?.invalid && LivreurForm.get('password')?.touched" class="text-danger">
+            {{ LivreurForm.get('password')?.errors?.['invalid'] ? 'Le mot de passe est invalide.' : 'Le mot de passe
+            est obligatoire.' }}
+          </div>
         </div>
       </div>
-      <!-- etat -->
+
+      <div class="">
+        <!-- prénom -->
+        <div class="mb-3">
+          <label class="mb-2" for="firstName">Prénom </label>
+          <input id="firstName" type="text" class="input-field" formControlName="firstName">
+          <p *ngIf="error" class="text-danger">{{error.firstName}}</p>
+          <div *ngIf="LivreurForm.get('firstName')?.invalid && LivreurForm.get('firstName')?.touched"
+            class="text-danger">
+            {{ LivreurForm.get('firstName')?.errors?.['invalid'] ? 'Le prénom est invalide.' : 'Le prénom est
+            obligatoire.' }}
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label for="email" class="mb-2">Email</label>
+          <input type="email" class="input-field" id="email" formControlName="email">
+          <p *ngIf="error" class="text-danger">{{error.email}}</p>
+          <div *ngIf="LivreurForm.get('email')?.invalid && LivreurForm.get('email')?.touched" class="text-danger">
+            {{ LivreurForm.get('email')?.errors?.['invalid'] ? 'L\'adresse email est invalide.' : 'L\'adresse email
+            est obligatoire.' }}
+          </div>
+        </div>
+
+        <!-- Photo livreur-->
+        <div class="mb-3">
+          <label for="photoLivreur" class="mb-1">Photo</label>
+          <input accept="image/*" name="photo_Livreur" class="form-control w-full py-1 inputPhoto" id="photoLivreur"
+            type="file">
+          <!-- Si vous avez besoin de validation pour la photo -->
+          <div *ngIf="LivreurForm.get('photo_Livreur')?.invalid && LivreurForm.get('photo_Livreur')?.touched"
+            class="text-danger">
+            {{ LivreurForm.get('photo_Livreur')?.errors?.['invalid'] ? 'Le format de la photo est invalide.' : 'La
+            photo est obligatoire.' }}
+          </div>
+        </div>
+
+        <!-- Password Confirm -->
+        <div class="form-group mb-3 inputP">
+          <label for="password_confirm" class="textLabel">Confirmer mot de passe</label>
+          <input [type]="showPassword ? 'text' : 'password'" class="input-field" id="password_confirm"
+            formControlName="password_confirm">
+          <button type="button" (click)="togglePassword()" class="iconEye">
+            <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+          </button>
+          <div *ngIf="LivreurForm.get('password_confirm')?.invalid && LivreurForm.get('password_confirm')?.touched"
+            class="text-danger">
+            <span *ngIf="LivreurForm.get('password_confirm')?.errors?.['invalid']">La confirmation du mot de passe
+              est
+              invalide.</span>
+            <span *ngIf="LivreurForm.get('password_confirm')?.errors?.['required']">La confirmation du mot de passe
+              est
+              obligatoire.</span>
+            <span *ngIf="LivreurForm.get('password_confirm')?.errors?.['match']">Les mots de passe ne correspondent
+              pas.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center">
+      <button type="button" class="btn btnAnnuler me-2" (click)="closeModal()">Annuler</button>
+      <button type="submit" class="btn btnSave" [disabled]="LivreurForm.invalid">Enregistrer</button>
+    </div>
+  </form>
+</p-dialog>
+
+<!--Modal details livreur -->
+<p-dialog [modal]="true" [(visible)]="visibleDetailLivreur"
+  [style]="{ width: '60rem', height:'30rem', backgroundColor: '#F8F9FD'}" header="Détail livreur">
+  <div id="details">
+    <div class="image">
+      <!-- <img src="https://kiccos.terangacode.com/{{detailLivreur?.image}}" class="card-img-top" alt="..." /> -->
+      <img
+        src="https://img.freepik.com/free-photo/medium-shot-black-woman-running-small-business_23-2150171799.jpg?t=st=1733949765~exp=1733953365~hmac=e039e07cff51d03a4f789b972b88cfa6de5a84d76ba20a693fdf734f477f6683&w=900"
+        alt="">
+    </div>
+    <div>
+      <h4>{{detailLivreur?.nom_partenaire}}</h4>
+      <p>
+        {{detailLivreur?.description}}
+      </p>
+
+      <div class="d-flex">
+        <h6 class="mb-3">Responsable : </h6>
+        <span>&nbsp;{{detailLivreur?.user.firstName}} {{detailLivreur?.user.lastName}}</span>
+      </div>
+      <div class="d-flex">
+        <h6 class="mb-3">Licence : </h6>
+        <span>&nbsp;{{detailLivreur?.licence_driver_number}}</span>
+      </div>
+      <div class="d-flex">
+        <h6 class="mb-3">Etat: </h6>
+        <span>&nbsp;{{detailLivreur?.etat}}</span>
+      </div>
+      <div class="d-flex">
+        <h6 class="mb-3">Téléphone : </h6>
+        <span>&nbsp;{{detailLivreur?.user.phoneNumber}}</span>
+      </div>
+    </div>
+  </div>
+
+
+</p-dialog>
+
+<!-- Modal modifier livreur -->
+<p-dialog [modal]="true" [(visible)]="visibleEditLivreur"
+  [style]="{ width: '40rem', height:'20rem', backgroundColor: '#F8F9FD'}" header="Modifier Livreur">
+  <form novalidate [formGroup]="LivreurForm" #ngForm="ngForm" (ngSubmit)="updateLivreur()">
+    <div class="contentInput">
+
       <div class="mb-2">
-        <label for="etat" class="mb-1">Etat</label>
-        <select id="etat" class="input-field" formControlName="etat">
-          <option value="attente">Active</option>
-          <option value="desactiver">Désactiver</option>
+        <label for="licence" class="mb-1">Numéro licence</label>
+        <input type="text" class="input-field" id="licence" formControlName="licence_driver_number">
+        <p *ngIf="error" class="text-danger">{{error.licence_driver_number}}</p>
+        <div
+          *ngIf="LivreurForm.get('licence_driver_number')?.invalid && LivreurForm.get('licence_driver_number')?.touched"
+          class="text-danger">
+          {{ LivreurForm.get('licence_driver_number')?.errors?.['invalid'] ? 'Le numéro de licence est invalide.'
+          :
+          'Le numéro de licence est obligatoire.' }}
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <label for="is_livreur_" class="mb-1">Livreur Externe</label>
+        <select id="is_livreur_" class="input-field" formControlName="is_livreur_externe">
+          <option value="1">OUI</option>
+          <option value="0">Non</option>
         </select>
       </div>
-      <div class="d-flex justify-content-center">
-        <button type="button" class="btn btnAnnuler me-2" (click)="closeModal()">Annuler</button>
-        <button type="submit" class="btn btnSave">Enregistrer</button>
-      </div>
-    </form>
-  </p-dialog>
+    </div>
+    <!-- etat -->
+    <div class="mb-2">
+      <label for="etat" class="mb-1">Etat</label>
+      <select id="etat" class="input-field" formControlName="etat">
+        <option value="attente">Active</option>
+        <option value="desactiver">Désactiver</option>
+      </select>
+    </div>
+    <div class="d-flex justify-content-center">
+      <button type="button" class="btn btnAnnuler me-2" (click)="closeModal()">Annuler</button>
+      <button type="submit" class="btn btnSave">Enregistrer</button>
+    </div>
+  </form>
+</p-dialog>

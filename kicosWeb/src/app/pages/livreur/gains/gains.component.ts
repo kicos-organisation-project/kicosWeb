@@ -53,8 +53,8 @@ export class GainsComponent {
         this.gains = response;
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        console.log(error)
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }

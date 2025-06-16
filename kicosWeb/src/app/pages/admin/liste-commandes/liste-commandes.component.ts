@@ -42,8 +42,7 @@ export class ListeCommandesComponent {
         this.tabCommande = response.data;
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
 
       }
     )
@@ -65,8 +64,7 @@ export class ListeCommandesComponent {
         console.log("Detail du commande", this.detailcommande);
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
 
       }
     )

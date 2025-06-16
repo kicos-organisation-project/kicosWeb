@@ -52,8 +52,7 @@ export class GestionCommandesComponent {
         this.listecommandes = response.data;
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
 
       }
     )
@@ -77,8 +76,7 @@ export class GestionCommandesComponent {
         console.log("Detail du commande", this.detailcommande);
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
 
       }
     )

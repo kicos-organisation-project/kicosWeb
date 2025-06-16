@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { ApiService } from '../../../core/services/api.service';
+import { MessageService } from '../../../core/services/message.service';
 
 @Component({
   selector: 'app-accueil-livreur',
@@ -28,7 +29,7 @@ export class AccueilLivreurComponent implements OnInit {
   http = inject(HttpClient);
   apiService = inject(ApiService);
   baseUrl = environment.base_url;
-
+ messageService = inject(MessageService);
   ngOnInit() {
     this.initGaugeChart();
     this.initLineChart();
@@ -159,22 +160,20 @@ export class AccueilLivreurComponent implements OnInit {
         console.log(this.profilLivreur);
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }
 
   statPayement:any;
   paiementstat() {
-    this.apiService.getRequestWithSessionId(`${this.baseUrl}/livreur/payments/stats`).subscribe(
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/user/earnings`).subscribe(
       (response: any) => {
         this.statPayement = response.data;
         console.log(this.statPayement);
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }

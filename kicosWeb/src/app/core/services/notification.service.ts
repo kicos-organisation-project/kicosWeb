@@ -23,12 +23,10 @@ export class NotificationService {
   }
 
   subscribeToLivreurNotifications(cb: (data: any) => void) {
-    console.log('👂 Abonnement au canal public "commandes-public"...');
 
     this.echo
       .channel('commandes-public')
       .listen('.CommandeAssignee', (data: any) => {
-        console.log('📦 Notification reçue :', data);
         cb(data);
       })
       .error((err: any) => {

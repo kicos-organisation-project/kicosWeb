@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
 import { ApiService } from '../../../core/services/api.service';
 import { RouterLink, RouterModule } from '@angular/router';
+import { MessageService } from '../../../core/services/message.service';
 
 @Component({
   selector: 'app-accueil-admin',
@@ -17,7 +18,7 @@ export class AccueilAdminComponent {
 
   apiService = inject(ApiService);
   baseUrl = environment.base_url;
-
+ messageService = inject(MessageService);
   dataCategogrie: any;
   optionsCategogrie: any;
   dataVentes: any;
@@ -31,92 +32,13 @@ export class AccueilAdminComponent {
 
   // Initialisation avec ngOnInit
   ngOnInit() {
-    this.initializeChartDataCategorie();
     this.listPartenaire();
     this.getLivreur();
     this.getClient();
     this.getInfolivreur();
     this.listeCategorie();
-    this.paiementstat();
+    // this.paiementstat();
   }
-
-  // Données Paiement recu par mois
-  initializeChartDataCategorie(): void {
-    const documentStyle = getComputedStyle(document.documentElement);
-    const textColor = documentStyle.getPropertyValue('--text-color');
-    const textColorSecondary = documentStyle.getPropertyValue(
-      '--text-color-secondary'
-    );
-
-    this.dataCategogrie = {
-      labels: [
-        'Janvier',
-        'Fevrier',
-        'Mars',
-        'Avril',
-        'Mai',
-        'Juin',
-        'Juillet',
-        'Aout',
-        'Septembre',
-        'Octobre',
-        'Novembre',
-        'Décembre',
-      ],
-      datasets: [
-        {
-          label: 'Paiement reçu par mois',
-          backgroundColor: documentStyle.getPropertyValue('--bg-primary'),
-          borderColor: documentStyle.getPropertyValue('--bg-primary'),
-          data: [400, 500, 350, 420, 560, 290, 340, 310, 280, 390, 350, 420],
-          barThickness: 15,
-          borderRadius: 5
-        },
-      ],
-    };
-
-    this.optionsCategogrie = {
-      maintainAspectRatio: false,
-      aspectRatio: 0.8,
-      plugins: {
-        legend: {
-          labels: {
-            color: textColor,
-          },
-        },
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: textColorSecondary,
-            font: {
-              weight: 500,
-            },
-          },
-          grid: {
-            display: false,
-          },
-          categoryPercentage: 0.2,
-          barPercentage: 0.3,
-        },
-        y: {
-          ticks: {
-            color: textColorSecondary,
-            font: {
-              weight: 500,
-            },
-            stepSize: 10,
-            beginAtZero: true,
-            max: 100,
-          },
-          grid: {
-            display: false,
-          },
-        },
-      },
-    };
-  }
-
 
   nombrePartenaire: number = 0;
   // lister les partenaire
@@ -168,8 +90,7 @@ export class AccueilAdminComponent {
         console.log(this.profilLivreur);
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }
@@ -180,8 +101,7 @@ export class AccueilAdminComponent {
         this.categorieTab = response.length;
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }
@@ -194,8 +114,7 @@ export class AccueilAdminComponent {
         console.log(this.statPayement);
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }

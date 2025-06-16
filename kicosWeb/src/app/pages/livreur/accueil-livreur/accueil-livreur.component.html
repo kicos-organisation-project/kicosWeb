@@ -39,17 +39,7 @@
                         </div>
                         <div class="revenue-details">
                             <!-- Affiche le dernier élément de statPayement -->
-                            <!-- <div class="revenue-amount">{{ statPayement[statPayement.length - 1]?.total_gain }}</div>
-                            <div class="revenue-period">{{ statPayement[statPayement.length - 1]?.month }}/{{
-                                statPayement[statPayement.length - 1]?.year }}</div> -->
-                        </div>
-                    </div>
-
-                    <div class="revenue-breakdown">
-                        <!-- Boucle sur tous les éléments de statPayement -->
-                        <div class="breakdown-item" *ngFor="let stat of statPayement">
-                            <span class="breakdown-label">{{ stat.month }} / {{ stat.year }}</span>
-                            <span class="breakdown-value">{{ stat.total_gain }}</span>
+                            <div class="revenue-amount">{{ statPayement?.total_earnings }}</div>
                         </div>
                     </div>
                 </div>

@@ -33,8 +33,7 @@ export class ProfilComponent {
         console.log(this.profilLivreur);
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }
@@ -68,8 +67,7 @@ export class ProfilComponent {
         }
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
         this.messageService.createMessage('error', 'Une erreur est survenue lors de la modification du profil.');
       }
     );
@@ -99,8 +97,7 @@ export class ProfilComponent {
         }
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
         this.messageService.createMessage('error', 'Une erreur est survenue lors de la modification du mot de passe.');
       }
     );
@@ -148,8 +145,7 @@ export class ProfilComponent {
         }
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
         this.messageService.createMessage('error', 'Une erreur est survenue lors de la modification du profil.');
       }
     );
@@ -177,8 +173,7 @@ export class ProfilComponent {
         }
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
         this.messageService.createMessage('error', 'Une erreur est survenue lors de la modification des informations administratives.');
       }
     );

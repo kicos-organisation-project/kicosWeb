@@ -10,6 +10,7 @@ import { NotificationService } from '../../../core/services/notification.service
 import { environment } from '../../../../environments/environment';
 import { ApiService } from '../../../core/services/api.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { MessageService } from '../../../core/services/message.service';
 
 type DialogPosition = 'center' | 'top' | 'bottom' | 'left' | 'right' | 'topleft' | 'topright' | 'bottomleft' | 'bottomright';
 
@@ -47,7 +48,7 @@ export class DashboardComponent {
   baseUrl = environment.base_url;
   apiService = inject(ApiService);
   authService = inject(AuthService);
-
+ messageService = inject(MessageService);
   // Constructeur
   constructor(
     private menuService: MenuService,
@@ -71,7 +72,6 @@ export class DashboardComponent {
     if (storedUserInfo) {
       this.userInfo = JSON.parse(storedUserInfo);
       this.userRole = this.userInfo.role;
-      console.log('role userInfo: ' + this.userRole);
       if (this.userRole === 'admin') {
         this.menus = this.menuService.menus.admin;
       } else if (this.userRole === 'partenaire') {
@@ -79,7 +79,6 @@ export class DashboardComponent {
       } else {
         this.menus = this.menuService.menus.livreur;
       }
-      console.log('Menus chargés:', this.menus);
     }
 
     console.log('Initialisation de l\'abonnement aux notifications');
@@ -114,8 +113,7 @@ export class DashboardComponent {
         }
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }
@@ -151,8 +149,7 @@ export class DashboardComponent {
         console.log(response);
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }
@@ -167,12 +164,9 @@ export class DashboardComponent {
     this.apiService.getRequestWithSessionId(`${this.baseUrl}/profile`).subscribe(
       (response: any) => {
         this.profilLivreur = response.data;
-
-        console.log(this.profilLivreur);
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }

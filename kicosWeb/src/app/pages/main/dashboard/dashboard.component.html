@@ -1,12 +1,9 @@
 <div class="wrapper m-0 d-flex">
   <div class="sidebar p-0" [ngClass]="{'collapsed': !isSidebarVisible}">
     <aside>
-      <div class="logoWrapper mt-2">
+      <div class="logoWrapper mt-4">
         <div class="logo">
-          <img *ngIf="!isSidebarVisible"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4NshHKqzTaToj0GKFn40reOu7doky-WRtXA&s"
-            alt="logo">
-          <!-- <img   *ngIf="!isSidebarVisible" src="../../../../assets/logo/logo.png" alt="logo"> -->
+          <img   *ngIf="!isSidebarVisible" src="../../../../assets/logo/logo.png" alt="logo">
           <strong class="text-center mx-2 titreLogo" *ngIf="isSidebarVisible">Kicos<span>Express</span> </strong>
         </div>
       </div>
@@ -112,7 +109,7 @@
   <div class="logoWrapper">
     <div class="logoSide d-flex justify-content-center">
       <img *ngIf="!isSidebarVisible"
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4NshHKqzTaToj0GKFn40reOu7doky-WRtXA&s" alt="logo">
+        src="../../../../assets/logo/logo.png" alt="logo">
     </div>
     <span class="text-pointer closeSidebar" (click)="toggleSidebar()">
       <i class="bi bi-x-circle"></i>

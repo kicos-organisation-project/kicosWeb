@@ -178,8 +178,7 @@ export class GestionLivreurComponent {
         this.messageService.createMessage('success', response.message);
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }
@@ -192,8 +191,7 @@ export class GestionLivreurComponent {
         this.ListeLivreur = response.livreurs;
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }
@@ -229,8 +227,7 @@ export class GestionLivreurComponent {
         this.messageService.createMessage('success', response.message);
       },
       (error: any) => {
-        console.log("Partie erreur");
-        console.log(error);
+        this.messageService.createMessage('error', error.error.message);
       }
     );
   }
@@ -247,8 +244,7 @@ export class GestionLivreurComponent {
             console.log("Detail du partenaire", this.detailLivreur);
           },
           (error: any) => {
-            console.log("Partie erreur");
-            console.log(error);
+          this.messageService.createMessage('error', error.error.message);
 
           }
         )

@@ -23,7 +23,7 @@
                 <ng-template pTemplate="header">
                     <tr class="text-center py-2">
                         <th class="">Responsable</th>
-                        <th class="">Motif</th>
+                        <!-- <th class="">Motif</th> -->
                         <th class="">Montant</th>
                         <th class="">Status </th>
                         <th class="">Action</th>
@@ -31,9 +31,10 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-demandePartenaire let-index="rowIndex" class="">
                     <tr class="py-4">
-                        <td class="text-center text-xs px-3" style="width: 20%;">{{
-                            demandePartenaire.partenaire?.nom_partenaire}}</td>
-                        <td class="text-center text-xs px-3" style="width: 20%;">
+                         <td class="text-center text-xs px-3" style="width: 20%;">
+                            {{demandePartenaire.user?.firstName}} {{demandePartenaire.user?.lastName}}
+                        </td>
+                        <!-- <td class="text-center text-xs px-3" style="width: 20%;">
                             <div class="truncate"
                                 style="max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
                                 :title="demande?.informations_paiement">
@@ -41,14 +42,13 @@
                                 demandePartenaire?.informations_paiement?.substring(0, 30) + '...' :
                                 demandePartenaire?.informations_paiement }}
                             </div>
-                        </td>
-                        <td class="text-center text-xs" style="width: 15%;">{{demandePartenaire.montant}}</td>
+                        </td> -->
+                        <td class="text-center text-xs" style="width: 15%;">{{demandePartenaire.amount}}</td>
                         <td class="text-center text-xs" style="width: 15%;">{{ demandePartenaire.status}}</td>
                         <td class="text-center text-xs" style="width: 15%;">
                             <i class="pi pi-pen-to-square me-3" style="font-size: 1rem; cursor: pointer;"
                                 (click)="showDialog();recupDemandeID(demandePartenaire)"
                                 title="Traiter demande de paiement"></i>
-                            <i class="pi pi-wallet" style="font-size: 1rem; cursor: pointer;" (click)="markDemande(demandePartenaire.id)"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -83,24 +83,37 @@
 
             <!-- Liste des demande livreur  -->
             @if (demandeLivreur.length) {
-            <p-table [value]="demandeLivreur" [paginator]="true" [rows]="3" [tableStyle]="{ 'min-width': '50rem'}"
-                [styleClass]="'paginationTacheCustom'" [rowsPerPageOptions]="[3, 5, 10, 15]">
+            <p-table [value]="demandeLivreur" [paginator]="true" [rows]="5" [tableStyle]="{ 'min-width': '50rem'}"
+                [styleClass]="'paginationTacheCustom'" [rowsPerPageOptions]="[5, 7, 10]">
                 <ng-template pTemplate="header">
                     <tr class="text-center py-2">
-                        <th class="">Photo </th>
-                        <th class="">Nom complet</th>
-                        <th class="">Statut</th>
+                        <th class="">Responsable</th>
+                        <!-- <th class="">Motif</th> -->
+                        <th class="">Montant</th>
+                        <th class="">Status </th>
                         <th class="">Action</th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-livreur let-index="rowIndex" class="">
+                <ng-template pTemplate="body" let-demandePartenaire let-index="rowIndex" class="">
                     <tr class="py-4">
-                        <td class="text-center text-xs px-3" style="width: 20%;"><img [src]="livreur.photo" alt=""
-                                style="width: 50px;"></td>
-                        <td class="text-center text-xs px-3" style="width: 20%;">{{ livreur.nomComplet}}</td>
-                        <td class="text-center text-xs" style="width: 15%;">{{ livreur.statut}}</td>
+                        <td class="text-center text-xs px-3" style="width: 20%;">
+                            {{demandePartenaire.user?.firstName}} {{demandePartenaire.user?.lastName}}
+                        </td>
+                        <!-- <td class="text-center text-xs px-3" style="width: 20%;">
+                            <div class="truncate"
+                                style="max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+                                :title="demande?.informations_paiement">
+                                {{ demandePartenaire?.informations_paiement?.length > 30 ?
+                                demandePartenaire?.informations_paiement?.substring(0, 30) + '...' :
+                                demandePartenaire?.informations_paiement }}
+                            </div>
+                        </td> -->
+                        <td class="text-center text-xs" style="width: 15%;">{{demandePartenaire.amount}}</td>
+                        <td class="text-center text-xs" style="width: 15%;">{{ demandePartenaire.status}}</td>
                         <td class="text-center text-xs" style="width: 15%;">
-                            <i class="pi pi-eye me-3" style="font-size: 1rem; cursor: pointer;"></i>
+                            <i class="pi pi-pen-to-square me-3" style="font-size: 1rem; cursor: pointer;"
+                                (click)="showDialog();recupDemandeID(demandePartenaire)"
+                                title="Traiter demande de paiement"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -122,14 +135,14 @@
             <div class="mb-3">
                 <label for="status">Satus</label>
                 <select class="form-select" id="status" [(ngModel)]="statusDemande">
-                    <option value="en_attente">En attente</option>
-                    <option value="approuvee">Approuvée</option>
-                    <option value="rejetee">Rejetée</option>
+                    <option value="pending">En attente</option>
+                    <option value="approved">Approuvée</option>
+                    <option value="rejected">Rejetée</option>
                 </select>
             </div>
             <div class="mb-3">
-                <label for="motif">Motif</label>
-                <textarea class="form-control" id="motif" rows="3" [(ngModel)]="motifPaiement"></textarea>
+                <label for="reference">Réference</label>
+                <textarea class="form-control" id="reference" rows="3" [(ngModel)]="reference"></textarea>
             </div>
         </div>
 
