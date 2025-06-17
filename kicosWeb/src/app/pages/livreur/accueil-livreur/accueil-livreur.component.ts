@@ -29,11 +29,11 @@ export class AccueilLivreurComponent implements OnInit {
   http = inject(HttpClient);
   apiService = inject(ApiService);
   baseUrl = environment.base_url;
- messageService = inject(MessageService);
+  messageService = inject(MessageService);
   ngOnInit() {
     this.initGaugeChart();
     this.initLineChart();
-    // this.getInfolivreur();
+    this.getInfolivreur();
     this.paiementstat();
     // this.get_actual_localisation();
   }
@@ -45,7 +45,6 @@ export class AccueilLivreurComponent implements OnInit {
   maxRetries = 3; // Nombre maximum de tentatives
 
   updateLocation(latitude: number, longitude: number): Observable<any> {
-    console.log('longitude:', longitude, 'latitude:', latitude);
     return this.http.post('https://kiccos.terangacode.com/api/livreurs/update-location', {
       latitude,
       longitude
@@ -68,7 +67,6 @@ export class AccueilLivreurComponent implements OnInit {
           console.error('Erreur de géolocalisation :', error);
           if (this.retryCount < this.maxRetries) {
             this.retryCount++;
-            console.log(`Nouvelle tentative (${this.retryCount}) dans 5 secondes...`);
             setTimeout(() => this.get_actual_localisation(), 5000); // Réessaye après 5 secondes
           } else {
             console.error('Échec après plusieurs tentatives. Utilisation du fallback.');
@@ -145,19 +143,18 @@ export class AccueilLivreurComponent implements OnInit {
   }
 
   // Statistiques
-  totalEarningsToday: number = 42.50;
-  totalEarningsWeek: number = 286.75;
-  completedDeliveries: number = 8;
-  totalDistance: number = 64;
+  totalEarningsToday: any
+  totalEarningsWeek: any;
+
 
   profilLivreur: any;
+  id_livreur: any;
   // infos profil livreur
   getInfolivreur() {
     this.apiService.getRequestWithSessionId(`${this.baseUrl}/profile`).subscribe(
       (response: any) => {
-        this.profilLivreur = response.data;
-
-        console.log(this.profilLivreur);
+        this.id_livreur = response.data.livreur.id;
+        this.listehistoriquelivraisons();
       },
       (error: any) => {
         this.messageService.createMessage('error', error.error.message);
@@ -165,14 +162,36 @@ export class AccueilLivreurComponent implements OnInit {
     );
   }
 
-  statPayement:any;
+  statPayement: any;
   paiementstat() {
     this.apiService.getRequestWithSessionId(`${this.baseUrl}/user/earnings`).subscribe(
       (response: any) => {
         this.statPayement = response.data;
-        console.log(this.statPayement);
       },
       (error: any) => {
+        this.messageService.createMessage('error', error.error.message);
+      }
+    );
+  }
+
+
+  historiqueLivraisons: any;
+  livraisonPending: any
+  livraisonDelivered: any
+  // Liste des historique-livraisons
+  listehistoriquelivraisons() {
+    // On fait appel a l'api pour lister les historique-livraisons
+    this.apiService.getRequestWithSessionId(`${environment.base_url}/livreurs/${this.id_livreur}/historique-livraisons`).subscribe(
+      (response: any) => {
+        this.historiqueLivraisons = response.data;
+        this.livraisonPending = this.historiqueLivraisons.filter((history: any) => history.livraison_status === 'pending');
+        this.totalEarningsToday = this.livraisonPending.length;
+        this.livraisonDelivered = this.historiqueLivraisons.filter((history: any) => history.livraison_status === 'delivered');
+        this.totalEarningsWeek = this.livraisonDelivered.length;
+
+      },
+      (error: any) => {
+
         this.messageService.createMessage('error', error.error.message);
       }
     );

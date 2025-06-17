@@ -1,18 +1,21 @@
 import { DialogModule } from 'primeng/dialog';
 import { PaginatorModule } from 'primeng/paginator';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { ApiService } from '../../../core/services/api.service';
 import { MessageService } from '../../../core/services/message.service';
 import { environment } from '../../../../environments/environment';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-gains',
   standalone: true,
-  imports: [PaginatorModule, DialogModule],
+  imports: [PaginatorModule, DialogModule, CommonModule],
   templateUrl: './gains.component.html',
   styleUrl: './gains.component.css'
 })
 export class GainsComponent {
+   cdr = inject(ChangeDetectorRef);
+
   // les varaibles utilisees
   first: number = 0;
   rows: number = 6;
@@ -20,37 +23,62 @@ export class GainsComponent {
   onPageChange(event: any) {
     this.first = event.first;
     this.rows = event.rows;
+    this.cdr.detectChanges(); // Forcer la mise à jour de la vue
   }
-  // contrôler la visibilité du modal details articles
-  visible: boolean = false;
-  showDialogDetailArticle() {
-    this.visible = true;
+  getPaginatedPartners(): any[] {
+    return this.gaingainsApproveds.slice(this.first, this.first + this.rows);
   }
+ 
   // Injection de dépendances
   apiService = inject(ApiService);
   messageService = inject(MessageService);
-  userInfo: any;
-  userid:any
+
   ngOnInit(): void {
-     const storedUserInfo = localStorage.getItem('userInfo');
-    if (storedUserInfo) {
-      this.userInfo = JSON.parse(storedUserInfo);
-      this.userid = this.userInfo.id
-    }
-    this.listeGains();
+    this.getInfolivreur();
+    // this.listeGains();
   }
 
 
+  id_livreur: any;
+  // infos profil livreur
+  getInfolivreur() {
+    this.apiService.getRequestWithSessionId(`${environment.base_url}/profile`).subscribe(
+      (response: any) => {
+        this.id_livreur = response.data.livreur.id;
+        console.log(this.id_livreur);
+        this.listeGains();
+      },
+      (error: any) => {
+        this.messageService.createMessage('error', error.error.message);
+      }
+    );
+  }
+
 
   gains: any;
-
-  // Liste des demandes de paiement
+  gaingainsApproveds: any;
+  // Liste des gains
   listeGains() {
-    // On fait appel a l'api pour lister les demandes de paiement
-    this.apiService.getRequestWithSessionId(`${environment.base_url}/livreurs/${this.userid}/gains`).subscribe(
+    console.log(this.id_livreur);
+    // On fait appel a l'api pour lister les gains
+    this.apiService.getRequestWithSessionId(`${environment.base_url}/livreurs/${this.id_livreur}/gains`).subscribe(
       (response: any) => {
-        console.log("liste des gains", response);
-        this.gains = response;
+        console.log("liste des gains", response.data);
+        this.gains = response.data;
+         this.gaingainsApproveds = this.gains.transactions
+          .filter((transaction: any) => transaction.status === 'approved')
+          .map((transaction: any) => ({
+            ...transaction,
+            livreur: {
+              firstName: this.gains.livreur.user.firstName,
+              lastName: this.gains.livreur.user.lastName,
+              email: this.gains.livreur.user.email,
+              phoneNumber: this.gains.livreur.user.phoneNumber
+            }
+          }));
+
+        console.log(this.gaingainsApproveds);
+
       },
       (error: any) => {
         console.log(error)
