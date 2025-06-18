@@ -153,13 +153,20 @@ export class ProfilComponent {
   }
 
   modifierInformationsRestaurant() {
+
+     if (!this.selectedFile) {
+      alert('Veuillez sélectionner une image');
+      return;
+    }
+
     // Récupération des valeurs du formulaire restaurant
-    const restaurantData = {
-      nom_partenaire: (document.getElementById('nom_partenaire') as HTMLInputElement).value,
-      horaire: (document.getElementById('horaire') as HTMLInputElement).value,
-      localisation: (document.getElementById('localisation') as HTMLInputElement).value,
-      description: (document.getElementById('description') as HTMLTextAreaElement).value
-    };
+    const restaurantData = new FormData();
+    restaurantData.append('image_url', this.selectedFile);
+    restaurantData.append('nom_partenaire', (document.getElementById('nom_partenaire') as HTMLInputElement).value);
+    restaurantData.append('localisation', (document.getElementById('localisation') as HTMLInputElement).value);
+    restaurantData.append('description', (document.getElementById('description') as HTMLTextAreaElement).value);
+    restaurantData.append('horaire',  (document.getElementById('horaire') as HTMLInputElement).value);
+
   
     // Appel à l'API pour modifier les informations du restaurant partenaire
     this.apiService.postWithSessionId(`${this.baseUrl}/profile/partenaire`, restaurantData).subscribe(

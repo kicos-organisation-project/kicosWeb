@@ -34,7 +34,7 @@ interface DeliveryPerformance {
 @Component({
   selector: 'app-gestion-livreur',
   standalone: true,
-  imports: [TabViewModule, TableModule, ChartModule, FormsModule, CommonModule, ReactiveFormsModule, DialogModule, FormsModule, CardModule, ButtonModule, InputTextModule, ProgressBarModule, RatingModule, TagModule,ToastModule],
+  imports: [TabViewModule, TableModule, ChartModule, FormsModule, CommonModule, ReactiveFormsModule, DialogModule, FormsModule, CardModule, ButtonModule, InputTextModule, ProgressBarModule, RatingModule, TagModule, ToastModule],
   templateUrl: './gestion-livreur.component.html',
   styleUrl: './gestion-livreur.component.css'
 })
@@ -89,7 +89,6 @@ export class GestionLivreurComponent {
 
   // Initialisation avec ngOnInit
   ngOnInit() {
-    this.loadData();
     this.calculateStats();
     this.getLivreur();
     // Validation en temps réel pour chaque champ
@@ -214,7 +213,14 @@ export class GestionLivreurComponent {
 
   //modifier livreur
   updateLivreur() {
-    this.apiService.postWithSessionId(`${this.baseUrl}/admin/livreurs/${this.id_livreur}/update`, this.LivreurForm.value).subscribe(
+    const formValue = this.LivreurForm.value;
+
+    // Convertir true/false en 1/0
+    const dataToSend = {
+      ...formValue,
+      is_livreur_externe: formValue.is_livreur_externe === 'true' ? 1 : 0
+    };
+    this.apiService.postWithSessionId(`${this.baseUrl}/admin/livreurs/${this.id_livreur}/update`,dataToSend ).subscribe(
       (response: any) => {
         console.log(response);
         if (response.status_code === 422) {
@@ -244,7 +250,7 @@ export class GestionLivreurComponent {
             console.log("Detail du partenaire", this.detailLivreur);
           },
           (error: any) => {
-          this.messageService.createMessage('error', error.error.message);
+            this.messageService.createMessage('error', error.error.message);
 
           }
         )
@@ -346,29 +352,7 @@ export class GestionLivreurComponent {
   avgDeliveryRate: number = 0;
   avgRating: number = 0;
 
-  loadData() {
-    // Simuler le chargement des données
-    this.drivers = [
-      {
-        id: 1,
-        name: 'Jean Dupont',
-        deliveriesCompleted: 150,
-        onTimeDeliveryRate: 95,
-        customerRating: 4.8,
-        status: 'active',
-        lastDelivery: new Date()
-      },
-      {
-        id: 2,
-        name: 'Marie Martin',
-        deliveriesCompleted: 120,
-        onTimeDeliveryRate: 88,
-        customerRating: 4.5,
-        status: 'active',
-        lastDelivery: new Date()
-      }
-    ];
-  }
+
 
   calculateStats() {
     const activeDrivers = this.drivers.filter(d => d.status === 'active');
@@ -387,25 +371,25 @@ export class GestionLivreurComponent {
     this.selectedDriver = null;
   }
 
-  filterTerm: string ="";
-  searchText: string ="";
+  filterTerm: string = "";
+  searchText: string = "";
   filterliste: any[] = [];
   filterLivreur() {
     this.filterTerm = this.searchText;
-    
+
     // Si le terme de recherche est vide, restaurer la liste complète
     if (!this.filterTerm || this.filterTerm.trim() === '') {
       this.getLivreur(); // Réinitialiser la liste
       return;
     }
-    
+
     // Sinon, filtrer normalement
     this.filterliste = this.apiService.filterByTerm(
-      this.ListeLivreur, 
-      this.filterTerm, 
+      this.ListeLivreur,
+      this.filterTerm,
       ['user.firstName', 'user.lastName', 'etat', 'user.phoneNumber', 'user.email']
     );
-    
+
     if (this.filterliste.length === 0) {
       this.getLivreur();
     } else {
@@ -416,7 +400,7 @@ export class GestionLivreurComponent {
   onSearch() {
     // Annuler le timer existant
     clearTimeout(this.debounceTimer);
-    
+
     // Créer un nouveau timer
     this.debounceTimer = setTimeout(() => {
       this.filterLivreur();

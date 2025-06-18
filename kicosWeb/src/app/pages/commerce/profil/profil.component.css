@@ -203,9 +203,8 @@ input:focus, select:focus {
 /* Styles pour la section d'image de profil */
 .profile-image-section {
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 30px;
-  margin-bottom: 25px;
 }
 
 .profile-image-container {

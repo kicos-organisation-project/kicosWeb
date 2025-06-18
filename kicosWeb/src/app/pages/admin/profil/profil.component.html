@@ -8,26 +8,8 @@
 
         <div class="profile-image-section">
             <div class="profile-image-container">
-                <img class="profile-image" src="{{profilLivreur?.admin?.avatar}}" alt="Photo de profil" id="profileImagePreview">
-            </div>
-
-            <div class="image-upload-container">
-                <form id="imageUploadForm" enctype="multipart/form-data">
-                    <label for="profileImage" class="custom-file-upload">
-                        <i class="fa fa-cloud-upload"></i> Sélectionner une image
-                    </label>
-                    <input type="file" id="profileImage" class="file-input" accept="image/*"
-                        (change)="onFileSelected($event)">
-
-                    <div class="selected-file-name" id="selectedFileName"></div>
-
-                    <p class="upload-info">Formats acceptés: JPG, PNG, JPEG. Taille max: 5 MB</p>
-
-                    <div class="image-actions">
-                        <button type="button" class="btn btn-blue" id="uploadImageBtn"
-                            (click)="uploadImage()">Enregistrer</button>
-                    </div>
-                </form>
+                <img class="profile-image" src="{{profilLivreur?.admin?.avatar}}" alt="Photo de profil"
+                    id="profileImagePreview">
             </div>
         </div>
     </div>
@@ -68,13 +50,13 @@
         <button class="btn" (click)="modifierProfilLivreur()">Enregistrer les modifications</button>
     </div>
 
-    <!-- Nouvelle section pour les informations administratives -->
+    <!-- Nouvelle section pour les informations Supplémentaire -->
     <div class="profile-section">
-        <h2 class="section-title">Informations Administratives</h2>
-        
+        <h2 class="section-title">Informations Supplémentaire</h2>
+
         <div class="form-group">
             <label for="avatar">Avatar</label>
-            <input type="text" id="avatar" value="{{profilLivreur?.admin.avatar}}">
+            <input type="file" id="avatar" accept="image/*" (change)="onFileSelected($event)">
         </div>
 
         <div class="form-group">
@@ -87,37 +69,42 @@
 </div>
 
 <!-- Modal existant pour changer le mot de passe inchangé -->
+<div class="modal fade" id="profil" tabindex="-1" aria-labelledby="profilLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="profilLabel">Modifier mon mot de passe</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="current_password">Mot de passe actuel</label>
+                    <input [type]="showPassword ? 'text' : 'password'" id="current_password">
+                    <button type="button" (click)="togglePassword()" class="iconEye">
+                        <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                    </button>
+                </div>
 
-<!-- Script pour la gestion basique de l'interface -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Code existant pour la gestion des images
-        document.getElementById('profileImage').addEventListener('change', function (e) {
-            const fileInput = e.target;
-            if (fileInput.files && fileInput.files.length > 0) {
-                const fileName = fileInput.files[0].name;
-                document.getElementById('selectedFileName').textContent = fileName;
+                <div class="form-group">
+                    <label for="new_password">Nouveau mot de passe</label>
+                    <input [type]="showPassword ? 'text' : 'password'" id="new_password">
+                    <button type="button" (click)="togglePassword()" class="iconEye">
+                        <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                    </button>
+                </div>
 
-                // Prévisualisation de l'image
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    document.getElementById('profileImagePreview').src = e.target.result;
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            }
-        });
-
-        // Gestion des boutons d'upload et de suppression
-        document.getElementById('uploadImageBtn').addEventListener('click', function () {
-            alert('Fonction de téléchargement à implémenter. Endpoint: /api/livreurs/profile/upload-image');
-        });
-
-        // Ajout d'un événement pour le bouton de modification des informations administratives
-        const btnModifierAdmin = document.querySelector('.profile-section:last-child .btn');
-        if (btnModifierAdmin) {
-            btnModifierAdmin.addEventListener('click', function() {
-                alert('Fonction de modification des informations administratives à implémenter.');
-            });
-        }
-    });
-</script>
+                <div class="form-group">
+                    <label for="new_password_confirmation">Confirmer le mot de passe</label>
+                    <input [type]="showPassword ? 'text' : 'password'" id="new_password_confirmation">
+                    <button type="button" (click)="togglePassword()" class="iconEye">
+                        <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-blue" (click)="modifierPassword()">Valider</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
