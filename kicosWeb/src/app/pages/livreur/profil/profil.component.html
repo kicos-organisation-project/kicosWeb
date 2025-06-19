@@ -31,7 +31,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="profile-section">
         <h2 class="section-title">Informations Personnelles</h2>
         <div class="form-row">
@@ -74,17 +74,18 @@
         <div class="form-group">
             <label>Position actuelle</label>
             <div class="form-row">
-              <div class="form-column">
-                <input type="text" id="latitude" value="14.724346209389799" readonly>
-              </div>
-              <div class="form-column">
-                <input type="text" id="longitude" value="-17.48901084355535" readonly>
-              </div>
+                <div class="form-column">
+                    <input type="text" id="latitude" value="{{latitude}}" readonly>
+                </div>
+                <div class="form-column">
+                    <input type="text" id="longitude" value="{{longitude}}" readonly>
+                </div>
+                <button class="btn" (click)="getCurrentLocation()">📍 Utiliser ma position actuelle</button>
             </div>
             <div class="map-container">
-              <!-- La carte serait intégrée ici avec une librairie comme Google Maps -->
+                <div id="map"></div>
             </div>
-          </div>
+        </div>
 
         <div class="form-row">
             <div class="form-column">
@@ -107,7 +108,7 @@
             </div>
         </div>
 
-        <button class="btn">Enregistrer les modifications</button>
+        <button class="btn" (click)="modifierLivreur()">Enregistrer les modifications</button>
     </div>
 </div>
 
@@ -154,33 +155,33 @@
 
 <!-- Script pour la gestion basique de l'interface (sans la partie AJAX) -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Affichage du nom du fichier sélectionné
-    document.getElementById('profileImage').addEventListener('change', function(e) {
-        const fileInput = e.target;
-        if (fileInput.files && fileInput.files.length > 0) {
-            const fileName = fileInput.files[0].name;
-            document.getElementById('selectedFileName').textContent = fileName;
-            
-            // Prévisualisation de l'image
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('profileImagePreview').src = e.target.result;
-            };
-            reader.readAsDataURL(fileInput.files[0]);
-        }
+    document.addEventListener('DOMContentLoaded', function () {
+        // Affichage du nom du fichier sélectionné
+        document.getElementById('profileImage').addEventListener('change', function (e) {
+            const fileInput = e.target;
+            if (fileInput.files && fileInput.files.length > 0) {
+                const fileName = fileInput.files[0].name;
+                document.getElementById('selectedFileName').textContent = fileName;
+
+                // Prévisualisation de l'image
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('profileImagePreview').src = e.target.result;
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        });
+
+        // Ces fonctions seraient à implémenter dans votre code TypeScript
+        // Ajout d'événements pour les boutons (sans la partie AJAX)
+        document.getElementById('uploadImageBtn').addEventListener('click', function () {
+            alert('Fonction de téléchargement à implémenter. Endpoint: /api/livreurs/profile/upload-image');
+        });
+
+        document.getElementById('removeImageBtn').addEventListener('click', function () {
+            alert('Fonction de suppression à implémenter. Endpoint: /api/livreurs/profile/remove-image');
+            // Réinitialisation de l'image à l'image par défaut
+            document.getElementById('profileImagePreview').src = '/assets/img/default-avatar.png';
+        });
     });
-    
-    // Ces fonctions seraient à implémenter dans votre code TypeScript
-    // Ajout d'événements pour les boutons (sans la partie AJAX)
-    document.getElementById('uploadImageBtn').addEventListener('click', function() {
-        alert('Fonction de téléchargement à implémenter. Endpoint: /api/livreurs/profile/upload-image');
-    });
-    
-    document.getElementById('removeImageBtn').addEventListener('click', function() {
-        alert('Fonction de suppression à implémenter. Endpoint: /api/livreurs/profile/remove-image');
-        // Réinitialisation de l'image à l'image par défaut
-        document.getElementById('profileImagePreview').src = '/assets/img/default-avatar.png';
-    });
-});
 </script>

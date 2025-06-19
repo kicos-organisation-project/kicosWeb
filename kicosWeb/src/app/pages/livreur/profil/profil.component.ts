@@ -3,6 +3,7 @@ import { environment } from '../../../../environments/environment';
 import { ApiService } from '../../../core/services/api.service';
 import { MessageService } from '../../../core/services/message.service';
 import { CommonModule } from '@angular/common';
+import L from 'leaflet';
 @Component({
   selector: 'app-profil',
   standalone: true,
@@ -13,23 +14,30 @@ import { CommonModule } from '@angular/common';
 export class ProfilComponent {
   baseUrl = environment.base_url;
   apiService = inject(ApiService);
-    messageService = inject(MessageService);
+  messageService = inject(MessageService);
   selectedFile: File | null = null;
 
   ngOnInit(): void {
-
     this.getInfolivreur();
-
   }
 
   profilLivreur: any;
+  longitude: any;
+  latitude: any;
   // infos profil livreur
   getInfolivreur() {
     this.apiService.getRequestWithSessionId(`${this.baseUrl}/profile`).subscribe(
       (response: any) => {
         this.profilLivreur = response.data;
+        this.latitude = parseFloat(this.profilLivreur?.livreur.latitude);
+        this.longitude = parseFloat(this.profilLivreur?.livreur.longitude);
+
+
+        console.log(this.latitude)
+        console.log(this.longitude)
 
         console.log(this.profilLivreur);
+        this.initMap();
       },
       (error: any) => {
         this.messageService.createMessage('error', error.error.message);
@@ -71,6 +79,37 @@ export class ProfilComponent {
       }
     );
   }
+
+  modifierLivreur() {
+    // Récupération des valeurs du formulaire
+    const profilData = {
+      latitude: (document.getElementById('latitude') as HTMLInputElement).value,
+      longitude: (document.getElementById('longitude') as HTMLInputElement).value,
+      estDisponible: (document.getElementById('availability') as HTMLInputElement).value,
+    };
+
+    // Appel à l'API pour modifier le profil du livreur
+    this.apiService.postWithSessionId(`${this.baseUrl}/profile/livreur`, profilData).subscribe(
+      (response: any) => {
+        console.log(response);
+        if (response.status_code === 422) {
+          this.messageService.createMessage('error', response.message);
+          return;
+        } else {
+          this.messageService.createMessage('success', response.message);
+          // Rafraîchir les données du profil
+          this.getInfolivreur();
+        }
+      },
+      (error: any) => {
+        this.messageService.createMessage('error', error.error.message);
+        this.messageService.createMessage('error', 'Une erreur est survenue lors de la modification du profil.');
+      }
+    );
+  }
+
+
+
 
   modifierPassword() {
     // Récupération des valeurs du formulaire
@@ -150,4 +189,71 @@ export class ProfilComponent {
     );
 
   }
+
+  map: L.Map | undefined;
+
+  initMap(): void {
+    if (!this.latitude || !this.longitude) {
+      console.error('Coordonnées invalides');
+      return;
+    }
+
+    this.map = L.map('map').setView([this.latitude, this.longitude], 10);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(this.map);
+
+    const marker = L.marker([this.latitude, this.longitude], {
+      draggable: true
+    }).addTo(this.map)
+      .bindPopup('Déplacez-moi pour changer la position')
+      .openPopup();
+
+    // 🔁 Quand le marqueur est déplacé
+    marker.on('dragend', (event: any) => {
+      const position = marker.getLatLng();
+      this.latitude = position.lat;
+      this.longitude = position.lng;
+
+      console.log('Nouvelle position :', this.latitude, this.longitude);
+
+      marker.getPopup()?.setContent(
+        `Nouvelle position :<br>Lat: ${this.latitude.toFixed(5)}, Lng: ${this.longitude.toFixed(5)}`
+      ).openOn(this.map!);
+    });
+  }
+
+  marker: L.Marker | undefined;
+  getCurrentLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          this.latitude = position.coords.latitude;
+          this.longitude = position.coords.longitude;
+
+          // Mise à jour de la vue de la carte
+          if (this.map) {
+            this.map.setView([this.latitude, this.longitude], 15);
+
+            // Déplace le marqueur existant ou en crée un nouveau
+            if (this.marker) {
+              this.marker.setLatLng([this.latitude, this.longitude]);
+            } else {
+              this.marker = L.marker([this.latitude, this.longitude], { draggable: true }).addTo(this.map);
+            }
+
+            this.marker.bindPopup(`Ma position actuelle`).openPopup();
+          }
+        },
+        (error) => {
+          console.error('Erreur lors de la géolocalisation', error);
+        }
+      );
+    } else {
+      alert("La géolocalisation n'est pas supportée par ce navigateur.");
+    }
+  }
+
+
 }
