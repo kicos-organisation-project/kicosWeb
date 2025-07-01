@@ -863,7 +863,7 @@ export class ValidatorCore {
    static verifInputFonction(inputValue: any, fieldName: string, options: ValidationOptions = {}) {
     const {
       minLength = 2,
-      regex = /^[a-zA-Z]+$/,
+      regex = /^[a-zA-ZÀ-ÖØ-öø-ÿ]+([ -][a-zA-ZÀ-ÖØ-öø-ÿ]+)*\s*$/,
       required = true,
       requiredMessage = `Le ${fieldName} est obligatoire.`,
       regexMessage = `Le ${fieldName} contient des caractères non autorisés.`,

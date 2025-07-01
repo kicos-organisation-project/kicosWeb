@@ -113,10 +113,10 @@ export class GestionLivreurComponent {
 
       switch (controlName) {
         case 'firstName':
-          options = { regex: /^[a-zA-Z]+$/, regexMessage: 'Le prénom ne doit contenir que des lettres.' };
+          options = { regex: /^[a-zA-ZÀ-ÖØ-öø-ÿ]+([ -][a-zA-ZÀ-ÖØ-öø-ÿ]+)*\s*$/, regexMessage: 'Le prénom ne doit contenir que des lettres.' };
           break;
         case 'lastName':
-          options = { regex: /^[a-zA-Z]+$/, regexMessage: 'Le nom ne doit contenir que des lettres.' };
+          options = { regex: /^[a-zA-ZÀ-ÖØ-öø-ÿ]+([ -][a-zA-ZÀ-ÖØ-öø-ÿ]+)*\s*$/, regexMessage: 'Le nom ne doit contenir que des lettres.' };
           break;
         case 'phoneNumber':
           options = { regex: /^\+\d{1,4}\d{7,14}$/, regexMessage: 'Le numéro de téléphone doit contenir exactement 13 chiffres.' };
@@ -162,8 +162,20 @@ export class GestionLivreurComponent {
   error: any;
   // ajouter livreur
   addLivreur() {
+
+    const formValue = this.LivreurForm.value;
+
+    const dataToSend = {
+      firstName: formValue.firstName,
+      lastName: formValue.lastName,
+      password: formValue.password,
+      // password_confirm: formValue.password_confirm,
+      licence_driver_number: formValue.licence_driver_number,
+      phoneNumber: formValue.phoneNumber,
+      email: formValue.email
+    };
     // Envoyer la requête POST avec FormData
-    this.apiService.postWithSessionId(`${this.baseUrl}/livreur`, this.LivreurForm.value).subscribe(
+    this.apiService.postWithSessionId(`${this.baseUrl}/livreur`, dataToSend).subscribe(
       (response: any) => {
         console.log(response.status_code);
         if (response.status_code === 422) {
@@ -220,7 +232,7 @@ export class GestionLivreurComponent {
       ...formValue,
       is_livreur_externe: formValue.is_livreur_externe === 'true' ? 1 : 0
     };
-    this.apiService.postWithSessionId(`${this.baseUrl}/admin/livreurs/${this.id_livreur}/update`,dataToSend ).subscribe(
+    this.apiService.postWithSessionId(`${this.baseUrl}/admin/livreurs/${this.id_livreur}/update`, dataToSend).subscribe(
       (response: any) => {
         console.log(response);
         if (response.status_code === 422) {

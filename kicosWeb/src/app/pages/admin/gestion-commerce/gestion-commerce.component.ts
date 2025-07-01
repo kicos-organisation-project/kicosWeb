@@ -179,10 +179,10 @@ export class GestionCommerceComponent implements OnInit {
 
       switch (controlName) {
         case 'firstName':
-          options = { regex: /^[a-zA-Z]+$/, regexMessage: 'Le prénom ne doit contenir que des lettres.' };
+          options = { regex: /^[a-zA-ZÀ-ÖØ-öø-ÿ]+([ -][a-zA-ZÀ-ÖØ-öø-ÿ]+)*\s*$/, regexMessage: 'Le prénom ne doit contenir que des lettres.' };
           break;
         case 'lastName':
-          options = { regex: /^[a-zA-Z]+$/, regexMessage: 'Le nom ne doit contenir que des lettres.' };
+          options = { regex: /^[a-zA-ZÀ-ÖØ-öø-ÿ]+([ -][a-zA-ZÀ-ÖØ-öø-ÿ]+)*\s*$/, regexMessage: 'Le nom ne doit contenir que des lettres.' };
           break;
         case 'nom_partenaire':
           options = { regex: /^[\p{L}\p{N}\s.,!?-]+$/u, regexMessage: 'Le nom du partenaire contient des caractères non autorisés.' };

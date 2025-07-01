@@ -172,18 +172,7 @@
           </div>
         </div>
 
-        <!-- Photo livreur-->
-        <div class="mb-3">
-          <label for="photoLivreur" class="mb-1">Photo</label>
-          <input accept="image/*" name="photo_Livreur" class="form-control w-full py-1 inputPhoto" id="photoLivreur"
-            type="file">
-          <!-- Si vous avez besoin de validation pour la photo -->
-          <div *ngIf="LivreurForm.get('photo_Livreur')?.invalid && LivreurForm.get('photo_Livreur')?.touched"
-            class="text-danger">
-            {{ LivreurForm.get('photo_Livreur')?.errors?.['invalid'] ? 'Le format de la photo est invalide.' : 'La
-            photo est obligatoire.' }}
-          </div>
-        </div>
+        
 
         <!-- Password Confirm -->
         <div class="form-group mb-3 inputP">
