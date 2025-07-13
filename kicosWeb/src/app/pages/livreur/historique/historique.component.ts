@@ -6,11 +6,11 @@ import { PaginatorModule } from 'primeng/paginator';
 import { ApiService } from '../../../core/services/api.service';
 import { MessageService } from '../../../core/services/message.service';
 import { environment } from '../../../../environments/environment';
-
+import { SkeletonModule } from 'primeng/skeleton';
 @Component({
   selector: 'app-historique',
   standalone: true,
-  imports: [TabViewModule, TableModule, DialogModule, PaginatorModule],
+  imports: [TabViewModule, TableModule, DialogModule, PaginatorModule, SkeletonModule],
   templateUrl: './historique.component.html',
   styleUrl: './historique.component.css'
 })
@@ -28,6 +28,9 @@ export class HistoriqueComponent {
   // Injection de dépendances
   apiService = inject(ApiService);
   messageService = inject(MessageService);
+
+  isLoading: boolean = true; // Par défaut, le chargement est actif
+
 
   ngOnInit(): void {
     this.getInfolivreur();
@@ -52,8 +55,8 @@ export class HistoriqueComponent {
 
 
   historiqueLivraisons: any;
-  livraisonPending:any
-  livraisonDelivered:any
+  livraisonPending: any
+  livraisonDelivered: any
   // Liste des historique-livraisons
   listehistoriquelivraisons() {
     // On fait appel a l'api pour lister les historique-livraisons
@@ -61,8 +64,10 @@ export class HistoriqueComponent {
       (response: any) => {
         console.log("liste des historique livraisons", response.data);
         this.historiqueLivraisons = response.data;
-        this.livraisonPending = this.historiqueLivraisons.filter((history:any)=>history.livraison_status === 'pending');
-        this.livraisonDelivered = this.historiqueLivraisons.filter((history:any)=>history.livraison_status === 'delivered');
+        this.livraisonPending = this.historiqueLivraisons.filter((history: any) => history.livraison_status === 'pending');
+        this.livraisonDelivered = this.historiqueLivraisons.filter((history: any) => history.livraison_status === 'delivered');
+        this.isLoading = false; // Désactivez le chargement une fois les données chargées
+
       },
       (error: any) => {
         console.log(error)

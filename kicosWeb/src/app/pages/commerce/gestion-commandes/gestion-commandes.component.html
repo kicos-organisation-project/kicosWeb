@@ -18,7 +18,19 @@
             </div>
         </div>
     </div>
+@if (isLoading) {
+  <!-- Skeleton pendant le chargement -->
+  <div class="row ">
+    <!-- Skeleton pour le titre -->
+    <p-skeleton width="100%" height="1.5rem" class="mb-2"></p-skeleton><br>
+    <!-- Skeleton pour la description -->
+    <p-skeleton width="100%" height="0.6rem" class="mb-2 mt-2"></p-skeleton>
+    <p-skeleton width="100%" height="0.6rem" class="mb-2 mt-2"></p-skeleton>
+    <p-skeleton width="100%" height="0.6rem" class="mb-2 mt-2"></p-skeleton>
+    <p-skeleton width="100%" height="0.6rem" class="mb-2 mt-2"></p-skeleton>
+  </div>
 
+  } @else {
     <!-- Liste des commandes  -->
     @if (listecommandes.length) {
     <p-table [value]="listecommandes" [paginator]="true" [rows]="5" [tableStyle]="{ 'min-width': '50rem'}"
@@ -51,7 +63,7 @@
     }
     @else {
     <p class="text-center fs-5 fw-bold">Aucun commande enregistré pour le moment </p>
-    }
+    }}
 </div>
 
 <p-dialog header="Détail Commande" [modal]="true" [(visible)]="visible"

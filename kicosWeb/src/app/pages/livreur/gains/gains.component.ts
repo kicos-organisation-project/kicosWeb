@@ -5,16 +5,17 @@ import { ApiService } from '../../../core/services/api.service';
 import { MessageService } from '../../../core/services/message.service';
 import { environment } from '../../../../environments/environment';
 import { CommonModule } from '@angular/common';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-gains',
   standalone: true,
-  imports: [PaginatorModule, DialogModule, CommonModule],
+  imports: [PaginatorModule, DialogModule, CommonModule,SkeletonModule],
   templateUrl: './gains.component.html',
   styleUrl: './gains.component.css'
 })
 export class GainsComponent {
-   cdr = inject(ChangeDetectorRef);
+  cdr = inject(ChangeDetectorRef);
 
   // les varaibles utilisees
   first: number = 0;
@@ -28,10 +29,13 @@ export class GainsComponent {
   getPaginatedPartners(): any[] {
     return this.gaingainsApproveds.slice(this.first, this.first + this.rows);
   }
- 
+
   // Injection de dépendances
   apiService = inject(ApiService);
   messageService = inject(MessageService);
+
+    isLoading: boolean = true; // Par défaut, le chargement est actif
+
 
   ngOnInit(): void {
     this.getInfolivreur();
@@ -65,7 +69,7 @@ export class GainsComponent {
       (response: any) => {
         console.log("liste des gains", response.data);
         this.gains = response.data;
-         this.gaingainsApproveds = this.gains.transactions
+        this.gaingainsApproveds = this.gains.transactions
           .filter((transaction: any) => transaction.status === 'approved')
           .map((transaction: any) => ({
             ...transaction,
@@ -78,6 +82,8 @@ export class GainsComponent {
           }));
 
         console.log(this.gaingainsApproveds);
+        this.isLoading = false; // Désactivez le chargement une fois les données chargées
+
 
       },
       (error: any) => {

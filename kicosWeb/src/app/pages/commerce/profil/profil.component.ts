@@ -64,6 +64,7 @@ export class ProfilComponent {
           this.messageService.createMessage('success', response.message);
           // Rafraîchir les données du profil
           this.getInfolivreur();
+           window.location.reload();
         }
       },
       (error: any) => {
@@ -94,6 +95,7 @@ export class ProfilComponent {
           (document.getElementById('new_password') as HTMLInputElement).value = '';
           (document.getElementById('new_password_confirmation') as HTMLInputElement).value = '';
           this.getInfolivreur();
+           window.location.reload();
         }
       },
       (error: any) => {
@@ -109,14 +111,14 @@ export class ProfilComponent {
       // Vérification de la taille du fichier (5MB max)
       const maxSize = 5 * 1024 * 1024; // 5MB en octets
       if (file.size > maxSize) {
-        alert('La taille du fichier dépasse la limite de 5MB');
+        this.messageService.createMessage('error', 'La taille du fichier dépasse la limite de 5MB');
         return;
       }
 
       // Vérification du type de fichier
       const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!validTypes.includes(file.type)) {
-        alert('Format de fichier non valide. Veuillez choisir un fichier JPG, PNG ou JPEG.');
+        this.messageService.createMessage('error', 'Format de fichier non valide. Veuillez choisir un fichier JPG, PNG ou JPEG.');
         return;
       }
 
@@ -126,7 +128,7 @@ export class ProfilComponent {
 
   uploadImage(): void {
     if (!this.selectedFile) {
-      alert('Veuillez sélectionner une image');
+      this.messageService.createMessage('error', 'Veuillez sélectionner une image');
       return;
     }
 
@@ -155,7 +157,7 @@ export class ProfilComponent {
   modifierInformationsRestaurant() {
 
      if (!this.selectedFile) {
-      alert('Veuillez sélectionner une image');
+      this.messageService.createMessage('error', 'Veuillez sélectionner une image');
       return;
     }
 
@@ -179,6 +181,7 @@ export class ProfilComponent {
           this.messageService.createMessage('success', 'Informations du restaurant mises à jour avec succès');
           // Rafraîchir les informations après la mise à jour
           this.getInfolivreur();
+           window.location.reload();
         }
       },
       (error: any) => {

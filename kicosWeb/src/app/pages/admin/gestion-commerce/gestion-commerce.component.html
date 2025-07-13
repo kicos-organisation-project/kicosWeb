@@ -106,10 +106,10 @@
                 <h6 class="mb-3">Téléphone : </h6>
                 <span>&nbsp;{{DetailPartenaire?.user.phoneNumber}}</span>
             </div>
-            <!-- <div class="d-flex">
-                <h6 class="mb-3">Numéro fixe : </h6>
-                <span>&nbsp;338402301</span>
-            </div> -->
+            <div class="d-flex">
+                <h6 class="mb-3">Statut : </h6>
+                <span>&nbsp;{{DetailPartenaire?.etat}}</span>
+            </div>
 
         </div>
     </div>
@@ -162,7 +162,7 @@
                 <!-- Horaire -->
                 <div class="mb-2">
                     <label for="horaire" class="mb-1">Horaire</label>
-                    <input type="text" class="input-field" id="horaire" formControlName="horaire">
+                    <input type="text" class="input-field" id="horaire" formControlName="horaire" placeholder="ex: 9h-22h">
                     <p *ngIf="error" class="text-danger">{{error.horaire}}</p>
                     <div *ngIf="PaternaireForm.get('horaire')?.invalid && PaternaireForm.get('horaire')?.touched"
                         class="text-danger">
@@ -254,7 +254,7 @@
 
         <!-- Photo établissement -->
         <div class="mb-2">
-            <label for="photoLivreur" class="mb-1">Photo</label>
+            <label for="photoLivreur" class="mb-1">Photo Établissement</label>
             <input accept="image/*" name="image" (change)="addPhotoEtablissement($event)"
                 class="form-control w-full py-1 inputPhoto" id="photoLivreur" type="file">
             <p *ngIf="error" class="text-danger">{{error.photoLivreur}}</p>

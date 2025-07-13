@@ -10,12 +10,13 @@ import { MessageService } from '../../../core/services/message.service';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { CommonModule } from '@angular/common';
+import { SkeletonModule } from 'primeng/skeleton';
 
 
 @Component({
   selector: 'app-gestion-paiements',
   standalone: true,
-  imports: [TabViewModule, TableModule, FormsModule, DialogModule,CommonModule],
+  imports: [TabViewModule, TableModule, FormsModule, DialogModule, CommonModule, SkeletonModule],
   templateUrl: './gestion-paiements.component.html',
   styleUrl: './gestion-paiements.component.css'
 })
@@ -30,6 +31,8 @@ export class GestionPaiementsComponent {
   demandeCommerce: any[] = [];
   demandeLivreur: any[] = [];
   demandes: any[] = [];
+  isLoading: boolean = true; // Par défaut, le chargement est actif
+
 
   ngOnInit() {
     this.listDemandePartenaire();
@@ -44,7 +47,9 @@ export class GestionPaiementsComponent {
         this.demandes = response.data;
         this.demandeCommerce = this.demandes.filter(item => item.type === 'partner_request');
         this.demandeLivreur = this.demandes.filter(item => item.type === 'livreur_payment');
-        console.log("liste des partenaires",  this.demandeCommerce );
+        console.log("liste des partenaires", this.demandeCommerce);
+        this.isLoading = false; // Désactivez le chargement une fois les données chargées
+
       },
       (error: any) => {
         this.messageService.createMessage('error', error.error.message);
@@ -63,16 +68,16 @@ export class GestionPaiementsComponent {
     this.visible = false;
   }
 
-  statusDemande:any;
-  reference:any;
+  statusDemande: any;
+  reference: any;
 
-  idDemande:any;
-  recupDemandeID(demande:any){
+  idDemande: any;
+  recupDemandeID(demande: any) {
     this.idDemande = demande.id;
     this.statusDemande = demande.status;
   }
 
-  resetvalueDemande(){
+  resetvalueDemande() {
     this.statusDemande = '';
     this.reference = '';
   }
@@ -80,7 +85,7 @@ export class GestionPaiementsComponent {
   // traiter demande paiements
   traiterDemandePaiement() {
     // On fait appel a l'api pour traiter les demande de paiement des  partenaires
-    this.apiService.postWithSessionId(`${this.baseUrl}/solde/process-payout/${this.idDemande}`, { status: this.statusDemande, motif: this.reference}).subscribe(
+    this.apiService.postWithSessionId(`${this.baseUrl}/solde/process-payout/${this.idDemande}`, { status: this.statusDemande, motif: this.reference }).subscribe(
       (response: any) => {
         console.log("Demande traitée", response);
         this.listDemandePartenaire();
@@ -96,7 +101,7 @@ export class GestionPaiementsComponent {
 
 
 
- 
+
 
   filterTerm: string = "";
   searchText: string = "";

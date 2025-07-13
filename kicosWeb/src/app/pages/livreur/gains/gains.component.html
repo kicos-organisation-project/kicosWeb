@@ -7,7 +7,31 @@
 
     <!-- les cartes -->
     <div class="row row-cols-1 mt-3 row-cols-md-2 g-4">
-        <!-- ----------------------------------------------- -->
+        @if (isLoading) {
+        <!-- Skeleton pendant le chargement -->
+        <div class="col" *ngFor="let item of [1,2,3,4,5,6]">
+            <div class="card">
+                <div class="contenu-globalCard">
+                    <div class="profil-noms">
+                        <div>
+                            <p-skeleton shape="circle" size="3rem"></p-skeleton>
+                        </div>
+                        <div style="width: 100%;">
+                            <p-skeleton width="70%" height="1.2rem" class="mb-2"></p-skeleton>
+                            <p-skeleton width="50%" height="0.8rem" class="mb-2"></p-skeleton>
+                            <div class="avertissement">
+                                <p-skeleton width="90%" height="0.7rem"></p-skeleton>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="prix">
+                        <p-skeleton width="60%" height="1.5rem"></p-skeleton>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        } @else {
         @if (gaingainsApproveds?.length) {
         <div class="col" *ngFor="let gain of getPaginatedPartners()">
             <div class="card">
@@ -38,7 +62,7 @@
         }
         @else {
         <p class="text-center fs-5 fw-bold">Aucun gain enregistré pour le moment </p>
-        }
+        }}
         <!-- -------------------------------------------------------------- -->
 
     </div>

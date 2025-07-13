@@ -64,6 +64,7 @@ export class ProfilComponent {
           this.messageService.createMessage('success', response.message);
           // Rafraîchir les données du profil
           this.getInfolivreur();
+           window.location.reload();
         }
       },
       (error: any) => {
@@ -94,6 +95,7 @@ export class ProfilComponent {
           (document.getElementById('new_password') as HTMLInputElement).value = '';
           (document.getElementById('new_password_confirmation') as HTMLInputElement).value = '';
           this.getInfolivreur();
+          window.location.reload();
         }
       },
       (error: any) => {
@@ -173,6 +175,8 @@ export class ProfilComponent {
           this.messageService.createMessage('success', 'Informations administratives mises à jour avec succès');
           // Rafraîchir les informations après la mise à jour
           this.getInfolivreur();
+          window.location.reload();
+
         }
       },
       (error: any) => {

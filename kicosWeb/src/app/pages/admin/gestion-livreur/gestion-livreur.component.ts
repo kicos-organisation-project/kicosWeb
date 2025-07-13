@@ -20,6 +20,8 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { RatingModule } from 'primeng/rating';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
+import { SkeletonModule } from 'primeng/skeleton';
+
 
 interface DeliveryPerformance {
   id: number;
@@ -34,7 +36,7 @@ interface DeliveryPerformance {
 @Component({
   selector: 'app-gestion-livreur',
   standalone: true,
-  imports: [TabViewModule, TableModule, ChartModule, FormsModule, CommonModule, ReactiveFormsModule, DialogModule, FormsModule, CardModule, ButtonModule, InputTextModule, ProgressBarModule, RatingModule, TagModule, ToastModule],
+  imports: [TabViewModule, TableModule, ChartModule, FormsModule, CommonModule, ReactiveFormsModule, DialogModule, FormsModule, CardModule, ButtonModule, InputTextModule, ProgressBarModule, RatingModule, TagModule, ToastModule, SkeletonModule],
   templateUrl: './gestion-livreur.component.html',
   styleUrl: './gestion-livreur.component.css'
 })
@@ -47,6 +49,8 @@ export class GestionLivreurComponent {
   fb = inject(FormBuilder)
 
   date: Date[] | undefined;
+  isLoading: boolean = true; // Par défaut, le chargement est actif
+
 
 
 
@@ -200,6 +204,8 @@ export class GestionLivreurComponent {
       (response: any) => {
         console.log(response.livreurs);
         this.ListeLivreur = response.livreurs;
+        this.isLoading = false; // Désactivez le chargement une fois les données chargées
+
       },
       (error: any) => {
         this.messageService.createMessage('error', error.error.message);

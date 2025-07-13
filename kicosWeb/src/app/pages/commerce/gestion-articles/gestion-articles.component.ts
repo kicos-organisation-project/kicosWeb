@@ -13,11 +13,12 @@ import { MessageService } from '../../../core/services/message.service';
 import { environment } from '../../../../environments/environment';
 import Swal from 'sweetalert2';
 import { ValidationOptions, ValidatorCore } from '../../../core/validators/validator';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-gestion-articles',
   standalone: true,
-  imports: [PaginatorModule, DialogModule, CommonModule, ReactiveFormsModule, FormsModule, RouterLink, RouterModule, TabViewModule, TableModule],
+  imports: [PaginatorModule, DialogModule, CommonModule, ReactiveFormsModule, FormsModule, RouterLink, RouterModule, TabViewModule, TableModule, SkeletonModule],
   templateUrl: './gestion-articles.component.html',
   styleUrl: './gestion-articles.component.css'
 })
@@ -44,6 +45,8 @@ export class GestionArticlesComponent {
   messageService = inject(MessageService);
   fb = inject(FormBuilder);
   cdr = inject(ChangeDetectorRef);
+  isLoading: boolean = true; // Par défaut, le chargement est actif
+
 
   // contrôler la visibilité du modal ajout article
   visibleAddArticle: boolean = false;
@@ -209,7 +212,7 @@ export class GestionArticlesComponent {
           this.error = response.errorList;
           return;
         } else
-          this.resetArticleForm();
+        this.resetArticleForm();
         this.closeModal();
         this.listeArticle();
         this.messageService.createMessage('success', response.message);
@@ -226,6 +229,8 @@ export class GestionArticlesComponent {
     this.apiService.get(`${this.baseUrl}/articles-partenaire`).subscribe(
       (response: any) => {
         this.listeArticles = response;
+        this.isLoading = false; // Désactivez le chargement une fois les données chargées
+
       },
       (error: any) => {
         console.log(error);
@@ -293,7 +298,7 @@ export class GestionArticlesComponent {
             this.messageService.createMessage('success', response.message);
           },
           (error: any) => {
-          this.messageService.createMessage('error', error.error.message);
+            this.messageService.createMessage('error', error.error.message);
 
           }
         )

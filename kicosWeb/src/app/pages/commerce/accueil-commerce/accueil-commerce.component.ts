@@ -29,6 +29,7 @@ export class AccueilCommerceComponent {
     this.commandeList();
     this.paiementstat();
     this.getInfolivreur();
+    this.listeArticle();
     
   }
 
@@ -43,7 +44,6 @@ export class AccueilCommerceComponent {
     // On fait appel a l'api pour lister les commandes
     this.apiService.getRequestWithSessionId(`${this.baseUrl}/commandes/partenaire`).subscribe(
       (response: any) => {
-        console.log("liste des commandes", response);
         this.nombreTotalCommande = response.data.length;
         let commandesPending = response.data.filter((commande: any) => commande.status === "pending");
         this.nombreCommandesPending = commandesPending.length;
@@ -69,7 +69,6 @@ export class AccueilCommerceComponent {
     this.apiService.getRequestWithSessionId(`${this.baseUrl}/user/earnings`).subscribe(
       (response: any) => {
         this.statPayement = response.data;
-        console.log(this.statPayement);
       },
       (error: any) => {
         this.messageService.createMessage('error', error.error.message);
@@ -84,7 +83,6 @@ export class AccueilCommerceComponent {
       (response: any) => {
         this.profilLivreur = response.data;
 
-        console.log(this.profilLivreur);
       },
       (error: any) => {
         this.messageService.createMessage('error', error.error.message);
@@ -93,14 +91,13 @@ export class AccueilCommerceComponent {
   }
 
   // liste article 
-  listeArticles: any[] = [];
+  listeArticles: number=0;
   listeArticle() {
     this.apiService.get(`${this.baseUrl}/articles-partenaire`).subscribe(
       (response: any) => {
         this.listeArticles = response.length;
       },
       (error: any) => {
-        console.log(error);
       }
     );
   }
