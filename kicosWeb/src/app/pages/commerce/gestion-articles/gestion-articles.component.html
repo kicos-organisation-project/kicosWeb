@@ -52,8 +52,10 @@
             <div class="card h-100">
                 <!-- <div class="new">New</div> -->
                 <div class="img">
-                    <img src="https://kiccos.terangacode.com/{{article.articleImage}}" class="card-img-top" alt="..." />
-                    <img src="{{article.articleImage}}" class="card-img-top" alt="..." />
+                    <div *ngIf="article.images && article.images.length > 0">
+                        <img [src]="'https://kiccos.terangacode.com/public' + article.images[0]" class="card-img-top"
+                            alt="Article image" />
+                    </div>
                 </div>
                 <div class="description">
                     <p class="categorie">{{article.articleName}}</p>
@@ -121,16 +123,17 @@
                     </div>
                 </div>
 
-                <!-- Photo article-->
-                <div class="mb-3 ">
-                    <label for="photoArticle" class="mb-1">Photo</label>
+
+                <!-- Photos article (multiple) -->
+                <div class="mb-3">
+                    <label for="photoArticle" class="mb-1">Photos</label>
                     <input accept="image/*" name="photo_Article" class="form-control w-full py-1 inputPhoto"
-                        id="photoArticle" type="file" (change)="addPhotoArticle($event)">
+                        id="photoArticle" type="file" multiple (change)="addPhotoArticle($event)">
                     <p *ngIf="error" class="text-danger">{{error.articleImage}}</p>
                     <div *ngIf="articleForm.get('articleImage')?.invalid && articleForm.get('articleImage')?.touched"
                         class="text-danger">
                         {{ articleForm.get('articleImage')?.errors?.['invalid'] ? 'Le format de l\'image est invalide.'
-                        : 'L\'image est obligatoire.' }}
+                        : 'Les images sont obligatoires.' }}
                     </div>
                 </div>
 
@@ -189,11 +192,17 @@
                     <input type="tel" class="input-field" id="prix_achat" formControlName="articlePrice">
                 </div>
 
-                <!-- Photo article-->
-                <div class="mb-3 ">
-                    <label for="photoArticle" class="mb-1">Photo</label>
-                    <input accept="image/*" name="photo_Article" class=" form-control w-full py-1 inputPhoto"
-                        id="photoArticle" type="file" (change)="addPhotoArticle($event)">
+                <!-- Photos article (multiple) -->
+                <div class="mb-3">
+                    <label for="photoArticle" class="mb-1">Photos</label>
+                    <input accept="image/*" name="photo_Article" class="form-control w-full py-1 inputPhoto"
+                        id="photoArticle" type="file" multiple (change)="addPhotoArticle($event)">
+                    <p *ngIf="error" class="text-danger">{{error.articleImage}}</p>
+                    <div *ngIf="articleForm.get('articleImage')?.invalid && articleForm.get('articleImage')?.touched"
+                        class="text-danger">
+                        {{ articleForm.get('articleImage')?.errors?.['invalid'] ? 'Le format de l\'image est invalide.'
+                        : 'Les images sont obligatoires.' }}
+                    </div>
                 </div>
 
                 <!-- Categorie -->

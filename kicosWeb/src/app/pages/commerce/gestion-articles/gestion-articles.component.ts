@@ -115,16 +115,48 @@ export class GestionArticlesComponent {
     );
   }
 
-  photo_article: any
-  // photo boutique
+  photos_article: any;
+
+  // Formats d'images acceptés
+  acceptedImageFormats = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+
+  // // Méthode pour ajouter plusieurs photos
   addPhotoArticle(event: any) {
     const fileInput = event.target;
     if (fileInput.files && fileInput.files.length > 0) {
-      this.photo_article = fileInput.files[0];
-      console.log(this.photo_article)
+      const selectedFiles = Array.from(fileInput.files) as File[];
+      this.photos_article = selectedFiles;
+      console.log('Photos sélectionnées:', this.photos_article);
     }
   }
 
+  // Validation d'un fichier image
+  validateImageFile(file: File): boolean {
+    // Vérifier l'extension du fichier (au cas où file.type échoue)
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+    if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+      this.error = { articleImage: 'Extension non supportée. Utilisez JPG, PNG, GIF ou WebP.' };
+      return false;
+    }
+
+    // Vérifier le type MIME (si disponible)
+    if (file.type && !this.acceptedImageFormats.includes(file.type)) {
+      this.error = { articleImage: 'Format d\'image non supporté. Utilisez JPG, PNG, GIF ou WebP.' };
+      return false;
+    }
+
+    // Vérifier la taille du fichier (max 5MB)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      this.error = { articleImage: 'La taille de l\'image ne doit pas dépasser 5MB.' };
+      return false;
+    }
+
+    this.error = null;
+    return true;
+  }
   validateField(controlName: string) {
     const control = this.articleForm.get(controlName);
     if (control) {
@@ -168,12 +200,12 @@ export class GestionArticlesComponent {
           };
           break;
 
-        case 'articleImage':
-          options = {
-            regex: /\.(jpg|jpeg|png|gif|webp)$/i,
-            regexMessage: 'Le fichier doit être une image (JPG, JPEG, PNG, GIF ou WEBP).'
-          };
-          break;
+        // case 'articleImage':
+        //   options = {
+        //     regex: /\.(jpg|jpeg|png|gif|webp)$/i,
+        //     regexMessage: 'Le fichier doit être une image (JPG, JPEG, PNG, GIF ou WEBP).'
+        //   };
+        //   break;
 
         default:
           options = {
@@ -200,9 +232,10 @@ export class GestionArticlesComponent {
     formData.append('categorie_id', this.articleForm.value.categorie_id || '');
 
     // Ajouter le fichier image s'il existe
-    if (this.photo_article) {
-      formData.append('articleImage', this.photo_article);
-    }
+    this.photos_article.forEach((photo: any, index: any) => {
+      formData.append(`images[${index}]`, photo);
+    });
+
     // Envoyer la requête POST 
     this.apiService.postWithSessionId(`${this.baseUrl}/add-article`, formData).subscribe(
       (response: any) => {
@@ -212,7 +245,7 @@ export class GestionArticlesComponent {
           this.error = response.errorList;
           return;
         } else
-        this.resetArticleForm();
+          this.resetArticleForm();
         this.closeModal();
         this.listeArticle();
         this.messageService.createMessage('success', response.message);
@@ -229,6 +262,7 @@ export class GestionArticlesComponent {
     this.apiService.get(`${this.baseUrl}/articles-partenaire`).subscribe(
       (response: any) => {
         this.listeArticles = response;
+        console.log(response);
         this.isLoading = false; // Désactivez le chargement une fois les données chargées
 
       },
@@ -248,9 +282,10 @@ export class GestionArticlesComponent {
     formData.append('categorie_id', this.articleForm.value.categorie_id || '');
 
     // Ajouter le fichier image s'il existe
-    if (this.photo_article) {
-      formData.append('articleImage', this.photo_article);
-    }
+    this.photos_article.forEach((photo: any, index: any) => {
+      formData.append(`images[${index}]`, photo);
+    });
+
     // On fait appel a l'api pour modifier les partenaires
     this.apiService.postWithSessionId(`${this.baseUrl}/articles/${this.id_article}`, formData).subscribe(
       (response: any) => {
