@@ -264,12 +264,13 @@ export class GestionArticlesComponent {
     this.apiService.get(`${this.baseUrl}/articles-partenaire`).subscribe(
       (response: any) => {
         this.listeArticles = response;
+        this.isLoading = false;
         console.log(response);
-        this.isLoading = false; // Désactivez le chargement une fois les données chargées
 
       },
       (error: any) => {
         console.log(error);
+        this.isLoading = false;
       }
     );
   }
@@ -333,6 +334,7 @@ export class GestionArticlesComponent {
               icon: "success"
             });
             this.messageService.createMessage('success', response.message);
+            window.location.reload();
           },
           (error: any) => {
             this.messageService.createMessage('error', error.error.message);
