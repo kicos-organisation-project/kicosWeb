@@ -4,7 +4,7 @@ import { DialogModule } from 'primeng/dialog';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormControl, } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink, RouterLinkActive, RouterModule, RouterOutlet } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { TabViewModule } from 'primeng/tabview';
 import { TableModule } from 'primeng/table';
 import { HttpClient } from '@angular/common/http';
@@ -14,11 +14,13 @@ import { environment } from '../../../../environments/environment';
 import Swal from 'sweetalert2';
 import { ValidationOptions, ValidatorCore } from '../../../core/validators/validator';
 import { SkeletonModule } from 'primeng/skeleton';
-
+import { CarouselModule } from 'primeng/carousel';
+import { ButtonModule } from 'primeng/button';
+import { TagModule } from 'primeng/tag';
 @Component({
   selector: 'app-gestion-articles',
   standalone: true,
-  imports: [PaginatorModule, DialogModule, CommonModule, ReactiveFormsModule, FormsModule, RouterLink, RouterModule, TabViewModule, TableModule, SkeletonModule],
+  imports: [PaginatorModule, DialogModule, CommonModule, ReactiveFormsModule, FormsModule, RouterModule, TabViewModule, TableModule, SkeletonModule,CarouselModule,ButtonModule,TagModule],
   templateUrl: './gestion-articles.component.html',
   styleUrl: './gestion-articles.component.css'
 })
@@ -341,7 +343,26 @@ export class GestionArticlesComponent {
     });
   }
 
+  visible: boolean = false;
+  showDialogDetailArticle() {
+    this.visible = true;
+  }
+
+  detailArticle: any;
+  detailAricle(id:any){
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/articles/${id}`).subscribe(
+        (response: any) => {
+          this.detailArticle = response.article;
+          console.log("Detail du articles", this.detailArticle);
+        },
+        (error: any) => {
+          console.log("Partie erreur");
+          console.log(error);
+
+        }
+      )
+  }
+
+
+
 }
-
-
-
