@@ -157,11 +157,11 @@ export class ProfilComponent {
   modifierInformationsAdmin() {
     // Récupération des valeurs du formulaire administratif
     const adminData = new FormData();
-     if (!this.selectedFile) {
-      alert('Veuillez sélectionner une image');
-      return;
-    }
-    adminData.append('avatar', this.selectedFile);
+    //  if (!this.selectedFile) {
+    //   alert('Veuillez sélectionner une image');
+    //   return;
+    // }
+    // adminData.append('avatar', this.selectedFile);
     adminData.append('address', (document.getElementById('address') as HTMLInputElement).value);
   
     // Appel à l'API pour modifier les informations administratives

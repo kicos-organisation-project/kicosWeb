@@ -53,7 +53,7 @@
                 <!-- <div class="new">New</div> -->
                 <div class="img">
                     <div *ngIf="article.images && article.images.length > 0">
-                        <img [src]="'https://kiccos.terangacode.com/public' + article.images[0].image"
+                        <img [src]="'https://kiccos.terangacode.com/public/' + article.images[0].image"
                             class="card-img-top" alt="Article image" />
                     </div>
                 </div>
@@ -253,7 +253,7 @@
                 <div class="carousel-inner">
                     <div *ngFor="let imagePath of detailArticle.images; let i = index" class="carousel-item"
                         [class.active]="i === 0">
-                        <img [src]="'https://kiccos.terangacode.com/public' + imagePath.image" class="d-block w-100"
+                        <img [src]="'https://kiccos.terangacode.com/public/' + imagePath.image" class="d-block w-100"
                             alt="Article image {{i + 1}}" style="height: auto; object-fit: cover; width:250px" />
                     </div>
                 </div>

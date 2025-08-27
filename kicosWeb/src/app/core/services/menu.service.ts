@@ -13,7 +13,7 @@ export class MenuService {
         { title: 'Gestion Partenaires', route: './admin/commerce', icon: 'bi bi-basket2', access: [] },
         { title: 'Gestion Livreurs', route: './admin/livreur', icon: 'pi pi-user', access: [] },
         { title: 'Gestion Catégories', route: './admin/categorie', icon: 'pi pi-objects-column', access: [] },
-        // { title: 'livraisons', route: './admin/commandes', icon: 'pi pi-truck', access: [] },
+        { title: 'Gestion clients', route: './admin/clients', icon: 'pi pi-users', access: [] },
         { title: 'Paiements', route: './admin/paie', icon: 'pi pi-money-bill', access: [] },
         { title: 'Profil', route: './admin/profil', icon: 'pi pi-user', access: [] }
 

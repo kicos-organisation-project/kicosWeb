@@ -163,23 +163,36 @@ export class GestionLivreurComponent {
     }
   }
 
+  photo_livreur: any
+  // photo boutique
+  addPhotoEtablissement(event: any) {
+    const fileInput = event.target;
+    if (fileInput.files && fileInput.files.length > 0) {
+      this.photo_livreur = fileInput.files[0];
+      console.log(this.photo_livreur)
+    }
+  }
+
   error: any;
   // ajouter livreur
   addLivreur() {
 
-    const formValue = this.LivreurForm.value;
+    // const formValue = this.LivreurForm.value;
+    const formData = new FormData();
 
-    const dataToSend = {
-      firstName: formValue.firstName,
-      lastName: formValue.lastName,
-      password: formValue.password,
-      // password_confirm: formValue.password_confirm,
-      licence_driver_number: formValue.licence_driver_number,
-      phoneNumber: formValue.phoneNumber,
-      email: formValue.email
-    };
+    // Ajouter le fichier image s'il existe
+    if (this.photo_livreur) {
+      formData.append('image', this.photo_livreur);
+    }
+    formData.append('firstName', this.LivreurForm.value.firstName || '');
+    formData.append('lastName', this.LivreurForm.value.lastName || '');
+    formData.append('licence_driver_number', this.LivreurForm.value.licence_driver_number || '');
+    formData.append('password', this.LivreurForm.value.password || '');
+    formData.append('phoneNumber', this.LivreurForm.value.phoneNumber || '');
+    formData.append('email', this.LivreurForm.value.email || '');
+    
     // Envoyer la requête POST avec FormData
-    this.apiService.postWithSessionId(`${this.baseUrl}/livreur`, dataToSend).subscribe(
+    this.apiService.postWithSessionId(`${this.baseUrl}/livreur`, formData).subscribe(
       (response: any) => {
         console.log(response.status_code);
         if (response.status_code === 422) {
@@ -260,7 +273,6 @@ export class GestionLivreurComponent {
     // Implémentez vos actions ici
     switch (action) {
       case 'view':
-        console.log(`Voir les détails de l'item ${rowId}`);
         // On fait appel a l'api pour afficher les détails d'un partenaire
         this.apiService.get(`${this.baseUrl}/livreur/${rowId}`).subscribe(
           (response: any) => {

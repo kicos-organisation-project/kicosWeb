@@ -31,8 +31,8 @@
   } @else {
   <!-- Liste des livreurs  -->
   @if (ListeLivreur.length) {
-  <p-table [value]="ListeLivreur" [paginator]="true" [rows]="3" [tableStyle]="{ 'min-width': '50rem'}"
-    [styleClass]="'paginationTacheCustom'" [rowsPerPageOptions]="[3, 5, 10, 15]">
+  <p-table [value]="ListeLivreur" [paginator]="true" [rows]="5" [tableStyle]="{ 'min-width': '50rem'}"
+    [styleClass]="'paginationTacheCustom'" [rowsPerPageOptions]="[5, 7, 10]">
     <ng-template pTemplate="header">
       <tr class="text-center py-2">
         <th class="">#</th>
@@ -203,6 +203,14 @@
               pas.</span>
           </div>
         </div>
+
+        <!-- Photo Livreur -->
+        <div class="mb-2">
+          <label for="photoLivreur" class="mb-1">Photo Livreur</label>
+          <input accept="image/*" name="image" (change)="addPhotoEtablissement($event)"
+            class="form-control w-full py-1 inputPhoto" id="photoLivreur" type="file">
+          <p *ngIf="error" class="text-danger">{{error.photoLivreur}}</p>
+        </div>
       </div>
     </div>
     <div class="d-flex justify-content-center">
@@ -217,10 +225,7 @@
   [style]="{ width: '60rem', height:'30rem', backgroundColor: '#F8F9FD'}" header="Détail livreur">
   <div id="details">
     <div class="image">
-      <!-- <img src="https://kiccos.terangacode.com/{{detailLivreur?.image}}" class="card-img-top" alt="..." /> -->
-      <img
-        src="https://img.freepik.com/premium-photo/happy-delivery-driver-handing-package_49921-7703.jpg?ga=GA1.1.107387725.1750243726&semt=ais_hybrid&w=740"
-        alt="">
+      <img src="https://kiccos.terangacode.com/public/{{detailLivreur?.image}}" class="card-img-top" alt="..." />
     </div>
     <div>
       <h4>{{detailLivreur?.nom_partenaire}}</h4>

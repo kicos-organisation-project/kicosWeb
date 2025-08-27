@@ -3,16 +3,6 @@
         <h1>Mon Profil</h1>
     </div>
 
-    <div class="profile-section">
-        <h2 class="section-title">Photo de Profil</h2>
-
-        <div class="profile-image-section">
-            <div class="profile-image-container">
-                <img class="profile-image" src="{{profilLivreur?.admin?.avatar}}" alt="Photo de profil"
-                    id="profileImagePreview">
-            </div>
-        </div>
-    </div>
 
     <div class="profile-section">
         <h2 class="section-title">Informations Personnelles</h2>
@@ -53,11 +43,6 @@
     <!-- Nouvelle section pour les informations Supplémentaire -->
     <div class="profile-section">
         <h2 class="section-title">Informations Supplémentaire</h2>
-
-        <div class="form-group">
-            <label for="avatar">Avatar</label>
-            <input type="file" id="avatar" accept="image/*" (change)="onFileSelected($event)">
-        </div>
 
         <div class="form-group">
             <label for="address">Adresse</label>

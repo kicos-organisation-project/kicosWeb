@@ -7,6 +7,7 @@ import { GestionLivreurComponent } from './gestion-livreur/gestion-livreur.compo
 import { GestionPaiementsComponent } from './gestion-paiements/gestion-paiements.component';
 import { CategorieComponent } from './categorie/categorie.component';
 import { ProfilComponent } from './profil/profil.component';
+import { GestionClientsComponent } from './gestion-clients/gestion-clients.component';
 
 
 
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'paie', component: GestionPaiementsComponent },
   { path: 'categorie', component: CategorieComponent },
   { path: 'profil', component: ProfilComponent },
+  { path: 'clients', component: GestionClientsComponent },
   { path: '**', redirectTo: 'dashboard', pathMatch: 'full' },
 
 ];

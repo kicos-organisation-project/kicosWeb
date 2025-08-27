@@ -2,11 +2,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './main/dashboard/dashboard.component';
 import { LoginComponent } from './main/login/login.component';
+import { ForgetPasswordComponent } from './main/forget-password/forget-password.component';
 
 
 const routes: Routes = [
     {path: '', component: LoginComponent},
     { path: 'login', component: LoginComponent },
+    { path: 'forgetPassword', component: ForgetPasswordComponent },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
 
     {

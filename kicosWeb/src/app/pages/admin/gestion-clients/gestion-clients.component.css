@@ -1,0 +1,297 @@
+::ng-deep .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  color: var(--bg-blue2);
+  border-color: var(--bg-blue2);
+  text-decoration: none;
+}
+
+::ng-deep .p-tabview .p-tabview-nav .p-tabview-nav-link {
+  color: var(--text-dark);
+  text-decoration: none;
+}
+
+.btn {
+  border-radius: 20px;
+  border: 1px solid;
+  /* padding: 8px 25px; */
+}
+
+.inputSearch {
+  border-radius: 20px;
+  border-left: none;
+}
+
+.btnValidate {
+  background-color: var(--bg-primary);
+  color: #fff;
+}
+
+.tdimg img {
+  width: 100%;
+  height: 10vh;
+  border-radius: 100%;
+}
+
+input:focus {
+  box-shadow: none;
+}
+
+form input {
+  border: none;
+  border-bottom: 1px solid;
+  border-radius: 0;
+  /* padding: 8px 0; */
+  margin-bottom: 16px;
+}
+
+::ng-deep .paginationTacheCustom .p-paginator-page.p-highlight {
+  background-color: var(--bg-primary);
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+ul li a {
+  text-decoration: none;
+  color: var(--text-dark);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+
+    @media (max-width: 480px) {
+      font-size: 1rem;
+    }
+  }
+
+  .month-selector {
+    display: flex;
+    align-items: center;
+    padding: 0.25rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 9999px;
+    gap: 0.5rem;
+
+    i {
+      font-size: 0.875rem;
+    }
+
+    @media (max-width: 480px) {
+      padding: 0.25rem 0.75rem;
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.charts-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
+}
+
+.chart {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  min-width: 180px;
+
+  @media (max-width: 768px) {
+    width: 190px;
+    height: 190px;
+  }
+
+  @media (max-width: 480px) {
+    width: 220px;
+    height: 220px;
+  }
+}
+
+.center-text {
+  position: absolute;
+  top: 25%;
+  left: 53%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  color: var(--text-dark);
+  white-space: nowrap;
+
+  @media (max-width: 768px) {
+    font-size: 1.125rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.25rem;
+  }
+}
+
+.spaceImage img {
+  width: 350px;
+}
+
+.actions-cell {
+  width: 100px;
+  text-align: center;
+  position: relative;
+}
+
+.speed-dial {
+  display: inline-block;
+  position: relative;
+}
+
+.speed-dial__button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg-neutral);
+  border: none;
+  color: var(--text-dark);
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.speed-dial__button:hover {
+  background: var(--bg-blue1);
+  color: var(--bg-white);
+}
+
+.speed-dial__items {
+  position: absolute;
+  top: 50%;
+  right: 100%; /* Changé de 'left: 100%' à 'right: 100%' */
+  display: flex;
+  gap: 0.5rem;
+  transform: translateY(-50%);
+  background: white;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 10;
+  animation: slideInFromRight 0.2s ease-out; /* Animation modifiée */
+}
+
+.speed-dial__items button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #f3f4f6;
+  color: #1f2937;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.speed-dial__items button:hover {
+  transform: scale(1.1);
+  background: #e5e7eb;
+}
+
+.speed-dial__items button::before {
+  content: attr(aria-label);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 0.5rem;
+  background: #1f2937;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.speed-dial__items button:hover::before {
+  opacity: 1;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+
+/* Modifier l'animation pour venir de la droite */
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(10px); /* Direction inversée */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+
+
+
+::ng-deep .p-tabview .p-tabview-panels {
+  background: transparent !important;
+  /* ou la couleur de votre choix */
+  border: none;
+  /* si vous voulez aussi enlever la bordure */
+}
+
+
+#details {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+  padding-bottom: 20px;
+}
+
+.image {
+  height: 330px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+img {
+  height: 100%;
+}
+
+
+.srch input {
+  padding: 5px 10px;
+  border: none;
+  box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px,
+      rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+  border-radius: 20px;
+  /* width: 250px; */
+}
