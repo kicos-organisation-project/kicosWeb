@@ -116,7 +116,7 @@
 </p-dialog>
 
 <!-- Modal ajout partenaire -->
-<p-dialog [modal]="true" [(visible)]="visibleAddCommerce"
+<p-dialog [modal]="true" [(visible)]="visibleAddCommerce" (onHide)="onDialogHide()"
     [style]="{ width: '60rem', height:'50rem', backgroundColor: '#F8F9FD'}" header="Ajout partenaire">
     <form novalidate [formGroup]="PaternaireForm" #ngForm="ngForm" (ngSubmit)="addPartenaire()">
         <div class="contentInput">
@@ -267,7 +267,7 @@
 </p-dialog>
 
 <!-- Modal modifier partenaire -->
-<p-dialog [modal]="true" [(visible)]="visibleUpdateCommerce"
+<p-dialog [modal]="true" [(visible)]="visibleUpdateCommerce" (onHide)="onDialogHide()"
     [style]="{ width: '40rem', height:'20rem', backgroundColor: '#F8F9FD'}" header="Modifier partenaire">
     <form novalidate [formGroup]="PaternaireForm" #ngForm="ngForm" (ngSubmit)="modifierPartenaire()">
         <div class="contentInput">

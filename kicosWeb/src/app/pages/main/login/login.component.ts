@@ -93,7 +93,7 @@ export class LoginComponent {
               this.router.navigate(['kicos/admin']);
             } else if (response.user.role === 'partenaire') {
               this.router.navigate(['kicos/commerce']);
-            } else {
+            } else if (response.user.role === 'livreur')  {
               this.router.navigate(['kicos/livreur']);
             }
             this.messageService.createMessage(

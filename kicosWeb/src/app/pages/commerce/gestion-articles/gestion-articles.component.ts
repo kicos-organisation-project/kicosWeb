@@ -20,7 +20,7 @@ import { TagModule } from 'primeng/tag';
 @Component({
   selector: 'app-gestion-articles',
   standalone: true,
-  imports: [PaginatorModule, DialogModule, CommonModule, ReactiveFormsModule, FormsModule, RouterModule, TabViewModule, TableModule, SkeletonModule,CarouselModule,ButtonModule,TagModule],
+  imports: [PaginatorModule, DialogModule, CommonModule, ReactiveFormsModule, FormsModule, RouterModule, TabViewModule, TableModule, SkeletonModule, CarouselModule, ButtonModule, TagModule],
   templateUrl: './gestion-articles.component.html',
   styleUrl: './gestion-articles.component.css'
 })
@@ -71,6 +71,10 @@ export class GestionArticlesComponent {
     this.resetArticleForm
   }
 
+  onDialogHide() {
+    this.resetArticleForm();
+  }
+
 
   ngOnInit(): void {
     this.listeCategorie();
@@ -103,6 +107,20 @@ export class GestionArticlesComponent {
       articlePrice: '',
       categorie_id: '',
     });
+    // Réinitialiser les états de validation
+    this.articleForm.markAsPristine();
+    this.articleForm.markAsUntouched();
+
+    // Réinitialiser chaque contrôle individuellement
+    Object.keys(this.articleForm.controls).forEach(key => {
+      const control = this.articleForm.get(key);
+      control?.markAsUntouched();
+      control?.markAsPristine();
+      control?.setErrors(null);
+    });
+
+    // Réinitialiser les erreurs personnalisées
+    this.error = null;
   }
 
 
@@ -258,12 +276,14 @@ export class GestionArticlesComponent {
     );
   }
 
+  listeArticleOriginal: any[] = [];
   // liste article 
   listeArticles: any[] = [];
   listeArticle() {
     this.apiService.get(`${this.baseUrl}/articles-partenaire`).subscribe(
       (response: any) => {
         this.listeArticles = response;
+        this.listeArticleOriginal = [...response];
         this.isLoading = false;
         console.log(response);
 
@@ -351,20 +371,52 @@ export class GestionArticlesComponent {
   }
 
   detailArticle: any;
-  detailAricle(id:any){
+  detailAricle(id: any) {
     this.apiService.getRequestWithSessionId(`${this.baseUrl}/articles/${id}`).subscribe(
-        (response: any) => {
-          this.detailArticle = response.article;
-          console.log("Detail du articles", this.detailArticle);
-        },
-        (error: any) => {
-          console.log("Partie erreur");
-          console.log(error);
+      (response: any) => {
+        this.detailArticle = response.article;
+        console.log("Detail du articles", this.detailArticle);
+      },
+      (error: any) => {
+        console.log("Partie erreur");
+        console.log(error);
 
-        }
-      )
+      }
+    )
   }
 
+  filterTerm: string = "";
+  searchText: string = "";
+  filterliste: any[] = [];
+  filterPartenaire() {
+    this.filterTerm = this.searchText.trim();
+
+    if (!this.filterTerm) {
+      // Si recherche vide, on montre tout
+      this.listeArticles = [...this.listeArticleOriginal];
+    } else {
+      // Sinon on filtre sur la liste originale
+      this.listeArticles = this.apiService.filterByTerm(
+        this.listeArticleOriginal, // Toujours filtrer sur la liste complète
+        this.filterTerm,
+        ['articleName', 'articlePrice', 'articleDescription']
+      );
+    }
+
+    this.first = 0; // On retourne à la première page
+  }
+  debounceTimer: any = null;
+
+  // Appelez cette méthode depuis votre input
+  onSearch() {
+    // Annuler le timer existant
+    clearTimeout(this.debounceTimer);
+
+    // Créer un nouveau timer
+    this.debounceTimer = setTimeout(() => {
+      this.filterPartenaire();
+    }, 300);
+  }
 
 
 }

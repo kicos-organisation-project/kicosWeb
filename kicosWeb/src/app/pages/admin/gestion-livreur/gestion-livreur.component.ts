@@ -190,7 +190,7 @@ export class GestionLivreurComponent {
     formData.append('password', this.LivreurForm.value.password || '');
     formData.append('phoneNumber', this.LivreurForm.value.phoneNumber || '');
     formData.append('email', this.LivreurForm.value.email || '');
-    
+
     // Envoyer la requête POST avec FormData
     this.apiService.postWithSessionId(`${this.baseUrl}/livreur`, formData).subscribe(
       (response: any) => {
@@ -211,12 +211,14 @@ export class GestionLivreurComponent {
     );
   }
 
+  listeLivreurOriginal: any[] = [];
   // lister livreur
   getLivreur() {
     this.apiService.getRequestWithSessionId(`${this.baseUrl}/livreur`).subscribe(
       (response: any) => {
         console.log(response.livreurs);
         this.ListeLivreur = response.livreurs;
+        this.listeLivreurOriginal = [...response.livreurs];
         this.isLoading = false; // Désactivez le chargement une fois les données chargées
 
       },
@@ -335,6 +337,20 @@ export class GestionLivreurComponent {
       phoneNumber: '',
       email: '',
     });
+    // Réinitialiser les états de validation
+    this.LivreurForm.markAsPristine();
+    this.LivreurForm.markAsUntouched();
+
+    // Réinitialiser chaque contrôle individuellement
+    Object.keys(this.LivreurForm.controls).forEach(key => {
+      const control = this.LivreurForm.get(key);
+      control?.markAsUntouched();
+      control?.markAsPristine();
+      control?.setErrors(null);
+    });
+
+    // Réinitialiser les erreurs personnalisées
+    this.error = null;
   }
 
   dataLivraison: any;
@@ -372,6 +388,11 @@ export class GestionLivreurComponent {
   closeModal() {
     this.visibleAddLivreur = false;
     this.visibleEditLivreur = false;
+    this.resetLivreurForm();
+  }
+
+  onDialogHide() {
+    this.resetLivreurForm();
   }
 
 
@@ -404,26 +425,19 @@ export class GestionLivreurComponent {
   filterTerm: string = "";
   searchText: string = "";
   filterliste: any[] = [];
-  filterLivreur() {
-    this.filterTerm = this.searchText;
+   filterLivreur() {
+    this.filterTerm = this.searchText.trim();
 
-    // Si le terme de recherche est vide, restaurer la liste complète
-    if (!this.filterTerm || this.filterTerm.trim() === '') {
-      this.getLivreur(); // Réinitialiser la liste
-      return;
-    }
-
-    // Sinon, filtrer normalement
-    this.filterliste = this.apiService.filterByTerm(
-      this.ListeLivreur,
-      this.filterTerm,
-      ['user.firstName', 'user.lastName', 'etat', 'user.phoneNumber', 'user.email']
-    );
-
-    if (this.filterliste.length === 0) {
-      this.getLivreur();
+    if (!this.filterTerm) {
+      // Si recherche vide, on montre tout
+      this.ListeLivreur = [...this.listeLivreurOriginal];
     } else {
-      this.ListeLivreur = this.filterliste;
+      // Sinon on filtre sur la liste originale
+      this.ListeLivreur = this.apiService.filterByTerm(
+        this.listeLivreurOriginal, // Toujours filtrer sur la liste complète
+        this.filterTerm,
+         ['user.firstName', 'user.lastName', 'etat', 'user.phoneNumber', 'user.email']
+      );
     }
   }
   debounceTimer: any;

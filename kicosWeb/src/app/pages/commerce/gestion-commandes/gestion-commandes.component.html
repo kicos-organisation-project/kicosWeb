@@ -3,7 +3,7 @@
 <div class="card border-0 p-4">
     <!-- Titre, recherche et ajout  -->
     <div class="d-flex justify-content-between mb-3">
-        <h5 class="fw-bold">Liste des commandes |</h5>
+        <h5 class="fw-bold">Liste des commandes </h5>
         <div class="search-and d-flex justify-content-between">
             <!-- Input de recherche  -->
             <div class="me-3">
@@ -13,7 +13,7 @@
                         <i class="pi pi-search"></i>
                     </span>
                     <input type="search" class="inputSearch form-control" aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-sm" placeholder="Rechercher">
+                        aria-describedby="inputGroup-sizing-sm" [(ngModel)]="searchText" (input)="onSearch()" placeholder="Rechercher">
                 </div>
             </div>
         </div>

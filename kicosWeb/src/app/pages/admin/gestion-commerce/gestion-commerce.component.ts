@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormControl, F
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { ValidationOptions,ValidatorCore } from '../../../core/validators/validator';
+import { ValidationOptions, ValidatorCore } from '../../../core/validators/validator';
 import { ApiService } from '../../../core/services/api.service';
 import { environment } from '../../../../environments/environment';
 import { MessageService } from '../../../core/services/message.service';
@@ -49,6 +49,7 @@ export class GestionCommerceComponent implements OnInit {
     this.rows = event.rows;
     this.cdr.detectChanges(); // Forcer la mise à jour de la vue
   }
+
   getPaginatedPartners(): any[] {
     return this.listePartenaire.slice(this.first, this.first + this.rows);
   }
@@ -103,6 +104,10 @@ export class GestionCommerceComponent implements OnInit {
     this.visible = false;
     this.visibleAddCommerce = false;
     this.visibleUpdateCommerce = false
+    this.resetFormPartenaire();
+  }
+
+  onDialogHide() {
     this.resetFormPartenaire();
   }
 
@@ -167,6 +172,20 @@ export class GestionCommerceComponent implements OnInit {
       type: '',
       image: ''
     });
+    // Réinitialiser les états de validation
+    this.PaternaireForm.markAsPristine();
+    this.PaternaireForm.markAsUntouched();
+
+    // Réinitialiser chaque contrôle individuellement
+    Object.keys(this.PaternaireForm.controls).forEach(key => {
+      const control = this.PaternaireForm.get(key);
+      control?.markAsUntouched();
+      control?.markAsPristine();
+      control?.setErrors(null);
+    });
+
+    // Réinitialiser les erreurs personnalisées
+    this.error = null;
   }
 
 
@@ -209,7 +228,7 @@ export class GestionCommerceComponent implements OnInit {
           options = { regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, regexMessage: 'Veuillez entrer une adresse email valide.' };
           break;
         case 'image':
-          options = { regex: /\.(jpg|jpeg|png|gif|bmp|webp)$/ , regexMessage:'Le fichier n\'est pas une image valide.'};
+          options = { regex: /\.(jpg|jpeg|png|gif|bmp|webp)$/, regexMessage: 'Le fichier n\'est pas une image valide.' };
           break;
         default:
           options = { regex: /^[a-zA-Z0-9]+$/, regexMessage: 'Ce champ ne doit contenir que des lettres et ou des chiffres.' };
@@ -247,12 +266,12 @@ export class GestionCommerceComponent implements OnInit {
     this.apiService.postWithSessionId(`${this.baseUrl}/partenaires`, formData).subscribe(
       (response: any) => {
         console.log(response);
-        if(response.status_code===422){
+        if (response.status_code === 422) {
           this.messageService.createMessage('error', response.message);
-          this.error = response.errorList; 
+          this.error = response.errorList;
           return;
-        }else
-        this.resetFormPartenaire();
+        } else
+          this.resetFormPartenaire();
         this.closeModal();
         this.listPartenaire();
         this.messageService.createMessage('success', response.message);
@@ -262,7 +281,8 @@ export class GestionCommerceComponent implements OnInit {
       }
     );
   }
-  
+
+  listePartenaireOriginal: any[] = [];
   // lister les partenaire
   listPartenaire() {
     // On fait appel a l'api pour lister les partenaires
@@ -270,6 +290,7 @@ export class GestionCommerceComponent implements OnInit {
       (response: any) => {
         console.log("liste des partenaires", response);
         this.listePartenaire = response.partenaires;
+        this.listePartenaireOriginal = [...response.partenaires];
         this.isLoading = false; // Désactivez le chargement une fois les données chargées
       },
       (error: any) => {
@@ -319,7 +340,7 @@ export class GestionCommerceComponent implements OnInit {
             this.messageService.createMessage('success', response.message);
           },
           (error: any) => {
-          this.messageService.createMessage('error', error.error.message);
+            this.messageService.createMessage('error', error.error.message);
 
           }
         )
@@ -333,11 +354,11 @@ export class GestionCommerceComponent implements OnInit {
     this.apiService.postWithSessionId(`${this.baseUrl}/admin/partenaires/${this.id_partenaire}/update`, this.PaternaireForm.value).subscribe(
       (response: any) => {
         console.log(response);
-        if(response.status_code===422){
+        if (response.status_code === 422) {
           this.messageService.createMessage('error', response.message);
           return;
-        }else
-        this.closeModal();
+        } else
+          this.closeModal();
         this.messageService.createMessage('success', response.message);
         this.listPartenaire();
         this.resetFormPartenaire();
@@ -349,38 +370,33 @@ export class GestionCommerceComponent implements OnInit {
     )
   }
 
-  filterTerm: string ="";
-  searchText: string ="";
+  filterTerm: string = "";
+  searchText: string = "";
   filterliste: any[] = [];
   filterPartenaire() {
-    this.filterTerm = this.searchText;
-    
-    // Si le terme de recherche est vide, restaurer la liste complète
-    if (!this.filterTerm || this.filterTerm.trim() === '') {
-      this.listPartenaire(); // Réinitialiser la liste
-      return;
-    }
-    
-    // Sinon, filtrer normalement
-    this.filterliste = this.apiService.filterByTerm(
-      this.listePartenaire, 
-      this.filterTerm, 
-      ['nom_partenaire', 'type', 'localisation']
-    );
-    
-    if (this.filterliste.length === 0) {
-      this.listPartenaire();
+    this.filterTerm = this.searchText.trim();
+
+    if (!this.filterTerm) {
+      // Si recherche vide, on montre tout
+      this.listePartenaire = [...this.listePartenaireOriginal];
     } else {
-      this.listePartenaire = this.filterliste;
+      // Sinon on filtre sur la liste originale
+      this.listePartenaire = this.apiService.filterByTerm(
+        this.listePartenaireOriginal, // Toujours filtrer sur la liste complète
+        this.filterTerm,
+        ['nom_partenaire', 'type', 'localisation']
+      );
     }
+
+    this.first = 0; // On retourne à la première page
   }
   debounceTimer: any = null;
-  
+
   // Appelez cette méthode depuis votre input
   onSearch() {
     // Annuler le timer existant
     clearTimeout(this.debounceTimer);
-    
+
     // Créer un nouveau timer
     this.debounceTimer = setTimeout(() => {
       this.filterPartenaire();

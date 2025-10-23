@@ -3,7 +3,7 @@
     <aside>
       <div class="logoWrapper mt-4">
         <div class="logo">
-          <img   *ngIf="!isSidebarVisible" src="../../../../assets/logo/logo.png" alt="logo">
+          <img *ngIf="!isSidebarVisible" src="../../../../assets/logo/logo.png" alt="logo">
           <strong class="text-center mx-2 titreLogo" *ngIf="isSidebarVisible">Kicos<span>Express</span> </strong>
         </div>
       </div>
@@ -30,7 +30,7 @@
         </div>
         <div class="d-flex justify-content-end ">
           @if(profilLivreur?.role=='livreur'){
-          <div >
+          <div>
             <div class="d-flex p-0 m-0 align-items-center headerIcon">
               <div class="notification-wrapper" *ngIf="profilLivreur?.role=='livreur'">
                 <div class="notification-bell">
@@ -79,17 +79,33 @@
           }
           <div class="mx-2">
             <div class="relative group dropdown">
-              <div class="flex items-center border-0 rounded-t-lg py-1 px-2 dropdown-toggle" type="button"
-                data-bs-toggle="dropdown">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_InUxO_6BhylxYbs67DY7-xF0TmEYPW4dQQ&s"
-                  class="photoUser">
-                {{profilLivreur?.firstName}} {{profilLivreur?.lastName}}
+              <div class="profil-dropdown d-flex align-items-center" data-bs-toggle="dropdown" type="button">
+                <!-- Image ou initiales -->
+                <ng-container *ngIf="profilLivreur?.image; else initiales">
+                  <img [src]="profilLivreur?.image" class="photoUser" alt="Photo profil">
+                </ng-container>
+
+                <ng-template #initiales>
+                  <div class="initiales-container">
+                    {{ getInitiales(profilLivreur?.firstName, profilLivreur?.lastName) }}
+                  </div>
+                </ng-template>
+
+                <!-- Nom + flèche -->
+                <div class="profil-info ms-2">
+                  <span class="profil-nom">
+                    {{ profilLivreur?.firstName }} {{ profilLivreur?.lastName }}
+                  </span>
+                  <i class="ms-1 bi bi-caret-down-fill text-muted" style="font-size: 10px;"></i>
+                </div>
               </div>
+
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item text-pointer" (click)="logout()">Se déconnecter</a></li>
               </ul>
             </div>
           </div>
+
         </div>
       </div>
     </header>
@@ -108,8 +124,7 @@
 <div class="sidebarWrapper" [ngClass]="{'show-sidebar': !isSidebarVisible, 'hide-sidebar': isSidebarVisible}">
   <div class="logoWrapper">
     <div class="logoSide d-flex justify-content-center">
-      <img *ngIf="!isSidebarVisible"
-        src="../../../../assets/logo/logo.png" alt="logo">
+      <img *ngIf="!isSidebarVisible" src="../../../../assets/logo/logo.png" alt="logo">
     </div>
     <span class="text-pointer closeSidebar" (click)="toggleSidebar()">
       <i class="bi bi-x-circle"></i>

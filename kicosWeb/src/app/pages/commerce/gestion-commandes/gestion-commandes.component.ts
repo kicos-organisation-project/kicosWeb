@@ -46,6 +46,7 @@ export class GestionCommandesComponent {
     this.commandeList();
   }
 
+  listecommandesOriginal:any[] = [];
   // lister les commandes
   commandeList() {
     // On fait appel a l'api pour lister les commandes
@@ -53,6 +54,7 @@ export class GestionCommandesComponent {
       (response: any) => {
         console.log("liste des commandes", response);
         this.listecommandes = response.data;
+        this.listecommandesOriginal = [...response.data];
         this.isLoading = false; // Désactivez le chargement une fois les données chargées
 
       },
@@ -86,4 +88,38 @@ export class GestionCommandesComponent {
       }
     )
   }
+
+  filterTerm: string = "";
+  searchText: string = "";
+  filterliste: any[] = [];
+  filterPartenaire() {
+    this.filterTerm = this.searchText.trim();
+
+    if (!this.filterTerm) {
+      // Si recherche vide, on montre tout
+      this.listecommandes = [...this.listecommandesOriginal];
+    } else {
+      // Sinon on filtre sur la liste originale
+      this.listecommandes = this.apiService.filterByTerm(
+        this.listecommandesOriginal, // Toujours filtrer sur la liste complète
+        this.filterTerm,
+        ['client_name', 'reference', 'status']
+      );
+    }
+
+    this.first = 0; // On retourne à la première page
+  }
+  debounceTimer: any = null;
+
+  // Appelez cette méthode depuis votre input
+  onSearch() {
+    // Annuler le timer existant
+    clearTimeout(this.debounceTimer);
+
+    // Créer un nouveau timer
+    this.debounceTimer = setTimeout(() => {
+      this.filterPartenaire();
+    }, 300);
+  }
+
 }

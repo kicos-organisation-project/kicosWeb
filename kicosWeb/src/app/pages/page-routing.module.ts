@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './main/dashboard/dashboard.component';
 import { LoginComponent } from './main/login/login.component';
 import { ForgetPasswordComponent } from './main/forget-password/forget-password.component';
+import { AuthGuard } from '../core/guards/auth.guard';
 
 
 const routes: Routes = [
@@ -12,7 +13,7 @@ const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
 
     {
-        path: 'kicos', component: DashboardComponent, children: [
+        path: 'kicos', component: DashboardComponent, canActivate: [AuthGuard],  children: [
             { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) },
             { path: 'commerce', loadChildren: () => import('./commerce/commerce.module').then(m => m.CommerceModule) },
             { path: 'livreur', loadChildren: () => import('./livreur/livreur.module').then(m => m.LivreurModule) },

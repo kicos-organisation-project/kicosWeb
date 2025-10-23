@@ -2,7 +2,7 @@
     <!-- recherche et ajout -->
     <div class="search-add">
         <div class="srch">
-            <input type="text" placeholder="recherchez ici ..." />
+            <input type="text" [(ngModel)]="searchText" (input)="onSearch()" placeholder="recherchez ici ..." />
         </div>
         <div class="add" (click)="showDialogAddArticle()">
             <button class="btn btnValidate"><i class="bi bi-plus">Ajouter</i></button>
@@ -93,7 +93,7 @@
 
 
 <!-- Modal ajout article -->
-<p-dialog [modal]="true" [(visible)]="visibleAddArticle"
+<p-dialog [modal]="true" [(visible)]="visibleAddArticle" (onHide)="onDialogHide()"
     [style]="{ width: '60rem', height:'50rem', backgroundColor: '#F8F9FD'}" header="Ajout Article">
     <form novalidate [formGroup]="articleForm" #ngForm="ngForm" (ngSubmit)="ajouterArticle()">
         <div class="">
@@ -175,7 +175,7 @@
 </p-dialog>
 
 <!-- Modal modifier article -->
-<p-dialog [modal]="true" [(visible)]="visibleUpdateArticle"
+<p-dialog [modal]="true" [(visible)]="visibleUpdateArticle" (onHide)="onDialogHide()"
     [style]="{ width: '60rem', height:'50rem', backgroundColor: '#F8F9FD'}" header="Ajout Article">
     <form novalidate [formGroup]="articleForm" #ngForm="ngForm" (ngSubmit)="modifierArticle()">
         <div class="">

@@ -53,7 +53,7 @@ export class HistoriqueComponent {
     );
   }
 
-
+  historiqueLivraisonsOriginal: any[] = [];
   historiqueLivraisons: any;
   livraisonPending: any
   livraisonDelivered: any
@@ -64,6 +64,7 @@ export class HistoriqueComponent {
       (response: any) => {
         console.log("liste des historique livraisons", response.data);
         this.historiqueLivraisons = response.data;
+        this.historiqueLivraisonsOriginal = [...response.data];
         this.livraisonPending = this.historiqueLivraisons.filter((history: any) => history.livraison_status === 'pending');
         this.livraisonDelivered = this.historiqueLivraisons.filter((history: any) => history.livraison_status === 'delivered');
         this.isLoading = false; // Désactivez le chargement une fois les données chargées
@@ -74,6 +75,39 @@ export class HistoriqueComponent {
         this.messageService.createMessage('error', error.error.message);
       }
     );
+  }
+
+  filterTerm: string = "";
+  searchText: string = "";
+  filterliste: any[] = [];
+  filterPartenaire() {
+    this.filterTerm = this.searchText.trim();
+
+    if (!this.filterTerm) {
+      // Si recherche vide, on montre tout
+      this.historiqueLivraisons = [...this.historiqueLivraisonsOriginal];
+    } else {
+      // Sinon on filtre sur la liste originale
+      this.historiqueLivraisons = this.apiService.filterByTerm(
+        this.historiqueLivraisonsOriginal, // Toujours filtrer sur la liste complète
+        this.filterTerm,
+        ['livraison_price', 'livraison_status']
+      );
+    }
+
+    this.first = 0; // On retourne à la première page
+  }
+  debounceTimer: any = null;
+
+  // Appelez cette méthode depuis votre input
+  onSearch() {
+    // Annuler le timer existant
+    clearTimeout(this.debounceTimer);
+
+    // Créer un nouveau timer
+    this.debounceTimer = setTimeout(() => {
+      this.filterPartenaire();
+    }, 300);
   }
 
 }

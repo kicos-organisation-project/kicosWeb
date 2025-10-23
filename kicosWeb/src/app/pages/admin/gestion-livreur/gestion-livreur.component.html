@@ -2,7 +2,7 @@
 <div class="card border-0 p-4">
   <!-- Titre, recherche et ajout  -->
   <div class="d-flex justify-content-between mb-3">
-    <h5 class="fw-bold">Liste des livreurs |</h5>
+    <h5 class="fw-bold">Liste des livreurs </h5>
     <div class="search-and d-flex justify-content-between">
       <!-- Input de recherche  -->
       <div class="me-3">
@@ -98,7 +98,7 @@
 </div>
 
 <!-- Modal ajout livreur -->
-<p-dialog [modal]="true" [(visible)]="visibleAddLivreur"
+<p-dialog [modal]="true" [(visible)]="visibleAddLivreur" (onHide)="onDialogHide()"
   [style]="{ width: '60rem', height:'50rem', backgroundColor: '#F8F9FD'}" header="Ajout Livreur">
   <form novalidate [formGroup]="LivreurForm" #ngForm="ngForm" (ngSubmit)="addLivreur()">
     <div class="contentInput">
@@ -264,7 +264,7 @@
 </p-dialog>
 
 <!-- Modal modifier livreur -->
-<p-dialog [modal]="true" [(visible)]="visibleEditLivreur"
+<p-dialog [modal]="true" [(visible)]="visibleEditLivreur" (onHide)="onDialogHide()"
   [style]="{ width: '40rem', height:'20rem', backgroundColor: '#F8F9FD'}" header="Modifier Livreur">
   <form novalidate [formGroup]="LivreurForm" #ngForm="ngForm" (ngSubmit)="updateLivreur()">
     <div class="contentInput">

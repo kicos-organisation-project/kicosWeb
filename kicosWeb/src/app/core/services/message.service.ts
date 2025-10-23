@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
-import { ToastModule } from 'primeng/toast';
 import Swal, { SweetAlertIcon } from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MessageService {
-  // constructor(private message: any) {}
 
-  // Permet d'afficher un massage (succes, error, warning ...)
   createMessage(type: SweetAlertIcon, message: string): void {
-    // const customClass = this.getCustomClassForType(type);
-
+    // Fermer les alertes existantes
+    Swal.close();
+    
     Swal.fire({
       position: 'top-end',
       toast: true,
@@ -22,23 +20,23 @@ export class MessageService {
       timerProgressBar: true,
       background: '#3C476D',
       color: '#fff',
-      // customClass: {
-      //   container: customClass, // Utilisation de la classe CSS personnalisée
-      //   title: 'my-toast-title',
-      //   timerProgressBar: 'my-progress-bar',
-      // },
+      // Important pour le positionnement
+      heightAuto: false,
+      // S'assurer qu'il soit au-dessus des modals
+      willOpen: () => {
+        // Créer un container avec z-index élevé
+        const container = document.createElement('div');
+        container.className = 'swal2-container swal2-center swal2-backdrop-show';
+        container.style.zIndex = '99999';
+      },
+      didOpen: (toast) => {
+        // Forcer le z-index
+        toast.style.zIndex = '100000';
+        const backdrop = document.querySelector('.swal2-container');
+        if (backdrop) {
+          (backdrop as HTMLElement).style.zIndex = '99999';
+        }
+      }
     });
-  }
-
-  // Retourne la classe CSS en fonction du type de message
-  private getCustomClassForType(type: SweetAlertIcon): string {
-    switch (type) {
-      case 'success':
-        return 'toast-success';
-      case 'error':
-        return 'toast-error';
-      default:
-        return 'toast-default'; // Classe par défaut
-    }
   }
 }
