@@ -164,6 +164,7 @@ export class DashboardComponent {
     this.apiService.getRequestWithSessionId(`${this.baseUrl}/profile`).subscribe(
       (response: any) => {
         this.profilLivreur = response.data;
+        console.log(this.profilLivreur)
       },
       (error: any) => {
         this.messageService.createMessage('error', error.error.message);

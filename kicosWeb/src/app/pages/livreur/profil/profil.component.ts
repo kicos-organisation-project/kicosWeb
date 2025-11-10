@@ -43,7 +43,6 @@ export class ProfilComponent {
         console.log(this.longitude)
 
         console.log(this.profilLivreur);
-        this.initMap();
       },
       (error: any) => {
         this.messageService.createMessage('error', error.error.message);
@@ -116,9 +115,6 @@ export class ProfilComponent {
     );
   }
 
-
-
-
   modifierPassword() {
     // Récupération des valeurs du formulaire
     const profilData = {
@@ -182,7 +178,7 @@ export class ProfilComponent {
 
     this.apiService.postWithSessionId(`${this.baseUrl}/profile/image`, formData).subscribe(
       (response: any) => {
-        console.log(response);
+        console.log('response renvoyer par api',response);
         if (response.status_code === 422) {
           this.messageService.createMessage('error', response.message);
           return;
@@ -200,39 +196,7 @@ export class ProfilComponent {
 
   }
 
-  map: L.Map | undefined;
 
-  initMap(): void {
-    if (!this.latitude || !this.longitude) {
-      console.error('Coordonnées invalides');
-      return;
-    }
-
-    this.map = L.map('map').setView([this.latitude, this.longitude], 10);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(this.map);
-
-    const marker = L.marker([this.latitude, this.longitude], {
-      draggable: true
-    }).addTo(this.map)
-      .bindPopup('Déplacez-moi pour changer la position')
-      .openPopup();
-
-    // 🔁 Quand le marqueur est déplacé
-    marker.on('dragend', (event: any) => {
-      const position = marker.getLatLng();
-      this.latitude = position.lat;
-      this.longitude = position.lng;
-
-      console.log('Nouvelle position :', this.latitude, this.longitude);
-
-      marker.getPopup()?.setContent(
-        `Nouvelle position :<br>Lat: ${this.latitude.toFixed(5)}, Lng: ${this.longitude.toFixed(5)}`
-      ).openOn(this.map!);
-    });
-  }
 
   marker: L.Marker | undefined;
   getCurrentLocation() {
@@ -241,20 +205,6 @@ export class ProfilComponent {
         (position) => {
           this.latitude = position.coords.latitude;
           this.longitude = position.coords.longitude;
-
-          // Mise à jour de la vue de la carte
-          if (this.map) {
-            this.map.setView([this.latitude, this.longitude], 15);
-
-            // Déplace le marqueur existant ou en crée un nouveau
-            if (this.marker) {
-              this.marker.setLatLng([this.latitude, this.longitude]);
-            } else {
-              this.marker = L.marker([this.latitude, this.longitude], { draggable: true }).addTo(this.map);
-            }
-
-            this.marker.bindPopup(`Ma position actuelle`).openPopup();
-          }
         },
         (error) => {
           console.error('Erreur lors de la géolocalisation', error);

@@ -81,9 +81,19 @@
             <div class="relative group dropdown">
               <div class="profil-dropdown d-flex align-items-center" data-bs-toggle="dropdown" type="button">
                 <!-- Image ou initiales -->
-                <ng-container *ngIf="profilLivreur?.image; else initiales">
-                  <img [src]="profilLivreur?.image" class="photoUser" alt="Photo profil">
+                <ng-container
+                  *ngIf="profilLivreur?.role === 'livreur' && profilLivreur?.livreur?.image; else checkPartenaire">
+                  <img src="https://kiccos.terangacode.com/public/{{profilLivreur?.livreur?.image}}"
+                    class="photoUser" alt="Photo profil">
                 </ng-container>
+
+                <ng-template #checkPartenaire>
+                  <ng-container
+                    *ngIf="profilLivreur?.role === 'partenaire' && profilLivreur?.partenaire?.image_url; else initiales">
+                    <img src="https://kiccos.terangacode.com/public/{{profilLivreur?.partenaire?.image_url}}"
+                      class="photoUser" alt="Photo profil">
+                  </ng-container>
+                </ng-template>
 
                 <ng-template #initiales>
                   <div class="initiales-container">

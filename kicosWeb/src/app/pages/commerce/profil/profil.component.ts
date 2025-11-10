@@ -163,7 +163,7 @@ export class ProfilComponent {
 
     // Récupération des valeurs du formulaire restaurant
     const restaurantData = new FormData();
-    restaurantData.append('image_url', this.selectedFile);
+    restaurantData.append('image', this.selectedFile);
     restaurantData.append('nom_partenaire', (document.getElementById('nom_partenaire') as HTMLInputElement).value);
     restaurantData.append('localisation', (document.getElementById('localisation') as HTMLInputElement).value);
     restaurantData.append('description', (document.getElementById('description') as HTMLTextAreaElement).value);
