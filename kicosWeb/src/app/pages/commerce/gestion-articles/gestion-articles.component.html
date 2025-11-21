@@ -63,7 +63,7 @@
                 </div>
                 <div class="price-detail">
                     <div class="price">
-                        <p>{{article.articlePrice}}</p>
+                       <p>{{ article.articlePrice | number:'1.0-0' }} FCFA</p>
                     </div>
                     <div class="detail">
                         <span (click)="showDialogUpdateArticle(article)"><a><i
