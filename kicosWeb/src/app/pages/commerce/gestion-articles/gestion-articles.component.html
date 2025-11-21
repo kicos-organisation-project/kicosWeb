@@ -58,8 +58,9 @@
                     </div>
                 </div>
                 <div class="description">
-                    <p class="categorie">{{article.articleName}}</p>
+                    <p class="categorie text-capitalize">{{article.categorie.titre}}</p>
                     <p class="nom">{{article.articleName}}</p>
+                    <p class="">{{ article.articleDescription | slice:0:50 }}{{ article.articleDescription.length > 150 ? '...' : '' }}</p>
                 </div>
                 <div class="price-detail">
                     <div class="price">

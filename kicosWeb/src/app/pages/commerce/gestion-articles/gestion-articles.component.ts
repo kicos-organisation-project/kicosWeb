@@ -305,10 +305,11 @@ export class GestionArticlesComponent {
     formData.append('categorie_id', this.articleForm.value.categorie_id || '');
 
     // Ajouter le fichier image s'il existe
-    this.photos_article.forEach((photo: any, index: any) => {
-      formData.append(`images[${index}]`, photo);
-    });
-
+    if (this.photos_article) {
+      this.photos_article.forEach((photo: any, index: any) => {
+        formData.append(`images[${index}]`, photo);
+      });
+    }
     // On fait appel a l'api pour modifier les partenaires
     this.apiService.postWithSessionId(`${this.baseUrl}/articles/${this.id_article}`, formData).subscribe(
       (response: any) => {
