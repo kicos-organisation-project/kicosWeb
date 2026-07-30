@@ -1,0 +1,51 @@
+.pwa-install-banner {
+  position: sticky;
+  top: 0;
+  z-index: 2000;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #1c1917;
+  color: #fff;
+  font-family: var(--font-sans, "DM Sans", sans-serif);
+}
+
+.pwa-install-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 200px;
+}
+
+.pwa-install-copy span {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.pwa-install-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.pwa-btn-primary,
+.pwa-btn-secondary {
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pwa-btn-primary {
+  background: #f18401;
+  color: #fff;
+}
+
+.pwa-btn-secondary {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}

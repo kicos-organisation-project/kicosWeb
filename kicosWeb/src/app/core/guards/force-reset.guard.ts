@@ -2,8 +2,7 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
-
-export const AuthGuard = () => {
+export const ForceResetGuard = () => {
   const auth = inject(AuthService);
   const router = inject(Router);
 
@@ -12,11 +11,10 @@ export const AuthGuard = () => {
     return false;
   }
 
-  if (auth.mustResetPassword()) {
-    router.navigate(['/force-reset']);
+  if (!auth.mustResetPassword()) {
+    router.navigate([auth.getDefaultHomeRoute()]);
     return false;
   }
 
   return true;
 };
- 

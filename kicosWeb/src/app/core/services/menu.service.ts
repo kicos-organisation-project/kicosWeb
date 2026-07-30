@@ -21,6 +21,7 @@ export class MenuService {
       commerce: [
         { title: 'Tableau de bord', route: './commerce/dashboard', icon: 'pi  pi-home', access: [] },
         { title: 'Gestion des Articles', route: './commerce/articles', icon: 'bi  bi-bag', access: [] },
+        { title: 'Mes catégories', route: './commerce/categories', icon: 'pi pi-objects-column', access: [] },
         { title: 'Commandes', route: './commerce/commandes', icon: 'pi pi-cart-arrow-down', access: [] },
         { title: 'Demande paiement', route: './commerce/paiement', icon: 'pi pi-wallet', access: [] },
         { title: 'Profil', route: './commerce/profil', icon: 'pi pi-user', access: [] }

@@ -11,13 +11,20 @@
           {{detailArticle?.articleDescription}}
         </p>
 
+        <div class="kpi-grid" *ngIf="articleKpis">
+          <div class="kpi-item"><span class="kpi-value">{{articleKpis.unites_vendues}}</span><span class="kpi-label">Unités vendues</span></div>
+          <div class="kpi-item"><span class="kpi-value">{{articleKpis.commandes}}</span><span class="kpi-label">Commandes</span></div>
+          <div class="kpi-item"><span class="kpi-value">{{articleKpis.note_moyenne ?? '—'}}</span><span class="kpi-label">Note moyenne</span></div>
+          <div class="kpi-item"><span class="kpi-value">{{articleKpis.chiffre_affaires_estime | number}}</span><span class="kpi-label">CA estimé</span></div>
+        </div>
+
         <div class="d-flex">
           <h6 class="mb-3">Prix d’achat : </h6>
           <span>&nbsp;{{detailArticle?.articlePrice}}</span>
         </div>
         <div class="d-flex" style="color: var(--bg-primary);">
           <h6 class="mb-3">Catégorie : </h6>
-          <span>&nbsp;Fruits & Légumes</span>
+          <span>&nbsp;{{detailArticle?.categorie?.titre || '—'}}</span>
         </div>
       </div>
     </div>

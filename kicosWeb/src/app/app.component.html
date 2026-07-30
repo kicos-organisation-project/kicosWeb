@@ -1,1 +1,11 @@
-<router-outlet/>
+<div class="pwa-install-banner" *ngIf="pwaInstall.canInstall">
+  <div class="pwa-install-copy">
+    <strong>Installer Kicos</strong>
+    <span>Accès rapide multi-appareils, hors ligne et notifications.</span>
+  </div>
+  <div class="pwa-install-actions">
+    <button type="button" class="pwa-btn-secondary" (click)="pwaInstall.dismiss()">Plus tard</button>
+    <button type="button" class="pwa-btn-primary" (click)="pwaInstall.install()">Installer</button>
+  </div>
+</div>
+<router-outlet />

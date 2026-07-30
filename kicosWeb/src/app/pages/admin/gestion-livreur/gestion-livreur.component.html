@@ -38,7 +38,7 @@
         <th class="">#</th>
         <th class="">Nom Complet </th>
         <th class="">Téléphone</th>
-        <th class="">Licence</th>
+        <th class="">Plaque</th>
         <th class="">Etat</th>
         <th class="">Action</th>
       </tr>
@@ -49,7 +49,7 @@
         <td class="text-center text-xs px-3" style="width: 20%;">{{ livreur.user.firstName}} {{
           livreur.user.lastName}}</td>
         <td class="text-center text-xs" style="width: 15%;">{{ livreur.user.phoneNumber}}</td>
-        <td class="text-center text-xs" style="width: 15%;">{{ livreur.licence_driver_number}}</td>
+        <td class="text-center text-xs" style="width: 15%;">{{ livreur.plaque_immatriculation}}</td>
         <td class="text-center text-xs" style="width: 20%;">{{ livreur.etat}}</td>
         <td class="actions-cell">
           <div class="speed-dial" [class.speed-dial--active]="openMenuId === livreur.id">
@@ -105,7 +105,7 @@
       <div class="">
         <!-- nom -->
         <div class="mb-3">
-          <label class="mb-2" for="lastName">Nom </label>
+          <label class="mb-2" for="lastName">Nom <span class="req">*</span></label>
           <input id="lastName" type="text" class="input-field" formControlName="lastName">
           <p *ngIf="error" class="text-danger">{{error.lastName}}</p>
           <div *ngIf="LivreurForm.get('lastName')?.invalid && LivreurForm.get('lastName')?.touched" class="text-danger">
@@ -126,33 +126,16 @@
           </div>
         </div>
 
-        <!-- Password -->
-        <div class="form-group mb-3 inputP">
-          <label for="password" class="textLabel">Mot de passe</label>
-          <input [type]="showPassword ? 'text' : 'password'" class="input-field" id="password"
-            formControlName="password">
-          <button type="button" (click)="togglePassword()" class="iconEye">
-            <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-          </button>
-          <p *ngIf="error" class="text-danger">{{error.password}}</p>
-          <div *ngIf="LivreurForm.get('password')?.invalid && LivreurForm.get('password')?.touched" class="text-danger">
-            {{ LivreurForm.get('password')?.errors?.['invalid'] ? 'Le mot de passe est invalide.IL doit contenir au
-            moins une majuscule, une minuscule, un chiffre et un caractère spécial.' : 'Le mot de passe
-            est obligatoire.' }}
-          </div>
-        </div>
-
-        <!-- Numéro licence -->
+        <!-- Identifiants temporaires envoyés par email automatiquement -->
+        <p class="text-muted small mb-3">Un mot de passe temporaire sera envoyé par email. Réinitialisation obligatoire à la première connexion.</p>
         <div class="mb-2">
-          <label for="licence" class="mb-1">Numéro licence</label>
-          <input type="text" class="input-field" id="licence" formControlName="licence_driver_number">
-          <p *ngIf="error" class="text-danger">{{error.licence_driver_number}}</p>
+          <label for="licence" class="mb-1">Plaque d'immatriculation <span class="req">*</span></label>
+          <input type="text" class="input-field" id="licence" formControlName="plaque_immatriculation" placeholder="ex: DK-1234-AB">
+          <p *ngIf="error" class="text-danger">{{error.plaque_immatriculation}}</p>
           <div
-            *ngIf="LivreurForm.get('licence_driver_number')?.invalid && LivreurForm.get('licence_driver_number')?.touched"
+            *ngIf="LivreurForm.get('plaque_immatriculation')?.invalid && LivreurForm.get('plaque_immatriculation')?.touched"
             class="text-danger">
-            {{ LivreurForm.get('licence_driver_number')?.errors?.['invalid'] ? 'Le numéro de licence est invalide.'
-            :
-            'Le numéro de licence est obligatoire.' }}
+            La plaque d'immatriculation est obligatoire.
           </div>
         </div>
       </div>
@@ -160,7 +143,7 @@
       <div class="">
         <!-- prénom -->
         <div class="mb-3">
-          <label class="mb-2" for="firstName">Prénom </label>
+          <label class="mb-2" for="firstName">Prénom <span class="req">*</span></label>
           <input id="firstName" type="text" class="input-field" formControlName="firstName">
           <p *ngIf="error" class="text-danger">{{error.firstName}}</p>
           <div *ngIf="LivreurForm.get('firstName')?.invalid && LivreurForm.get('firstName')?.touched"
@@ -183,26 +166,8 @@
 
 
 
-        <!-- Password Confirm -->
-        <div class="form-group mb-3 inputP">
-          <label for="password_confirm" class="textLabel">Confirmer mot de passe</label>
-          <input [type]="showPassword ? 'text' : 'password'" class="input-field" id="password_confirm"
-            formControlName="password_confirm">
-          <button type="button" (click)="togglePassword()" class="iconEye">
-            <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-          </button>
-          <div *ngIf="LivreurForm.get('password_confirm')?.invalid && LivreurForm.get('password_confirm')?.touched"
-            class="text-danger">
-            <span *ngIf="LivreurForm.get('password_confirm')?.errors?.['invalid']">La confirmation du mot de passe
-              est
-              invalide.</span>
-            <span *ngIf="LivreurForm.get('password_confirm')?.errors?.['required']">La confirmation du mot de passe
-              est
-              obligatoire.</span>
-            <span *ngIf="LivreurForm.get('password_confirm')?.errors?.['match']">Les mots de passe ne correspondent
-              pas.</span>
-          </div>
-        </div>
+        <!-- Identifiants temporaires envoyés par email automatiquement -->
+        <p class="text-muted small mb-3">Un mot de passe temporaire sera envoyé par email. Réinitialisation obligatoire à la première connexion.</p>
 
         <!-- Photo Livreur -->
         <div class="mb-2">
@@ -233,13 +198,20 @@
         {{detailLivreur?.description}}
       </p>
 
-      <div class="d-flex">
-        <h6 class="mb-3">Nom Complet : </h6>
-        <span>&nbsp;{{detailLivreur?.user.firstName}} {{detailLivreur?.user.lastName}}</span>
+      <div class="kpi-grid" *ngIf="livreurKpis">
+        <div class="kpi-item"><span class="kpi-value">{{livreurKpis.total_livraisons}}</span><span class="kpi-label">Livraisons</span></div>
+        <div class="kpi-item"><span class="kpi-value">{{livreurKpis.livraisons_livrees}}</span><span class="kpi-label">Livrées</span></div>
+        <div class="kpi-item"><span class="kpi-value">{{livreurKpis.taux_reussite}}%</span><span class="kpi-label">Taux</span></div>
+        <div class="kpi-item"><span class="kpi-value">{{livreurKpis.gains_totaux | number}}</span><span class="kpi-label">Gains</span></div>
+        <div class="kpi-item"><span class="kpi-value">{{ livreurKpis.disponible ? 'Oui' : 'Non' }}</span><span class="kpi-label">Disponible</span></div>
       </div>
       <div class="d-flex">
-        <h6 class="mb-3">Licence : </h6>
-        <span>&nbsp;{{detailLivreur?.licence_driver_number}}</span>
+        <h6 class="mb-3">Nom Complet : </h6>
+        <span>&nbsp;{{detailLivreur?.user?.firstName}} {{detailLivreur?.user?.lastName}}</span>
+      </div>
+      <div class="d-flex">
+        <h6 class="mb-3">Plaque : </h6>
+        <span>&nbsp;{{detailLivreur?.plaque_immatriculation}}</span>
       </div>
       <div class="d-flex">
         <h6 class="mb-3">Etat: </h6>
@@ -270,15 +242,13 @@
     <div class="contentInput">
 
       <div class="mb-2">
-        <label for="licence" class="mb-1">Numéro licence</label>
-        <input type="text" class="input-field" id="licence" formControlName="licence_driver_number">
-        <p *ngIf="error" class="text-danger">{{error.licence_driver_number}}</p>
+        <label for="licence" class="mb-1">Plaque d'immatriculation <span class="req">*</span></label>
+        <input type="text" class="input-field" id="licence" formControlName="plaque_immatriculation">
+        <p *ngIf="error" class="text-danger">{{error.plaque_immatriculation}}</p>
         <div
-          *ngIf="LivreurForm.get('licence_driver_number')?.invalid && LivreurForm.get('licence_driver_number')?.touched"
+          *ngIf="LivreurForm.get('plaque_immatriculation')?.invalid && LivreurForm.get('plaque_immatriculation')?.touched"
           class="text-danger">
-          {{ LivreurForm.get('licence_driver_number')?.errors?.['invalid'] ? 'Le numéro de licence est invalide.'
-          :
-          'Le numéro de licence est obligatoire.' }}
+          La plaque d'immatriculation est obligatoire.
         </div>
       </div>
 

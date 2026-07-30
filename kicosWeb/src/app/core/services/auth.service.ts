@@ -112,6 +112,43 @@ export class AuthService {
     return localStorage.getItem(this.tokenKey);
   }
 
+  getUserInfo(): Record<string, any> | null {
+    const raw = localStorage.getItem('userInfo');
+    if (!raw) {
+      return null;
+    }
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  }
+
+  mustResetPassword(): boolean {
+    const user = this.getUserInfo();
+    return !!user?.must_reset_password;
+  }
+
+  setMustResetPassword(value: boolean): void {
+    const user = this.getUserInfo() || {};
+    user['must_reset_password'] = value;
+    localStorage.setItem('userInfo', JSON.stringify(user));
+  }
+
+  getDefaultHomeRoute(): string {
+    const role = this.getUserInfo()?.['role'];
+    if (role === 'admin') {
+      return '/kicos/admin';
+    }
+    if (role === 'partenaire') {
+      return '/kicos/commerce';
+    }
+    if (role === 'livreur') {
+      return '/kicos/livreur';
+    }
+    return '/login';
+  }
+
   // Récupère le temps d'expiration du jeton
   private getTokenExpiration(): number | null {
     const expiration = localStorage.getItem(this.tokenExpirationKey);
@@ -119,10 +156,11 @@ export class AuthService {
   }
 
   // Efface la session
-  private clearSession() {
+    private clearSession() {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem('userInfo');
     localStorage.removeItem('authToken');
+    localStorage.removeItem('token');
     localStorage.removeItem('tokenExpiration');
   }
 

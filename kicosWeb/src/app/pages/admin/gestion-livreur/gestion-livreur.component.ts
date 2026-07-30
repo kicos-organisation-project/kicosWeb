@@ -57,25 +57,15 @@ export class GestionLivreurComponent {
   // Le formulaire ajout livreur
   LivreurForm = this.fb.group({
     firstName: new FormControl('', Validators.required),
-    lastName: new FormControl('', [ValidatorCore.nameValidator("Le motif du depense ", 10, 100)]),
-    password: new FormControl('', [
-      ValidatorCore.passWordValidator('Le mot de passe', 8),
-    ]),
-    password_confirm: new FormControl('', [
-      ValidatorCore.passWordValidator('Le mot de passe de confirmation', 8),
-    ]),
-    licence_driver_number: new FormControl('', [
-      ValidatorCore.isValidAlphNumValidator("Le licence", 10, 10),
-    ]),
-    phoneNumber: new FormControl('', [
-      ValidatorCore.nameValidator('Le numero de telephone', 10, 100),
-    ]),
-    email: new FormControl('', [
-      ValidatorCore.nameValidator('L email', 10, 100),
-    ]),
+    lastName: new FormControl('', Validators.required),
+    plaque_immatriculation: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z0-9-]+$/)]),
+    phoneNumber: new FormControl(''),
+    email: new FormControl('', [Validators.email]),
     etat: new FormControl(''),
-    is_livreur_externe: new FormControl(''),
+    is_livreur_externe: new FormControl(false),
   });
+
+  livreurKpis: any = null;
 
   openMenuId: number | null = null;
 
@@ -125,7 +115,7 @@ export class GestionLivreurComponent {
         case 'phoneNumber':
           options = { regex: /^\+\d{1,4}\d{7,14}$/, regexMessage: 'Le numéro de téléphone doit contenir exactement 13 chiffres.' };
           break;
-        case 'licence_driver_number':
+        case 'plaque_immatriculation':
           options = { regex: /^[\p{L}\p{N}\s.,!?-]+$/u, regexMessage: 'La description contient des caractères non autorisés.' };
           break;
         case 'password':
@@ -186,10 +176,10 @@ export class GestionLivreurComponent {
     }
     formData.append('firstName', this.LivreurForm.value.firstName || '');
     formData.append('lastName', this.LivreurForm.value.lastName || '');
-    formData.append('licence_driver_number', this.LivreurForm.value.licence_driver_number || '');
-    formData.append('password', this.LivreurForm.value.password || '');
+    formData.append('plaque_immatriculation', this.LivreurForm.value.plaque_immatriculation || '');
     formData.append('phoneNumber', this.LivreurForm.value.phoneNumber || '');
     formData.append('email', this.LivreurForm.value.email || '');
+    formData.append('is_livreur_externe', String(this.LivreurForm.value.is_livreur_externe || false));
 
     // Envoyer la requête POST avec FormData
     this.apiService.postWithSessionId(`${this.baseUrl}/livreur`, formData).subscribe(
@@ -236,7 +226,7 @@ export class GestionLivreurComponent {
     this.LivreurForm.patchValue({
       firstName: livreur.user.firstName,
       lastName: livreur.user.lastName,
-      licence_driver_number: livreur.licence_driver_number,
+      plaque_immatriculation: livreur.plaque_immatriculation,
       is_livreur_externe: livreur.is_livreur_externe,
       phoneNumber: livreur.user.phoneNumber,
       email: livreur.user.email,
@@ -279,7 +269,11 @@ export class GestionLivreurComponent {
         this.apiService.get(`${this.baseUrl}/livreur/${rowId}`).subscribe(
           (response: any) => {
             this.detailLivreur = response;
-            console.log("Detail du partenaire", this.detailLivreur);
+            this.livreurKpis = null;
+            this.apiService.getRequestWithSessionId(`${this.baseUrl}/livreur/${rowId}/stats`).subscribe(
+              (stats: any) => { this.livreurKpis = stats.kpis; },
+              () => { this.livreurKpis = null; }
+            );
           },
           (error: any) => {
             this.messageService.createMessage('error', error.error.message);
@@ -332,11 +326,12 @@ export class GestionLivreurComponent {
     this.LivreurForm.reset({
       firstName: '',
       lastName: '',
-      password: '',
-      licence_driver_number: '',
+      plaque_immatriculation: '',
       phoneNumber: '',
       email: '',
+      is_livreur_externe: false,
     });
+    this.livreurKpis = null;
     // Réinitialiser les états de validation
     this.LivreurForm.markAsPristine();
     this.LivreurForm.markAsUntouched();

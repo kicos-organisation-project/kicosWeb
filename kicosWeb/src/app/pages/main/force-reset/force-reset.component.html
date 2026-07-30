@@ -1,0 +1,33 @@
+<div class="auth-shell d-flex justify-content-center align-items-center">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <span class="brand-mark">K</span>
+      <div>
+        <h1 class="auth-title">Nouveau mot de passe</h1>
+        <p class="auth-subtitle">Première connexion — remplacez votre mot de passe temporaire.</p>
+      </div>
+    </div>
+
+    <form [formGroup]="resetForm" (ngSubmit)="onSubmitForceReset()" class="auth-form">
+      <div class="form-group mb-3">
+        <label for="new_password">Nouveau mot de passe <span class="req">*</span></label>
+        <input id="new_password" type="password" class="input-field" formControlName="new_password">
+        <div class="text-danger small" *ngIf="resetForm.get('new_password')?.invalid && resetForm.get('new_password')?.touched">
+          8+ caractères avec majuscule, minuscule, chiffre et caractère spécial (!@#$%^&*).
+        </div>
+      </div>
+
+      <div class="form-group mb-4">
+        <label for="new_password_confirmation">Confirmation <span class="req">*</span></label>
+        <input id="new_password_confirmation" type="password" class="input-field" formControlName="new_password_confirmation">
+        <div class="text-danger small" *ngIf="resetForm.get('new_password_confirmation')?.invalid && resetForm.get('new_password_confirmation')?.touched">
+          Confirmation obligatoire.
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary-auth w-100" [disabled]="loading || resetForm.invalid">
+        {{ loading ? 'Enregistrement...' : 'Enregistrer et continuer' }}
+      </button>
+    </form>
+  </div>
+</div>

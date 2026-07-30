@@ -6,19 +6,17 @@ import { GestionCommandesComponent } from './gestion-commandes/gestion-commandes
 import { GestionAvisComponent } from './gestion-avis/gestion-avis.component';
 import { DemandePaiementComponent } from './demande-paiement/demande-paiement.component';
 import { ProfilComponent } from './profil/profil.component';
-
-
-
+import { CategorieComponent } from '../admin/categorie/categorie.component';
 
 const routes: Routes = [
-    {path: 'dashboard', component:AccueilCommerceComponent},
-    {path: 'articles', component: GestionArticlesComponent}, 
+    {path: 'dashboard', component: AccueilCommerceComponent},
+    {path: 'articles', component: GestionArticlesComponent},
+    {path: 'categories', component: CategorieComponent, data: { scope: 'partner' }},
     {path: 'detailArticle/:id', component: GestionAvisComponent},
     {path: 'commandes', component: GestionCommandesComponent},
     {path: 'paiement', component: DemandePaiementComponent},
     {path: 'profil', component: ProfilComponent},
     {path: '**', redirectTo: 'dashboard', pathMatch: 'full' },
-
 ];
 
 @NgModule({

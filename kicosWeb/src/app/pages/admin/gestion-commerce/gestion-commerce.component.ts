@@ -14,12 +14,13 @@ import Swal from 'sweetalert2';
 import { ChangeDetectorRef } from '@angular/core';
 import { SkeletonModule } from 'primeng/skeleton';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { MapPickerComponent } from '../../../shared/components/map-picker/map-picker.component';
 
 
 @Component({
   selector: 'app-gestion-commerce',
   standalone: true,
-  imports: [PaginatorModule, DialogModule, CommonModule, ReactiveFormsModule, FormsModule, SkeletonModule],
+  imports: [PaginatorModule, DialogModule, CommonModule, ReactiveFormsModule, FormsModule, SkeletonModule, MapPickerComponent],
   templateUrl: './gestion-commerce.component.html',
   styleUrl: './gestion-commerce.component.css'
 })
@@ -88,10 +89,13 @@ export class GestionCommerceComponent implements OnInit {
       phoneNumber: partenaire.user.phoneNumber,
       email: partenaire.user.email,
       localisation: partenaire.localisation,
+      situation: partenaire.situation,
+      latitude: partenaire.latitude,
+      longitude: partenaire.longitude,
       description: partenaire.description,
       ninea: partenaire.ninea,
       horaire: partenaire.horaire,
-      type: partenaire.type,
+      type: partenaire.type === 'restaurant' ? 'resto' : partenaire.type,
       image: partenaire.image,
       nom_partenaire: partenaire.nom_partenaire,
       etat: partenaire.etat,
@@ -115,37 +119,30 @@ export class GestionCommerceComponent implements OnInit {
   // Le formulaire ajout partenaire
   PaternaireForm = this.fb.group({
     firstName: new FormControl('', Validators.required),
-    lastName: new FormControl('', [ValidatorCore.nameValidator("Le nom  ", 10, 100)]),
-    nom_partenaire: new FormControl('', [ValidatorCore.nameValidator("Le nom  ", 10, 100)]),
-    type: new FormControl('', [ValidatorCore.nameValidator("Le type  ", 10, 100)]),
-    ninea: new FormControl('', [
-      ValidatorCore.isValidAlphNumValidator("Le NINEA", 10, 10),
-      Validators.pattern(/^[0-9]{7}$/)
-    ]),
-    localisation: new FormControl('', [
-      ValidatorCore.isValidAdress("L'adresse de la boutique", 5, 40),
-    ]),
-    description: new FormControl('', [
-      ValidatorCore.nameValidator('La description', 10, 100),
-    ]),
-    horaire: new FormControl('', [
-      ValidatorCore.isValidAlphNumValidator("Les heures d'ouverture", 5, 5),
-      Validators.required
-    ]),
-
-    email: new FormControl('', [
-      ValidatorCore.nameValidator('L email', 10, 100),
-    ]),
-    phoneNumber: new FormControl('', [
-      ValidatorCore.nameValidator('Le numero de telephone', 12, 100),
-      Validators.pattern(/^[0-9]{12}$/)
-    ]),
-
+    lastName: new FormControl('', Validators.required),
+    nom_partenaire: new FormControl('', Validators.required),
+    type: new FormControl('', Validators.required),
+    ninea: new FormControl(''),
+    situation: new FormControl('', Validators.required),
+    localisation: new FormControl('', Validators.required),
+    latitude: new FormControl(''),
+    longitude: new FormControl(''),
+    description: new FormControl('', Validators.required),
+    horaire: new FormControl('', Validators.required),
+    email: new FormControl('', [Validators.email]),
+    phoneNumber: new FormControl(''),
     image: new FormControl(''),
     etat: new FormControl(''),
-  }
+  });
 
-  );
+  partnerTypes = [
+    { value: 'boutique', label: 'Boutique' },
+    { value: 'resto', label: 'Resto' },
+    { value: 'immo', label: 'Immo' },
+    { value: 'location', label: 'Location' },
+  ];
+
+  partenaireKpis: any = null;
 
   photo_etablissement: any
   // photo boutique
@@ -163,6 +160,9 @@ export class GestionCommerceComponent implements OnInit {
       firstName: '',
       lastName: '',
       localisation: '',
+      situation: '',
+      latitude: '',
+      longitude: '',
       horaire: '',
       ninea: '',
       description: '',
@@ -172,6 +172,7 @@ export class GestionCommerceComponent implements OnInit {
       type: '',
       image: ''
     });
+    this.partenaireKpis = null;
     // Réinitialiser les états de validation
     this.PaternaireForm.markAsPristine();
     this.PaternaireForm.markAsUntouched();
@@ -210,7 +211,11 @@ export class GestionCommerceComponent implements OnInit {
           options = { regex: /^[\p{L}\p{N}\s.,!?-]+$/u, regexMessage: 'Le type du partenaire contient des caractères non autorisés.' };
           break;
         case 'ninea':
-          options = { regex: /^[\p{L}\p{N}\s.,!?-]+$/u, regexMessage: 'Le NINEA doit contenir exactement 7 chiffres.' };
+          if (!value) {
+            control.setErrors(null);
+            return;
+          }
+          options = { regex: /^\d+$/, regexMessage: 'Le NINEA ne doit contenir que des chiffres.' };
           break;
         case 'phoneNumber':
           options = { regex: /^\+\d{1,4}\d{7,14}$/, regexMessage: 'Le numéro de téléphone doit contenir exactement 13 chiffres.' };
@@ -240,6 +245,13 @@ export class GestionCommerceComponent implements OnInit {
     }
   }
 
+  onMapCoordinatesChange(coords: { latitude: number; longitude: number }) {
+    this.PaternaireForm.patchValue({
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+    });
+  }
+
   error: any;
   // Ajouter un partenaire 
   addPartenaire() {
@@ -250,12 +262,21 @@ export class GestionCommerceComponent implements OnInit {
     formData.append('lastName', this.PaternaireForm.value.lastName || '');
     formData.append('nom_partenaire', this.PaternaireForm.value.nom_partenaire || '');
     formData.append('type', this.PaternaireForm.value.type || '');
+    formData.append('situation', this.PaternaireForm.value.situation || '');
     formData.append('localisation', this.PaternaireForm.value.localisation || '');
     formData.append('email', this.PaternaireForm.value.email || '');
     formData.append('phoneNumber', this.PaternaireForm.value.phoneNumber || '');
     formData.append('description', this.PaternaireForm.value.description || '');
     formData.append('horaire', this.PaternaireForm.value.horaire || '');
-    formData.append('ninea', this.PaternaireForm.value.ninea || '');
+    if (this.PaternaireForm.value.ninea) {
+      formData.append('ninea', this.PaternaireForm.value.ninea);
+    }
+    if (this.PaternaireForm.value.latitude) {
+      formData.append('latitude', String(this.PaternaireForm.value.latitude));
+    }
+    if (this.PaternaireForm.value.longitude) {
+      formData.append('longitude', String(this.PaternaireForm.value.longitude));
+    }
 
     // Ajouter le fichier image s'il existe
     if (this.photo_etablissement) {
@@ -302,17 +323,27 @@ export class GestionCommerceComponent implements OnInit {
 
   // détail partenaire
   detailPatenaire(idPartenaire: string) {
-    // On fait appel a l'api pour afficher les détails d'un partenaire
+    this.partenaireKpis = null;
     this.apiService.getRequestWithSessionId(`${this.baseUrl}/partenaires/${idPartenaire}`).subscribe(
       (response: any) => {
         this.DetailPartenaire = response;
-        console.log("Detail du partenaire", this.DetailPartenaire);
+        this.loadPartenaireKpis(idPartenaire);
       },
       (error: any) => {
         this.messageService.createMessage('error', error.error.message);
-
       }
-    )
+    );
+  }
+
+  loadPartenaireKpis(idPartenaire: string) {
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/partenaires/${idPartenaire}/stats`).subscribe(
+      (response: any) => {
+        this.partenaireKpis = response.kpis;
+      },
+      () => {
+        this.partenaireKpis = null;
+      }
+    );
   }
 
   // supprimer partenaire
@@ -350,8 +381,7 @@ export class GestionCommerceComponent implements OnInit {
 
   // modifier un partenaire
   modifierPartenaire() {
-    // On fait appel a l'api pour modifier les partenaires
-    this.apiService.postWithSessionId(`${this.baseUrl}/admin/partenaires/${this.id_partenaire}/update`, this.PaternaireForm.value).subscribe(
+    this.apiService.postWithSessionId(`${this.baseUrl}/partenaires/${this.id_partenaire}`, this.PaternaireForm.value).subscribe(
       (response: any) => {
         console.log(response);
         if (response.status_code === 422) {

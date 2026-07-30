@@ -86,7 +86,13 @@ export class DashboardComponent {
 
     this.notification.subscribeToLivreurNotifications((data) => {
       console.log('Notification reçue dans le composant:', data);
-      // Ici tu peux déclencher une alerte, mettre à jour l'interface, etc.
+      this.messageService.createMessage(
+        'info',
+        data?.message || 'Nouvelle notification commande'
+      );
+      if (this.userRole === 'livreur') {
+        this.listNotif();
+      }
     });
 
     if (this.userRole == 'livreur') {

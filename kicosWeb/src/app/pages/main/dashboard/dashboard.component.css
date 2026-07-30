@@ -1,17 +1,25 @@
 
-.sidebar{
-    width: 16%;
+.mainContainer{
+    background-color: var(--bg-neutral);
+}
+
+.sidebar {
+    width: 240px;
+    min-width: 240px;
     transition: width 0.3s ease;
+    border-right: 1px solid var(--border-light);
+    background: var(--bg-white);
 }
 
 .main{
-    width: 84%;
+    flex: 1;
+    min-width: 0;
     transition: width 0.3s ease;
 }
 
-/* Largeur réduite pour la barre latérale repliée */
 .sidebar.collapsed {
-    width: 5%;
+    width: 72px;
+    min-width: 72px;
 }
 
 .sidebar.collapsed .logoWrapper .logo strong {
@@ -40,16 +48,8 @@
     transition: opacity 0.2s ease;
 }
 
-.sidebar.collapsed .logoWrapper .logo{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Expansion du contenu principal lorsque la barre latérale est réduite */
 .main.expanded {
-    width: 95%;
-    transition: margin-left 0.3s ease;
+    flex: 1;
 }
 
 .mainContainer{
@@ -153,18 +153,15 @@ aside nav a {
     color: var(--text-dark);
     text-decoration: none;
 
-    li {
-        /* border: 1px solid; */
-        height: 45px;
+        li {
+        height: 40px;
         display: flex;
         justify-content: start;
         align-items: center;
-        margin-bottom: 10px;
-        border-radius: 20px;
-        padding-left: 15px;
-        cursor: pointer;
-        /* transition: background-color ease-in 0.3s;
-              transition: color ease-in 0.3s; */
+        margin-bottom: 6px;
+        border-radius: 10px;
+        padding-left: 12px;
+        font-size: 0.9rem;
 
         &.active {
             background-color: white;

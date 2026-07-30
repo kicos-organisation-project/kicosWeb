@@ -17,7 +17,7 @@ const routes: Routes = [
   { path: 'commandes', component: ListeCommandesComponent },
   { path: 'livreur', component: GestionLivreurComponent },
   { path: 'paie', component: GestionPaiementsComponent },
-  { path: 'categorie', component: CategorieComponent },
+  { path: 'categorie', component: CategorieComponent, data: { scope: 'admin' } },
   { path: 'profil', component: ProfilComponent },
   { path: 'clients', component: GestionClientsComponent },
   { path: '**', redirectTo: 'dashboard', pathMatch: 'full' },

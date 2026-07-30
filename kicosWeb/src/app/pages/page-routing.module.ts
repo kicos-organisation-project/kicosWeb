@@ -3,13 +3,16 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './main/dashboard/dashboard.component';
 import { LoginComponent } from './main/login/login.component';
 import { ForgetPasswordComponent } from './main/forget-password/forget-password.component';
+import { ForceResetComponent } from './main/force-reset/force-reset.component';
 import { AuthGuard } from '../core/guards/auth.guard';
+import { ForceResetGuard } from '../core/guards/force-reset.guard';
 
 
 const routes: Routes = [
     {path: '', component: LoginComponent},
     { path: 'login', component: LoginComponent },
     { path: 'forgetPassword', component: ForgetPasswordComponent },
+    { path: 'force-reset', component: ForceResetComponent, canActivate: [ForceResetGuard] },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
 
     {

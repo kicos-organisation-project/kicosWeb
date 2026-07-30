@@ -76,7 +76,7 @@
 
 
 <!--Modal details partenaire -->
-<p-dialog [modal]="true" [(visible)]="visible" [style]="{ width: '60rem', height:'30rem', backgroundColor: '#F8F9FD'}"
+<p-dialog [modal]="true" [(visible)]="visible" [style]="{ width: '60rem', backgroundColor: '#F8F9FD'}"
     header="Détail commerce">
     <div id="details">
         <div class="image">
@@ -88,13 +88,38 @@
                 {{DetailPartenaire?.description}}
             </p>
 
+            <div class="kpi-grid" *ngIf="partenaireKpis">
+                <div class="kpi-item"><span class="kpi-value">{{partenaireKpis.total_commandes}}</span><span class="kpi-label">Commandes</span></div>
+                <div class="kpi-item"><span class="kpi-value">{{partenaireKpis.commandes_livrees}}</span><span class="kpi-label">Livrées</span></div>
+                <div class="kpi-item"><span class="kpi-value">{{partenaireKpis.chiffre_affaires | number}}</span><span class="kpi-label">CA</span></div>
+                <div class="kpi-item"><span class="kpi-value">{{partenaireKpis.taux_livraison}}%</span><span class="kpi-label">Taux livraison</span></div>
+                <div class="kpi-item"><span class="kpi-value">{{partenaireKpis.articles_actifs}}</span><span class="kpi-label">Articles</span></div>
+                <div class="kpi-item"><span class="kpi-value">{{partenaireKpis.categories}}</span><span class="kpi-label">Catégories</span></div>
+            </div>
+
             <div class="d-flex">
-                <h6 class="mb-3">Responsable : </h6>
-                <span>&nbsp;{{DetailPartenaire?.user.firstName}} {{DetailPartenaire?.user.lastName}}</span>
+                <h6 class="mb-3">Type : </h6>
+                <span>&nbsp;{{DetailPartenaire?.type}}</span>
             </div>
             <div class="d-flex">
-                <h6 class="mb-3">Adresse : </h6>
-                <span>&nbsp;{{DetailPartenaire?.localisation}}</span>
+                <h6 class="mb-3">Responsable : </h6>
+                <span>&nbsp;{{DetailPartenaire?.user?.firstName}} {{DetailPartenaire?.user?.lastName}}</span>
+            </div>
+            <div class="d-flex">
+                <h6 class="mb-3">Situation : </h6>
+                <span>&nbsp;{{DetailPartenaire?.situation || '—'}}</span>
+            </div>
+            <div class="d-flex">
+                <h6 class="mb-3">Adresse / Maps : </h6>
+                <span>&nbsp;{{DetailPartenaire?.localisation || '—'}}
+                  <ng-container *ngIf="DetailPartenaire?.latitude && DetailPartenaire?.longitude">
+                    ({{DetailPartenaire?.latitude}}, {{DetailPartenaire?.longitude}})
+                  </ng-container>
+                </span>
+            </div>
+            <div class="d-flex">
+                <h6 class="mb-3">NINEA : </h6>
+                <span>&nbsp;{{DetailPartenaire?.ninea || '—'}}</span>
             </div>
             <div class="d-flex">
                 <h6 class="mb-3">Horaire: </h6>
@@ -102,7 +127,7 @@
             </div>
             <div class="d-flex">
                 <h6 class="mb-3">Téléphone : </h6>
-                <span>&nbsp;{{DetailPartenaire?.user.phoneNumber}}</span>
+                <span>&nbsp;{{DetailPartenaire?.user?.phoneNumber}}</span>
             </div>
             <div class="d-flex">
                 <h6 class="mb-3">Statut : </h6>
@@ -123,7 +148,7 @@
             <div>
                 <!-- Nom -->
                 <div class="mb-2">
-                    <label class="mb-1" for="name">Nom</label>
+                    <label class="mb-1" for="name">Nom <span class="req">*</span></label>
                     <input id="name" type="text" class="input-field" formControlName="lastName">
                     <p *ngIf="error" class="text-danger">{{error.lastName}}</p>
                     <div *ngIf="PaternaireForm.get('lastName')?.invalid && PaternaireForm.get('lastName')?.touched"
@@ -135,7 +160,7 @@
 
                 <!-- Nom établissement -->
                 <div class="mb-2">
-                    <label class="mb-1" for="nom_partenaire">Nom Etablissement</label>
+                    <label class="mb-1" for="nom_partenaire">Nom Etablissement <span class="req">*</span></label>
                     <input id="nom_partenaire" type="text" class="input-field" formControlName="nom_partenaire">
                     <p *ngIf="error" class="text-danger">{{error.nom_partenaire}}</p>
                     <div *ngIf="PaternaireForm.get('nom_partenaire')?.invalid && PaternaireForm.get('nom_partenaire')?.touched"
@@ -145,27 +170,21 @@
                     </div>
                 </div>
 
-                <!-- Ninea -->
+                <!-- Ninea facultatif -->
                 <div class="mb-2">
                     <label for="ninea" class="mb-1">Ninea</label>
-                    <input type="text" class="input-field" id="ninea" formControlName="ninea">
+                    <input type="text" class="input-field" id="ninea" formControlName="ninea" placeholder="Facultatif">
                     <p *ngIf="error" class="text-danger">{{error.ninea}}</p>
-                    <div *ngIf="PaternaireForm.get('ninea')?.invalid && PaternaireForm.get('ninea')?.touched"
-                        class="text-danger">
-                        {{ PaternaireForm.get('ninea')?.errors?.['invalid'] ? 'Le NINEA doit contenir exactement 7
-                        chiffres.' : 'Le NINEA est obligatoire.' }}
-                    </div>
                 </div>
 
                 <!-- Horaire -->
                 <div class="mb-2">
-                    <label for="horaire" class="mb-1">Horaire</label>
+                    <label for="horaire" class="mb-1">Horaire <span class="req">*</span></label>
                     <input type="text" class="input-field" id="horaire" formControlName="horaire" placeholder="ex: 9h-22h">
                     <p *ngIf="error" class="text-danger">{{error.horaire}}</p>
                     <div *ngIf="PaternaireForm.get('horaire')?.invalid && PaternaireForm.get('horaire')?.touched"
                         class="text-danger">
-                        {{ PaternaireForm.get('horaire')?.errors?.['required'] ? 'L\'horaire est invalide .' : 'Le \n
-                        format de l\'horaire est invalide (ex: 08h - 18h).' }}
+                        L'horaire est obligatoire.
                     </div>
                 </div>
 
@@ -185,7 +204,7 @@
             <div>
                 <!-- Prénom -->
                 <div class="mb-2">
-                    <label for="firstName" class="mb-1">Prénom</label>
+                    <label for="firstName" class="mb-1">Prénom <span class="req">*</span></label>
                     <input type="text" class="input-field" id="firstName" formControlName="firstName">
                     <p *ngIf="error" class="text-danger">{{error.firstName}}</p>
                     <div *ngIf="PaternaireForm.get('firstName')?.invalid && PaternaireForm.get('firstName')?.touched"
@@ -197,42 +216,68 @@
 
                 <!-- Type -->
                 <div class="mb-2">
-                    <label for="type" class="mb-1">Type</label>
+                    <label for="type" class="mb-1">Type <span class="req">*</span></label>
                     <select id="type" class="input-field" formControlName="type">
-                        <option value="boutique">Boutique</option>
-                        <option value="restaurant">Restaurant</option>
+                        <option value="">Sélectionner</option>
+                        <option *ngFor="let t of partnerTypes" [value]="t.value">{{t.label}}</option>
                     </select>
                     <p *ngIf="error" class="text-danger">{{error.type}}</p>
                     <div *ngIf="PaternaireForm.get('type')?.invalid && PaternaireForm.get('type')?.touched"
                         class="text-danger">
-                        {{ PaternaireForm.get('type')?.errors?.['invalid'] ? 'Le type est invalide.' : 'Le type est
-                        obligatoire.' }}
+                        Le type est obligatoire.
+                    </div>
+                </div>
+
+                <!-- Situation -->
+                <div class="mb-2">
+                    <label for="situation" class="mb-1">Situation <span class="req">*</span></label>
+                    <input type="text" class="input-field" id="situation" formControlName="situation" placeholder="ex: Almadies, Dakar">
+                    <p *ngIf="error" class="text-danger">{{error.situation}}</p>
+                    <div *ngIf="PaternaireForm.get('situation')?.invalid && PaternaireForm.get('situation')?.touched"
+                        class="text-danger">
+                        La situation est obligatoire.
                     </div>
                 </div>
 
                 <!-- Localisation -->
                 <div class="mb-2">
-                    <label for="localisation" class="mb-1">Localisation</label>
-                    <input type="text" class="input-field" id="localisation" formControlName="localisation">
+                    <label for="localisation" class="mb-1">Localisation / adresse <span class="req">*</span></label>
+                    <input type="text" class="input-field" id="localisation" formControlName="localisation" placeholder="Adresse complète">
                     <p *ngIf="error" class="text-danger">{{error.localisation}}</p>
                     <div *ngIf="PaternaireForm.get('localisation')?.invalid && PaternaireForm.get('localisation')?.touched"
                         class="text-danger">
-                        {{ PaternaireForm.get('localisation')?.errors?.['invalid'] ? 'La localisation est invalide.' : '
-                        La localisation est obligatoire.' }}
+                        La localisation est obligatoire.
+                    </div>
+                </div>
 
+                <div class="mb-2">
+                    <label class="mb-1">Position sur la carte</label>
+                    <app-map-picker
+                      [latitude]="PaternaireForm.value.latitude"
+                      [longitude]="PaternaireForm.value.longitude"
+                      (coordinatesChange)="onMapCoordinatesChange($event)">
+                    </app-map-picker>
+                </div>
+
+                <div class="mb-2 d-flex gap-2">
+                    <div class="flex-fill">
+                        <label for="latitude" class="mb-1">Latitude</label>
+                        <input type="number" step="any" class="input-field" formControlName="latitude" placeholder="Facultatif">
+                    </div>
+                    <div class="flex-fill">
+                        <label for="longitude" class="mb-1">Longitude</label>
+                        <input type="number" step="any" class="input-field" formControlName="longitude" placeholder="Facultatif">
                     </div>
                 </div>
 
                 <!-- Description -->
                 <div class="mb-2">
-                    <label for="description" class="mb-1">Description</label>
+                    <label for="description" class="mb-1">Description <span class="req">*</span></label>
                     <input type="text" class="input-field" id="description" formControlName="description">
                     <p *ngIf="error" class="text-danger">{{error.description}}</p>
                     <div *ngIf="PaternaireForm.get('description')?.invalid && PaternaireForm.get('description')?.touched"
                         class="text-danger">
-                        {{ PaternaireForm.get('description')?.errors?.['invalid'] ? 'La description est invalide.' : '
-                        La description contient des caractères non autorisés.' }}
-
+                        La description est obligatoire.
                     </div>
                 </div>
 
@@ -251,8 +296,9 @@
         </div>
 
         <!-- Photo établissement -->
+        <p class="text-muted small mb-2">Un mot de passe temporaire sera généré et envoyé par email au partenaire.</p>
         <div class="mb-2">
-            <label for="photoLivreur" class="mb-1">Photo Établissement</label>
+            <label for="photoLivreur" class="mb-1">Photo Établissement <span class="req">*</span></label>
             <input accept="image/*" name="image" (change)="addPhotoEtablissement($event)"
                 class="form-control w-full py-1 inputPhoto" id="photoLivreur" type="file">
             <p *ngIf="error" class="text-danger">{{error.photoLivreur}}</p>
@@ -272,32 +318,31 @@
     <form novalidate [formGroup]="PaternaireForm" #ngForm="ngForm" (ngSubmit)="modifierPartenaire()">
         <div class="contentInput">
             <div>
-                <!-- Ninea -->
                 <div class="mb-2">
                     <label for="ninea" class="mb-1">Ninea</label>
-                    <input type="text" class="input-field" id="ninea" formControlName="ninea">
+                    <input type="text" class="input-field" id="ninea" formControlName="ninea" placeholder="Facultatif">
                     <p *ngIf="error" class="text-danger">{{error.ninea}}</p>
-                    <div *ngIf="PaternaireForm.get('ninea')?.invalid && PaternaireForm.get('ninea')?.touched"
-                        class="text-danger">
-                        {{ PaternaireForm.get('ninea')?.errors?.['invalid'] ? 'Le NINEA doit contenir exactement 7 \n
-                        chiffres.' : 'Le NINEA est obligatoire.' }}
-                    </div>
+                </div>
+                <div class="mb-2">
+                    <label for="situation" class="mb-1">Situation</label>
+                    <input type="text" class="input-field" formControlName="situation">
                 </div>
             </div>
 
             <div>
                 <!-- Type -->
                 <div class="mb-2">
-                    <label for="type" class="mb-1">Type</label>
+                    <label for="type" class="mb-1">Type <span class="req">*</span></label>
                     <select id="type" class="input-field" formControlName="type">
-                        <option value="boutique">Boutique</option>
-                        <option value="restaurant">Restaurant</option>
+                        <option *ngFor="let t of partnerTypes" [value]="t.value">{{t.label}}</option>
                     </select>
                     <p *ngIf="error" class="text-danger">{{error.type}}</p>
-                    <div *ngIf="PaternaireForm.get('type')?.invalid && PaternaireForm.get('type')?.touched"
-                        class="text-danger">
-                        {{ PaternaireForm.get('type')?.errors?.['invalid'] ? 'Le type est invalide.' : 'Le type est \n
-                        obligatoire.' }}
+                </div>
+                <div class="mb-2">
+                    <label class="mb-1">Latitude / Longitude</label>
+                    <div class="d-flex gap-2">
+                        <input type="number" step="any" class="input-field" formControlName="latitude" placeholder="Lat">
+                        <input type="number" step="any" class="input-field" formControlName="longitude" placeholder="Lng">
                     </div>
                 </div>
             </div>

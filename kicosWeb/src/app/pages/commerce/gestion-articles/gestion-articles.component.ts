@@ -125,12 +125,12 @@ export class GestionArticlesComponent {
 
 
   listeCategorie() {
-    this.apiService.getRequestWithSessionId(`${this.baseUrl}/all-categories`).subscribe(
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/mes-categories`).subscribe(
       (response: any) => {
-        this.categorieTab = response;
+        this.categorieTab = Array.isArray(response) ? response : (response.categories || []);
       },
       (error: any) => {
-        this.messageService.createMessage('error', error.error.message);
+        this.messageService.createMessage('error', error.error?.message || 'Erreur catégories');
       }
     );
   }
@@ -349,13 +349,7 @@ export class GestionArticlesComponent {
           (response: any) => {
             console.log("article supprimé", response);
             this.listeArticle();
-            Swal.fire({
-              title: "Supprimé !",
-              text: "Le article a été supprimé.",
-              icon: "success"
-            });
             this.messageService.createMessage('success', response.message);
-            window.location.reload();
           },
           (error: any) => {
             this.messageService.createMessage('error', error.error.message);
@@ -372,18 +366,29 @@ export class GestionArticlesComponent {
   }
 
   detailArticle: any;
+  articleKpis: any = null;
   detailAricle(id: any) {
+    this.articleKpis = null;
     this.apiService.getRequestWithSessionId(`${this.baseUrl}/articles/${id}`).subscribe(
       (response: any) => {
         this.detailArticle = response.article;
-        console.log("Detail du articles", this.detailArticle);
+        this.loadArticleStats(id);
       },
       (error: any) => {
-        console.log("Partie erreur");
         console.log(error);
-
       }
-    )
+    );
+  }
+
+  loadArticleStats(id: string | number) {
+    this.apiService.getRequestWithSessionId(`${this.baseUrl}/articles/${id}/stats`).subscribe(
+      (response: any) => {
+        this.articleKpis = response.kpis;
+      },
+      () => {
+        this.articleKpis = null;
+      }
+    );
   }
 
   filterTerm: string = "";

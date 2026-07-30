@@ -81,27 +81,3 @@
 .btn-primary-auth:disabled {
   opacity: 0.65;
 }
-
-.inputP {
-  position: relative;
-}
-
-.iconEye {
-  position: absolute;
-  right: 10px;
-  top: 34px;
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-}
-
-.forgotPassword {
-  cursor: pointer;
-  color: var(--bg-primary);
-  font-size: 0.875rem;
-  margin: 0;
-}
-
-.forgotPassword:hover {
-  text-decoration: underline;
-}

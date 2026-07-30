@@ -4,9 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --configuration production",
+    "build:dev": "ng build --configuration development",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "pwa:serve": "npx http-server dist/kicos-express/browser -p 8080 -c-1"
   },
   "private": true,
   "dependencies": {
@@ -18,7 +20,9 @@
     "@angular/platform-browser": "^18.0.0",
     "@angular/platform-browser-dynamic": "^18.0.0",
     "@angular/router": "^18.0.0",
+    "@angular/service-worker": "^18.0.0",
     "bootstrap": "^5.3.3",
+    "laravel-echo": "^1.19.0",
     "bootstrap-icons": "^1.11.3",
     "chart.js": "^4.4.7",
     "leaflet": "^1.9.4",
