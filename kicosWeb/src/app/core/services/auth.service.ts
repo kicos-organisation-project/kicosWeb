@@ -126,7 +126,7 @@ export class AuthService {
 
   mustResetPassword(): boolean {
     const user = this.getUserInfo();
-    return !!user?.must_reset_password;
+    return !!user?.['must_reset_password'];
   }
 
   setMustResetPassword(value: boolean): void {

@@ -55,7 +55,7 @@ export class NotificationService {
       return;
     }
 
-    const payload: NotificationOptions = {
+    const payload: NotificationOptions & { vibrate?: number[] } = {
       icon: '/icons/icon-192.png',
       badge: '/icons/icon-72.png',
       vibrate: [120, 60, 120],
@@ -65,13 +65,13 @@ export class NotificationService {
     try {
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.ready.then((reg) => {
-          reg.showNotification(title, payload);
+          reg.showNotification(title, payload as any);
         });
       } else {
-        new Notification(title, payload);
+        new Notification(title, payload as any);
       }
     } catch {
-      new Notification(title, payload);
+      new Notification(title, payload as any);
     }
   }
 
@@ -116,8 +116,9 @@ export class NotificationService {
 
   /** Rebind auth header after login. */
   refreshAuth(): void {
-    if (this.echo?.connector?.pusher?.config?.auth?.headers) {
-      this.echo.connector.pusher.config.auth.headers['Authorization'] =
+    const pusherConfig = (this.echo?.connector?.pusher?.config as any);
+    if (pusherConfig?.auth?.headers) {
+      pusherConfig.auth.headers['Authorization'] =
         `Bearer ${this.getToken() || ''}`;
     }
   }

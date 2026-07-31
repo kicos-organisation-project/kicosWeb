@@ -253,8 +253,8 @@
                 <div class="mb-2">
                     <label class="mb-1">Position sur la carte</label>
                     <app-map-picker
-                      [latitude]="PaternaireForm.value.latitude"
-                      [longitude]="PaternaireForm.value.longitude"
+                      [latitude]="PaternaireForm.value.latitude ?? null"
+                      [longitude]="PaternaireForm.value.longitude ?? null"
                       (coordinatesChange)="onMapCoordinatesChange($event)">
                     </app-map-picker>
                 </div>

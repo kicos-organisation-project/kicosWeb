@@ -241,7 +241,7 @@ export class GestionLivreurComponent {
     // Convertir true/false en 1/0
     const dataToSend = {
       ...formValue,
-      is_livreur_externe: formValue.is_livreur_externe === 'true' ? 1 : 0
+      is_livreur_externe: formValue.is_livreur_externe === true ? 1 : 0
     };
     this.apiService.postWithSessionId(`${this.baseUrl}/admin/livreurs/${this.id_livreur}/update`, dataToSend).subscribe(
       (response: any) => {

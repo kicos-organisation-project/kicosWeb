@@ -13,7 +13,7 @@
         <label for="new_password">Nouveau mot de passe <span class="req">*</span></label>
         <input id="new_password" type="password" class="input-field" formControlName="new_password">
         <div class="text-danger small" *ngIf="resetForm.get('new_password')?.invalid && resetForm.get('new_password')?.touched">
-          8+ caractères avec majuscule, minuscule, chiffre et caractère spécial (!@#$%^&*).
+          8+ caractères avec majuscule, minuscule, chiffre et caractère spécial (!&#64;#$%^&*).
         </div>
       </div>
 
