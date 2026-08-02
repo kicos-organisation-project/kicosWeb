@@ -2,8 +2,8 @@
   min-height: 100vh;
   padding: 24px;
   background:
-    radial-gradient(900px 420px at 10% 0%, rgba(241, 132, 1, 0.14), transparent 55%),
-    linear-gradient(160deg, #0F172A 0%, #1E293B 48%, #334155 100%);
+    radial-gradient(900px 420px at 10% 0%, rgba(241, 132, 1, 0.18), transparent 55%),
+    linear-gradient(160deg, #fff8f0 0%, #ffffff 50%, #fff3e0 100%);
 }
 
 .auth-card {
@@ -33,6 +33,13 @@
   justify-content: center;
   font-weight: 700;
   font-size: 1.25rem;
+}
+
+.auth-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .auth-title {

@@ -1,50 +1,18 @@
-<div class="title mb-4 mt-5">
-    <h3>Demande de paiment</h3>
-</div>
+<div class="page-panel">
+  <h5 class="page-panel-title mb-3">Mon solde</h5>
 
-<div id="avis">
-    <form class="promo-form" novalidate [formGroup]="demandeForm" #ngForm="ngForm" (ngSubmit)="addDemandePaiement()">
-       <div class="form-grid">
-            <div class="form-group mb-3">
-                <label for="amount">Montant</label>
-                <input type="number" id="amount" class="form-control" formControlName="amount">
-            </div>
+  <div class="solde-info-card mb-4">
+    <p class="mb-0">
+      Les versements sont <strong>automatiques chaque dimanche</strong>. Votre solde est transféré sans demande manuelle.
+    </p>
+  </div>
 
-            <div class="form-group mb-3">
-                <label for="note">Motif</label>
-                <textarea n id="note" class="form-control" formControlName="note"></textarea>
-            </div>
+  <div class="solde-card" *ngIf="!isLoading; else loading">
+    <span class="solde-label">Solde disponible</span>
+    <span class="solde-amount">{{ solde?.amount ?? 0 | number:'1.0-0' }} FCFA</span>
+  </div>
 
-            <div class="form-group mb-3">
-                <button type="submit" class="btn btnSave">Sauvegarder</button>
-            </div>
-        </div>
-    </form>
-    <div class="promo-list">
-        <p-table [value]="demandesPaiement" [paginator]="true" [rows]="2" [tableStyle]="{ 'min-width': '50rem'}"
-            [styleClass]="'paginationTacheCustom'" [rowsPerPageOptions]="[2, 4, 6]">
-            <ng-template pTemplate="header">
-                <tr class="text-center py-2">
-                    <th class="">#</th>
-                    <th class="">Motant </th>
-                    <!-- <th class="">Motif </th> -->
-                    <th class="">etat</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-demande let-index="rowIndex" class="">
-                <tr class="py-4">
-                    <td class="text-center text-xs px-3 tdimg" style="width: 10%;">{{index + 1}}</td>
-                    <td class="text-center text-xs px-3" style="width: 20%;">{{ demande?.amount}}</td>
-                    <!-- <td class="text-center text-xs px-3" style="width: 20%;">
-                        <div class="truncate"
-                            style="max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
-                            :title="demande?.informations_paiement">
-                            {{ demande?.informations_paiement?.length > 30 ? demande?.informations_paiement?.substring(0, 30) + '...' : demande?.informations_paiement }}
-                        </div>
-                    </td> -->
-                    <td class="text-center text-xs" style="width: 15%;">{{ demande.status}}</td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </div>
+  <ng-template #loading>
+    <p class="text-muted">Chargement du solde...</p>
+  </ng-template>
 </div>

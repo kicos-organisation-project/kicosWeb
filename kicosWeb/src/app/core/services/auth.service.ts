@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MessageService } from './message.service';
+import { NotificationService } from './notification.service';
 import { environment } from '../../../environments/environment';
 import { tap, catchError } from 'rxjs/operators';
 import { throwError, Observable, Subject } from 'rxjs';
@@ -27,7 +28,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private notificationService: NotificationService,
   ) { }
 
   // Connexion de l'utilisateur
@@ -103,7 +105,8 @@ export class AuthService {
     const expirationDate = new Date().getTime() + (59 * 60 * 1000); // 1h
     localStorage.setItem(this.tokenExpirationKey, expirationDate.toString());
 
-    this.startSessionWarningTimer(); // ⬅️ Ajoute cette ligne
+    this.notificationService.refreshAuth();
+    this.startSessionWarningTimer();
   }
 
 

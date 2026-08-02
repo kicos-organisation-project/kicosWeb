@@ -11,6 +11,7 @@ import { environment } from '../../../../environments/environment';
 import { ApiService } from '../../../core/services/api.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { MessageService } from '../../../core/services/message.service';
+import { safeImage, DEFAULT_AVATAR } from '../../../core/utils/image.util';
 
 type DialogPosition = 'center' | 'top' | 'bottom' | 'left' | 'right' | 'topleft' | 'topright' | 'bottomleft' | 'bottomright';
 
@@ -48,7 +49,10 @@ export class DashboardComponent {
   baseUrl = environment.base_url;
   apiService = inject(ApiService);
   authService = inject(AuthService);
- messageService = inject(MessageService);
+  messageService = inject(MessageService);
+  safeImage = safeImage;
+  DEFAULT_AVATAR = DEFAULT_AVATAR;
+  private notificationsSubscribed = false;
   // Constructeur
   constructor(
     private menuService: MenuService,
@@ -82,7 +86,19 @@ export class DashboardComponent {
     }
 
     console.log('Initialisation de l\'abonnement aux notifications');
-    const livreurId = this.userInfo.id;
+
+    if (this.userRole === 'livreur') {
+      this.listNotif();
+    }
+
+    this.getInfolivreur();
+  }
+
+  private subscribeLivreurRealtime(livreurId: string | number): void {
+    if (this.notificationsSubscribed) {
+      return;
+    }
+    this.notificationsSubscribed = true;
 
     this.notification.subscribeToLivreurNotifications((data) => {
       console.log('Notification reçue dans le composant:', data);
@@ -90,19 +106,15 @@ export class DashboardComponent {
         'info',
         data?.message || 'Nouvelle notification commande'
       );
-      if (this.userRole === 'livreur') {
-        this.listNotif();
-      }
-    });
-
-    if (this.userRole == 'livreur') {
       this.listNotif();
-    }
-    // this.listNotif();
+    }, livreurId);
+  }
 
-
-    this.getInfolivreur();
-
+  avatarUrl(imagePath: string | null | undefined): string {
+    return safeImage(
+      imagePath ? `https://kiccos.terangacode.com/public/${imagePath}` : null,
+      DEFAULT_AVATAR
+    );
   }
 
   notificationlist: any;
@@ -170,7 +182,9 @@ export class DashboardComponent {
     this.apiService.getRequestWithSessionId(`${this.baseUrl}/profile`).subscribe(
       (response: any) => {
         this.profilLivreur = response.data;
-        console.log(this.profilLivreur)
+        if (this.userRole === 'livreur' && this.profilLivreur?.livreur?.id) {
+          this.subscribeLivreurRealtime(this.profilLivreur.livreur.id);
+        }
       },
       (error: any) => {
         this.messageService.createMessage('error', error.error.message);

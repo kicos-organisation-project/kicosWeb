@@ -1,125 +1,113 @@
-<div class="container">
-    <div class="profile-header">
-        <h1>Mon Profil</h1>
+<div class="profile-page">
+  <header class="profile-hero">
+    <img src="assets/logo/logo.png" alt="Kicos Express" class="profile-logo">
+    <div class="profile-hero-text">
+      <h1>Mon profil</h1>
+      <p>{{ profilLivreur?.partenaire?.nom_partenaire || profilLivreur?.role }}</p>
     </div>
+  </header>
 
-    <div class="profile-section">
-        <h2 class="section-title">Photo de Profil</h2>
-
-        <div class="profile-image-section">
-            <div class="profile-image-container">
-                <img class="profile-image" src="https://kiccos.terangacode.com/public/{{profilLivreur?.partenaire.image_url}}" alt="Photo de profil"
-                    id="profileImagePreview">
-            </div>
-        </div>
-    </div>
-
-    <div class="profile-section">
-        <h2 class="section-title">Informations Personnelles</h2>
-        <div class="form-row">
-            <div class="form-column">
-                <div class="form-group">
-                    <label for="firstName">Prénom</label>
-                    <input type="text" id="firstName" value="{{profilLivreur?.firstName}}">
-                </div>
-            </div>
-            <div class="form-column">
-                <div class="form-group">
-                    <label for="lastName">Nom</label>
-                    <input type="text" id="lastName" value="{{profilLivreur?.lastName}}">
-                </div>
-            </div>
-        </div>
-
+  <div class="profile-grid">
+    <section class="profile-card">
+      <h2>Photo & identité</h2>
+      <div class="profile-avatar-wrap">
+        <img [src]="avatarUrl()" (error)="$any($event.target).src = DEFAULT_AVATAR" class="profile-avatar" alt="Photo profil">
+      </div>
+      <div class="form-row">
         <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" value="{{profilLivreur?.email}}">
+          <label for="firstName">Prénom</label>
+          <input type="text" id="firstName" [value]="profilLivreur?.firstName">
         </div>
-
         <div class="form-group">
-            <label for="phoneNumber">Téléphone</label>
-            <input type="tel" id="phoneNumber" value="{{profilLivreur?.phoneNumber}}" disabled>
+          <label for="lastName">Nom</label>
+          <input type="text" id="lastName" [value]="profilLivreur?.lastName">
         </div>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" [value]="profilLivreur?.email">
+      </div>
+      <div class="form-group">
+        <label for="phoneNumber">Téléphone</label>
+        <input type="tel" id="phoneNumber" [value]="profilLivreur?.phoneNumber" disabled>
+      </div>
+      <button type="button" class="btn-link" data-bs-toggle="modal" data-bs-target="#profil">Modifier mon mot de passe</button>
+      <button class="btn" (click)="modifierProfilLivreur()">Enregistrer</button>
+    </section>
 
-        <div class="form-group">
-            <label for="role">Rôle</label>
-            <input type="text" id="role" value="{{profilLivreur?.role}}" disabled>
+    <section class="profile-card">
+      <h2>Établissement</h2>
+      <div class="form-group">
+        <label for="avatar">Photo établissement</label>
+        <input type="file" id="avatar" accept="image/*" (change)="onFileSelected($event)">
+      </div>
+      <div class="form-group">
+        <label for="nom_partenaire">Nom du restaurant</label>
+        <input type="text" id="nom_partenaire" [value]="profilLivreur?.partenaire?.nom_partenaire">
+      </div>
+      <div class="form-group">
+        <label for="horaire">Horaires</label>
+        <input type="text" id="horaire" [value]="profilLivreur?.partenaire?.horaire">
+      </div>
+      <div class="form-group">
+        <label for="localisation">Localisation</label>
+        <input type="text" id="localisation" [value]="profilLivreur?.partenaire?.localisation">
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" rows="2">{{ profilLivreur?.partenaire?.description }}</textarea>
+      </div>
+      <button class="btn" (click)="modifierInformationsRestaurant()">Enregistrer</button>
+    </section>
+
+    <section class="profile-card">
+      <h2>Informations de paiement</h2>
+      <div class="form-group">
+        <label>Situation</label>
+        <div class="readonly-value">{{ profilLivreur?.partenaire?.situation || '—' }}</div>
+      </div>
+      <div class="form-group">
+        <label>Lien Google Maps</label>
+        <div class="readonly-value">
+          <a *ngIf="profilLivreur?.partenaire?.maps_url" [href]="profilLivreur.partenaire.maps_url" target="_blank" rel="noopener">
+            {{ profilLivreur.partenaire.maps_url }}
+          </a>
+          <span *ngIf="!profilLivreur?.partenaire?.maps_url">—</span>
         </div>
-
-        <div class="action-links mb-4" data-bs-toggle="modal" data-bs-target="#profil">Modifier mon mot de passe</div>
-        <button class="btn" (click)="modifierProfilLivreur()">Enregistrer les modifications</button>
-    </div>
-
-    <div class="profile-section">
-        <h2 class="section-title">Informations Supplémentaire</h2>
-
-        <div class="form-group">
-            <label for="avatar">Avatar</label>
-            <input type="file" id="avatar" accept="image/*" (change)="onFileSelected($event)">
-        </div>
-
-        <div class="form-group">
-            <label for="nom_partenaire">Nom du Restaurant</label>
-            <input type="text" id="nom_partenaire" value="{{profilLivreur?.partenaire.nom_partenaire}}">
-        </div>
-
-        <div class="form-group">
-            <label for="horaire">Horaires</label>
-            <input type="text" id="horaire" value="{{profilLivreur?.partenaire.horaire}}">
-        </div>
-
-        <div class="form-group">
-            <label for="localisation">Localisation</label>
-            <input type="text" id="localisation" value="{{profilLivreur?.partenaire.localisation}}">
-        </div>
-
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea id="description" rows="3"
-                class="form-control">{{profilLivreur?.partenaire.description}}</textarea>
-        </div>
-
-        <button class="btn" (click)="modifierInformationsRestaurant()">Enregistrer les modifications</button>
-    </div>
+      </div>
+      <div class="form-group">
+        <label>Moyen de transfert</label>
+        <div class="readonly-value">{{ getMoyenTransfertLabel(profilLivreur?.partenaire?.moyen_transfert) }}</div>
+      </div>
+    </section>
+  </div>
 </div>
 
-<!-- Modal pour changer le mot de passe -->
 <div class="modal fade" id="profil" tabindex="-1" aria-labelledby="profilLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="profilLabel">Modifier mon mot de passe</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="current_password">Mot de passe actuel</label>
-                    <input [type]="showPassword ? 'text' : 'password'" id="current_password">
-                    <button type="button" (click)="togglePassword()" class="iconEye">
-                        <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-                    </button>
-                </div>
-
-                <div class="form-group">
-                    <label for="new_password">Nouveau mot de passe</label>
-                    <input [type]="showPassword ? 'text' : 'password'" id="new_password">
-                    <button type="button" (click)="togglePassword()" class="iconEye">
-                        <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-                    </button>
-                </div>
-
-                <div class="form-group">
-                    <label for="new_password_confirmation">Confirmer le mot de passe</label>
-                    <input [type]="showPassword ? 'text' : 'password'" id="new_password_confirmation">
-                    <button type="button" (click)="togglePassword()" class="iconEye">
-                        <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-blue" (click)="modifierPassword()">Valider</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-            </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="profilLabel">Modifier mon mot de passe</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="current_password">Mot de passe actuel</label>
+          <input [type]="showPassword ? 'text' : 'password'" id="current_password">
         </div>
+        <div class="form-group">
+          <label for="new_password">Nouveau mot de passe</label>
+          <input [type]="showPassword ? 'text' : 'password'" id="new_password">
+        </div>
+        <div class="form-group">
+          <label for="new_password_confirmation">Confirmer le mot de passe</label>
+          <input [type]="showPassword ? 'text' : 'password'" id="new_password_confirmation">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" (click)="modifierPassword()">Valider</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
     </div>
+  </div>
 </div>

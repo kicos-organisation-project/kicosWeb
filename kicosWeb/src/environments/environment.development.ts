@@ -1,6 +1,7 @@
 export const environment = {
   production: false,
-  base_url: 'http://127.0.0.1:8000/api',
+  // Via proxy.conf.json → API prod (pour partage tunnel / local)
+  base_url: '/api',
   pusher: {
     key: 'b4f9d7a49fca6dc7af58',
     cluster: 'eu',

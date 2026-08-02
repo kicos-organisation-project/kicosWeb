@@ -13,20 +13,18 @@ import { MessageService } from '../../../core/services/message.service';
 import Swal from 'sweetalert2';
 import { ChangeDetectorRef } from '@angular/core';
 import { SkeletonModule } from 'primeng/skeleton';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { MapPickerComponent } from '../../../shared/components/map-picker/map-picker.component';
+import { safeImage, DEFAULT_PRODUCT } from '../../../core/utils/image.util';
 
 
 @Component({
   selector: 'app-gestion-commerce',
   standalone: true,
-  imports: [PaginatorModule, DialogModule, CommonModule, ReactiveFormsModule, FormsModule, SkeletonModule, MapPickerComponent],
+  imports: [PaginatorModule, DialogModule, CommonModule, ReactiveFormsModule, FormsModule, SkeletonModule],
   templateUrl: './gestion-commerce.component.html',
   styleUrl: './gestion-commerce.component.css'
 })
 export class GestionCommerceComponent implements OnInit {
 
-  // Injection de dépendances
   router = inject(Router);
   http = inject(HttpClient);
   apiService = inject(ApiService);
@@ -34,30 +32,53 @@ export class GestionCommerceComponent implements OnInit {
   fb = inject(FormBuilder)
   cdr = inject(ChangeDetectorRef);
 
-  // Declaration des variables 
   baseUrl = environment.base_url;
   listePartenaire: any[] = [];
   DetailPartenaire: any;
-  isLoading: boolean = true; // Par défaut, le chargement est actif
+  isLoading: boolean = true;
 
-  // les varaibles utilisees
+  safeImage = safeImage;
+  DEFAULT_PRODUCT = DEFAULT_PRODUCT;
+
+  moyenTransfertOptions = [
+    { value: 'orange_money', label: 'Orange Money' },
+    { value: 'wave', label: 'Wave' },
+    { value: 'free_money', label: 'Free Money' },
+    { value: 'nita_transfert', label: 'Nita Transfert' },
+    { value: 'bank', label: 'Banque' },
+  ];
+
+  moyenTransfertLabels: Record<string, string> = Object.fromEntries(
+    this.moyenTransfertOptions.map((o) => [o.value, o.label])
+  );
+
   first: number = 0;
   rows: number = 3;
 
-  // les événements de pagination
   onPageChange(event: any) {
     this.first = event.first;
     this.rows = event.rows;
-    this.cdr.detectChanges(); // Forcer la mise à jour de la vue
+    this.cdr.detectChanges();
   }
 
   getPaginatedPartners(): any[] {
     return this.listePartenaire.slice(this.first, this.first + this.rows);
   }
 
+  partnerImageUrl(image: string | null | undefined): string {
+    return safeImage(
+      image ? `https://kiccos.terangacode.com/public/${image}` : null,
+      DEFAULT_PRODUCT
+    );
+  }
+
+  getMoyenTransfertLabel(value: string | null | undefined): string {
+    if (!value) return '—';
+    return this.moyenTransfertLabels[value] || value;
+  }
+
   ngOnInit() {
     this.listPartenaire();
-    // Validation en temps réel pour chaque champ
     Object.keys(this.PaternaireForm.controls).forEach((controlName) => {
       this.PaternaireForm.get(controlName)?.valueChanges.subscribe(() => {
         this.validateField(controlName);
@@ -65,23 +86,19 @@ export class GestionCommerceComponent implements OnInit {
     });
   }
 
-  // contrôler la visibilité du modal details partenaire
   visible: boolean = false;
   showDialogDetailCommerce() {
     this.visible = true;
   }
 
-  // contrôler la visibilité du modal ajout partenaire
   visibleAddCommerce: boolean = false;
   showDialogAddCommerce() {
     this.visibleAddCommerce = true;
   }
 
   id_partenaire: any
-  // contrôler la visibilité du modal modification partenaire
   visibleUpdateCommerce: boolean = false;
   showDialogUpdateCommerce(partenaire: any) {
-    console.log(partenaire);
     this.visibleUpdateCommerce = true;
     this.PaternaireForm.patchValue({
       firstName: partenaire.user.firstName,
@@ -90,8 +107,8 @@ export class GestionCommerceComponent implements OnInit {
       email: partenaire.user.email,
       localisation: partenaire.localisation,
       situation: partenaire.situation,
-      latitude: partenaire.latitude,
-      longitude: partenaire.longitude,
+      maps_url: partenaire.maps_url,
+      moyen_transfert: partenaire.moyen_transfert,
       description: partenaire.description,
       ninea: partenaire.ninea,
       horaire: partenaire.horaire,
@@ -103,7 +120,6 @@ export class GestionCommerceComponent implements OnInit {
     this.id_partenaire = partenaire.id;
   }
 
-  //fermer modal
   closeModal() {
     this.visible = false;
     this.visibleAddCommerce = false;
@@ -115,8 +131,6 @@ export class GestionCommerceComponent implements OnInit {
     this.resetFormPartenaire();
   }
 
-
-  // Le formulaire ajout partenaire
   PaternaireForm = this.fb.group({
     firstName: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
@@ -125,12 +139,12 @@ export class GestionCommerceComponent implements OnInit {
     ninea: new FormControl(''),
     situation: new FormControl('', Validators.required),
     localisation: new FormControl('', Validators.required),
-    latitude: new FormControl<string | number | null>(''),
-    longitude: new FormControl<string | number | null>(''),
+    maps_url: new FormControl(''),
+    moyen_transfert: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
     horaire: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.email]),
-    phoneNumber: new FormControl(''),
+    phoneNumber: new FormControl('', Validators.required),
     image: new FormControl(''),
     etat: new FormControl(''),
   });
@@ -145,24 +159,21 @@ export class GestionCommerceComponent implements OnInit {
   partenaireKpis: any = null;
 
   photo_etablissement: any
-  // photo boutique
   addPhotoEtablissement(event: any) {
     const fileInput = event.target;
     if (fileInput.files && fileInput.files.length > 0) {
       this.photo_etablissement = fileInput.files[0];
-      console.log(this.photo_etablissement)
     }
   }
 
-  // Méthode pour réinitialiser les champs du formulaire 
   resetFormPartenaire() {
     this.PaternaireForm.patchValue({
       firstName: '',
       lastName: '',
       localisation: '',
       situation: '',
-      latitude: '',
-      longitude: '',
+      maps_url: '',
+      moyen_transfert: '',
       horaire: '',
       ninea: '',
       description: '',
@@ -173,11 +184,9 @@ export class GestionCommerceComponent implements OnInit {
       image: ''
     });
     this.partenaireKpis = null;
-    // Réinitialiser les états de validation
     this.PaternaireForm.markAsPristine();
     this.PaternaireForm.markAsUntouched();
 
-    // Réinitialiser chaque contrôle individuellement
     Object.keys(this.PaternaireForm.controls).forEach(key => {
       const control = this.PaternaireForm.get(key);
       control?.markAsUntouched();
@@ -185,12 +194,9 @@ export class GestionCommerceComponent implements OnInit {
       control?.setErrors(null);
     });
 
-    // Réinitialiser les erreurs personnalisées
     this.error = null;
   }
 
-
-  // Valider un champ spécifique
   validateField(controlName: string) {
     const control = this.PaternaireForm.get(controlName);
     if (control) {
@@ -229,6 +235,19 @@ export class GestionCommerceComponent implements OnInit {
         case 'localisation':
           options = { regex: /^[\p{L}\p{N}\s.,!?-]+$/u, regexMessage: 'La localisation contient des caractères non autorisés.' };
           break;
+        case 'situation':
+          options = { regex: /^[\p{L}\p{N}\s.,!?-]+$/u, regexMessage: 'La situation contient des caractères non autorisés.' };
+          break;
+        case 'maps_url':
+          if (!value) {
+            control.setErrors(null);
+            return;
+          }
+          options = { regex: /^https?:\/\/.+/i, regexMessage: 'URL Google Maps invalide.' };
+          break;
+        case 'moyen_transfert':
+          options = { regex: /^(orange_money|wave|free_money|nita_transfert|bank)$/, regexMessage: 'Moyen de transfert invalide.' };
+          break;
         case 'email':
           options = { regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, regexMessage: 'Veuillez entrer une adresse email valide.' };
           break;
@@ -240,30 +259,22 @@ export class GestionCommerceComponent implements OnInit {
       }
 
       const result = ValidatorCore.verifInputFonction(value, controlName, options);
-      console.log(`Validation for ${controlName}:`, result); // Debug log
       control.setErrors(result.isValid ? null : { invalid: true });
     }
   }
 
-  onMapCoordinatesChange(coords: { latitude: number; longitude: number }) {
-    this.PaternaireForm.patchValue({
-      latitude: coords.latitude,
-      longitude: coords.longitude,
-    });
-  }
-
   error: any;
-  // Ajouter un partenaire 
   addPartenaire() {
     const formData = new FormData();
 
-    // Ajouter chaque champ du formulaire explicitement
     formData.append('firstName', this.PaternaireForm.value.firstName || '');
     formData.append('lastName', this.PaternaireForm.value.lastName || '');
     formData.append('nom_partenaire', this.PaternaireForm.value.nom_partenaire || '');
     formData.append('type', this.PaternaireForm.value.type || '');
     formData.append('situation', this.PaternaireForm.value.situation || '');
     formData.append('localisation', this.PaternaireForm.value.localisation || '');
+    formData.append('maps_url', this.PaternaireForm.value.maps_url || '');
+    formData.append('moyen_transfert', this.PaternaireForm.value.moyen_transfert || '');
     formData.append('email', this.PaternaireForm.value.email || '');
     formData.append('phoneNumber', this.PaternaireForm.value.phoneNumber || '');
     formData.append('description', this.PaternaireForm.value.description || '');
@@ -271,22 +282,13 @@ export class GestionCommerceComponent implements OnInit {
     if (this.PaternaireForm.value.ninea) {
       formData.append('ninea', this.PaternaireForm.value.ninea);
     }
-    if (this.PaternaireForm.value.latitude) {
-      formData.append('latitude', String(this.PaternaireForm.value.latitude));
-    }
-    if (this.PaternaireForm.value.longitude) {
-      formData.append('longitude', String(this.PaternaireForm.value.longitude));
-    }
 
-    // Ajouter le fichier image s'il existe
     if (this.photo_etablissement) {
       formData.append('image', this.photo_etablissement);
     }
 
-    // Envoyer la requête POST avec FormData
     this.apiService.postWithSessionId(`${this.baseUrl}/partenaires`, formData).subscribe(
       (response: any) => {
-        console.log(response);
         if (response.status_code === 422) {
           this.messageService.createMessage('error', response.message);
           this.error = response.errorList;
@@ -304,24 +306,19 @@ export class GestionCommerceComponent implements OnInit {
   }
 
   listePartenaireOriginal: any[] = [];
-  // lister les partenaire
   listPartenaire() {
-    // On fait appel a l'api pour lister les partenaires
     this.apiService.getRequestWithSessionId(`${this.baseUrl}/partenaires`).subscribe(
       (response: any) => {
-        console.log("liste des partenaires", response);
         this.listePartenaire = response.partenaires;
         this.listePartenaireOriginal = [...response.partenaires];
-        this.isLoading = false; // Désactivez le chargement une fois les données chargées
+        this.isLoading = false;
       },
       (error: any) => {
         this.messageService.createMessage('error', error.error.message);
-
       }
     )
   }
 
-  // détail partenaire
   detailPatenaire(idPartenaire: string) {
     this.partenaireKpis = null;
     this.apiService.getRequestWithSessionId(`${this.baseUrl}/partenaires/${idPartenaire}`).subscribe(
@@ -346,7 +343,6 @@ export class GestionCommerceComponent implements OnInit {
     );
   }
 
-  // supprimer partenaire
   suprimerPartenaire(idPartenaire: string) {
     Swal.fire({
       title: "Êtes vous sûres?",
@@ -358,10 +354,8 @@ export class GestionCommerceComponent implements OnInit {
       confirmButtonText: "Oui, supprime-le !"
     }).then((result) => {
       if (result.isConfirmed) {
-        // On fait appel a l'api pour supprimer un partenaire
         this.apiService.deleteWithSessionId(`${this.baseUrl}/partenaires/${idPartenaire}`).subscribe(
           (response: any) => {
-            console.log("Partenaire supprimé", response);
             this.listPartenaire();
             Swal.fire({
               title: "Supprimé !",
@@ -372,18 +366,15 @@ export class GestionCommerceComponent implements OnInit {
           },
           (error: any) => {
             this.messageService.createMessage('error', error.error.message);
-
           }
         )
       }
     });
   }
 
-  // modifier un partenaire
   modifierPartenaire() {
     this.apiService.postWithSessionId(`${this.baseUrl}/partenaires/${this.id_partenaire}`, this.PaternaireForm.value).subscribe(
       (response: any) => {
-        console.log(response);
         if (response.status_code === 422) {
           this.messageService.createMessage('error', response.message);
           return;
@@ -395,7 +386,6 @@ export class GestionCommerceComponent implements OnInit {
       },
       (error: any) => {
         this.messageService.createMessage('error', error.error.message);
-
       }
     )
   }
@@ -407,27 +397,21 @@ export class GestionCommerceComponent implements OnInit {
     this.filterTerm = this.searchText.trim();
 
     if (!this.filterTerm) {
-      // Si recherche vide, on montre tout
       this.listePartenaire = [...this.listePartenaireOriginal];
     } else {
-      // Sinon on filtre sur la liste originale
       this.listePartenaire = this.apiService.filterByTerm(
-        this.listePartenaireOriginal, // Toujours filtrer sur la liste complète
+        this.listePartenaireOriginal,
         this.filterTerm,
         ['nom_partenaire', 'type', 'localisation']
       );
     }
 
-    this.first = 0; // On retourne à la première page
+    this.first = 0;
   }
   debounceTimer: any = null;
 
-  // Appelez cette méthode depuis votre input
   onSearch() {
-    // Annuler le timer existant
     clearTimeout(this.debounceTimer);
-
-    // Créer un nouveau timer
     this.debounceTimer = setTimeout(() => {
       this.filterPartenaire();
     }, 300);

@@ -3,7 +3,7 @@
     <aside>
       <div class="logoWrapper mt-4">
         <div class="logo">
-          <img *ngIf="!isSidebarVisible" src="../../../../assets/logo/logo.png" alt="logo">
+          <img *ngIf="!isSidebarVisible" src="assets/logo/logo.png" alt="logo">
           <strong class="text-center mx-2 titreLogo" *ngIf="isSidebarVisible">Kicos<span>Express</span> </strong>
         </div>
       </div>
@@ -81,16 +81,16 @@
             <div class="relative group dropdown">
               <div class="profil-dropdown d-flex align-items-center" data-bs-toggle="dropdown" type="button">
                 <!-- Image ou initiales -->
-                <ng-container
-                  *ngIf="profilLivreur?.role === 'livreur' && profilLivreur?.livreur?.image; else checkPartenaire">
-                  <img src="https://kiccos.terangacode.com/public/{{profilLivreur?.livreur?.image}}"
+                <ng-container *ngIf="profilLivreur?.role === 'livreur' && profilLivreur?.livreur?.image; else checkPartenaire">
+                  <img [src]="avatarUrl(profilLivreur?.livreur?.image)"
+                    (error)="$any($event.target).src = DEFAULT_AVATAR"
                     class="photoUser" alt="Photo profil">
                 </ng-container>
 
                 <ng-template #checkPartenaire>
-                  <ng-container
-                    *ngIf="profilLivreur?.role === 'partenaire' && profilLivreur?.partenaire?.image_url; else initiales">
-                    <img src="https://kiccos.terangacode.com/public/{{profilLivreur?.partenaire?.image_url}}"
+                  <ng-container *ngIf="profilLivreur?.role === 'partenaire' && profilLivreur?.partenaire?.image_url; else initiales">
+                    <img [src]="avatarUrl(profilLivreur?.partenaire?.image_url)"
+                      (error)="$any($event.target).src = DEFAULT_AVATAR"
                       class="photoUser" alt="Photo profil">
                   </ng-container>
                 </ng-template>
@@ -134,7 +134,7 @@
 <div class="sidebarWrapper" [ngClass]="{'show-sidebar': !isSidebarVisible, 'hide-sidebar': isSidebarVisible}">
   <div class="logoWrapper">
     <div class="logoSide d-flex justify-content-center">
-      <img *ngIf="!isSidebarVisible" src="../../../../assets/logo/logo.png" alt="logo">
+      <img *ngIf="!isSidebarVisible" src="assets/logo/logo.png" alt="logo">
     </div>
     <span class="text-pointer closeSidebar" (click)="toggleSidebar()">
       <i class="bi bi-x-circle"></i>

@@ -21,6 +21,7 @@ import { RatingModule } from 'primeng/rating';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { SkeletonModule } from 'primeng/skeleton';
+import { safeImage, DEFAULT_AVATAR } from '../../../core/utils/image.util';
 
 
 interface DeliveryPerformance {
@@ -41,6 +42,15 @@ interface DeliveryPerformance {
   styleUrl: './gestion-livreur.component.css'
 })
 export class GestionLivreurComponent {
+  DEFAULT_AVATAR = DEFAULT_AVATAR;
+
+  livreurImageUrl(image: string | null | undefined): string {
+    return safeImage(
+      image ? `https://kiccos.terangacode.com/public/${image}` : null,
+      DEFAULT_AVATAR
+    );
+  }
+
   // Injection de dépendances
   router = inject(Router);
   http = inject(HttpClient);

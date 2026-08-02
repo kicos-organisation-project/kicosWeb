@@ -96,7 +96,7 @@ export class CategorieComponent {
 
     this.scope = this.route.snapshot.data['scope'] || 'admin';
 
-    this.pageTitle = this.scope === 'partner' ? 'Mes catégories' : 'Gestion Catégories';
+    this.pageTitle = this.scope === 'partner' ? 'Mes catégories' : 'Catégories établissements';
 
     const userInfo = this.getUserInfo();
 
@@ -199,35 +199,21 @@ export class CategorieComponent {
 
 
   private filterCategories(items: any[]): any[] {
-
     if (this.scope === 'admin') {
-
-      return items.filter((item) => item.partenaire_id == null);
-
+      return items;
     }
 
     if (!this.partnerId) {
-
       return [];
-
     }
 
     return items.filter((item) => item.partenaire_id === this.partnerId);
-
   }
 
 
 
-  canManage(categorie: any): boolean {
-
-    if (this.scope === 'admin') {
-
-      return categorie.partenaire_id == null;
-
-    }
-
-    return categorie.partenaire_id === this.partnerId;
-
+  canManage(_categorie: any): boolean {
+    return this.scope === 'partner';
   }
 
 

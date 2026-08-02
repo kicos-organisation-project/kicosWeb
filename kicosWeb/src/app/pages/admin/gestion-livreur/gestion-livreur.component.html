@@ -190,7 +190,7 @@
   [style]="{ width: '60rem', height:'30rem', backgroundColor: '#F8F9FD'}" header="Détail livreur">
   <div id="details">
     <div class="image">
-      <img src="https://kiccos.terangacode.com/public/{{detailLivreur?.image}}" class="card-img-top" alt="..." />
+      <img [src]="livreurImageUrl(detailLivreur?.image)" (error)="$any($event.target).src = DEFAULT_AVATAR" class="card-img-top" alt="..." />
     </div>
     <div>
       <h4>{{detailLivreur?.nom_partenaire}}</h4>

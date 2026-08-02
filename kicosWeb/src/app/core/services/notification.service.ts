@@ -75,25 +75,42 @@ export class NotificationService {
     }
   }
 
-  subscribeToLivreurNotifications(cb: RealtimeCallback): void {
+  private handleLivreurEvent(data: any, livreurId: string | number | undefined, cb: RealtimeCallback): void {
+    if (livreurId != null && data?.livreur_id != null && String(data.livreur_id) !== String(livreurId)) {
+      return;
+    }
+
+    this.zone.run(() => {
+      this.showLocalNotification('Nouvelle commande Kicos', {
+        body: data?.message || 'Une commande est à accepter',
+        tag: `commande-${data?.commande_id || Date.now()}`,
+        data,
+        requireInteraction: true,
+      });
+      cb(data);
+    });
+  }
+
+  subscribeToLivreurNotifications(cb: RealtimeCallback, livreurId?: string | number): void {
     void this.ensureNotificationPermission();
+
+    const onEvent = (data: any) => this.handleLivreurEvent(data, livreurId, cb);
 
     this.echo
       .channel('commandes-public')
-      .listen('.CommandeAssignee', (data: any) => {
-        this.zone.run(() => {
-          this.showLocalNotification('Nouvelle commande Kicos', {
-            body: data?.message || 'Une commande est à accepter',
-            tag: `commande-${data?.commande_id || Date.now()}`,
-            data,
-            requireInteraction: true,
-          });
-          cb(data);
-        });
-      })
+      .listen('.CommandeAssignee', onEvent)
       .error((err: any) => {
         console.error('Erreur canal commandes-public:', err);
       });
+
+    if (livreurId != null) {
+      this.echo
+        .private(`livreur.${livreurId}`)
+        .listen('.CommandeAssignee', onEvent)
+        .error((err: any) => {
+          console.error(`Erreur canal private-livreur.${livreurId}:`, err);
+        });
+    }
   }
 
   /** Abonnement générique canal public + event Laravel (dot-prefixed). */

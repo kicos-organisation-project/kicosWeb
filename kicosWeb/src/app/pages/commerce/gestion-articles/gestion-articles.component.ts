@@ -17,6 +17,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
+import { safeImage, DEFAULT_PRODUCT } from '../../../core/utils/image.util';
 @Component({
   selector: 'app-gestion-articles',
   standalone: true,
@@ -25,6 +26,15 @@ import { TagModule } from 'primeng/tag';
   styleUrl: './gestion-articles.component.css'
 })
 export class GestionArticlesComponent {
+  DEFAULT_PRODUCT = DEFAULT_PRODUCT;
+
+  articleImageUrl(image: string | null | undefined): string {
+    return safeImage(
+      image ? `https://kiccos.terangacode.com/public/${image}` : null,
+      DEFAULT_PRODUCT
+    );
+  }
+
   // les varaibles utilisees
   first: number = 0;
   rows: number = 8;
